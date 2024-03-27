@@ -16,7 +16,7 @@ function App() {
                     <Route path="/" element={<RootLayout />}>
                         <Route path="/" element={<Home />} />
                         <Route path="/login" element={<LoginPage />} />
-                        <Route path="/hackothons" element={<HackRoute />}>
+                        <Route path="/hackathons" element={<HackRoute />}>
                             <Route path="" element={<OnGoingHacks />} />
                             <Route path="upcoming" element={<UpcomingHacks />} />
                             <Route path="hack-host" element={<HackHost/>} />

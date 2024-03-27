@@ -1,19 +1,32 @@
-import { Fragment } from 'react'
+import { Fragment , useState, useEffect } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { Link, useLocation } from 'react-router-dom'
 
-const navigation = [
-    { name: 'Home', href: '/', current: true },
-    { name: 'Hackothans', href: 'hackothons', current: false },
-    { name: 'Mentors', href: '/mentors', current: false },
-    { name: 'Calendar', href: '/calender', current: false },
-]
+
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
 function NavigationBar() {
+    const [navigation, setNavigation] = useState([
+        { name: 'Home', to: '/', current: true },
+        { name: 'Hackathons', to: '/hackathons', current: false },
+        { name: 'Mentors', to: '/login', current: false },
+        { name: 'Calendar', to: '/login', current: false },
+    ]);
+    const location = useLocation(); // Get the current location
+
+    useEffect(() => {
+        // Update the 'current' property in the navigation array based on the current location
+        const updatedNavigation = navigation.map(item => ({
+            ...item,
+            current: item.to === location.pathname // Check if the item's 'to' matches the current path
+        }));
+
+        setNavigation(updatedNavigation); // Update the state with the modified navigation array
+    }, [location.pathname]); // Re-run the effect when the pathname changes
     return (
         <Disclosure as="nav" className="bg-gray-800">
             {({ open }) => (
@@ -43,9 +56,9 @@ function NavigationBar() {
                                 <div className="hidden sm:ml-6 sm:block">
                                     <div className="flex space-x-4">
                                         {navigation.map((item) => (
-                                            <a
+                                            <Link
                                                 key={item.name}
-                                                href={item.href}
+                                                to={item.to}
                                                 className={classNames(
                                                     item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                                                     'rounded-md px-3 py-2 text-sm font-medium'
@@ -53,7 +66,7 @@ function NavigationBar() {
                                                 aria-current={item.current ? 'page' : undefined}
                                             >
                                                 {item.name}
-                                            </a>
+                                            </Link>
                                         ))}
                                     </div>
                                 </div>
@@ -123,22 +136,22 @@ function NavigationBar() {
                                             </Menu.Item>*/}
                                             <Menu.Item>
                                                 {({ active }) => (
-                                                    <a
-                                                        href="/sign-up"
+                                                    <Link
+                                                        to="/sign-up"
                                                         className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                                                     >
                                                         SignUp
-                                                    </a>
+                                                    </Link>
                                                 )}
                                             </Menu.Item>
                                             <Menu.Item>
                                                 {({ active }) => (
-                                                    <a
-                                                        href="/login"
+                                                    <Link
+                                                        to="/login"
                                                         className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                                                     >
                                                         Login
-                                                    </a>
+                                                    </Link>
                                                 )}
                                             </Menu.Item>
                                         </Menu.Items>
@@ -154,7 +167,7 @@ function NavigationBar() {
                                 <Disclosure.Button
                                     key={item.name}
                                     as="a"
-                                    href={item.href}
+                                    to={item.to}
                                     className={classNames(
                                         item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                                         'block rounded-md px-3 py-2 text-base font-medium'

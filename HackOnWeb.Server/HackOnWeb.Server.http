@@ -4,3 +4,5 @@ GET {{HackOnWeb.Server_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+GET {{HackOnWeb.Server_HostAddress}}/api/
+Accept: application/json
