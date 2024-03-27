@@ -1,75 +1,121 @@
-﻿const links = [
-    { name: 'Open roles', href: '#' },
-    { name: 'Internship program', href: '#' },
-    { name: 'Our values', href: '#' },
-    { name: 'Meet our leadership', href: '#' },
-]
-const stats = [
-    { name: 'Offices worldwide', value: '12' },
-    { name: 'Full-time colleagues', value: '300+' },
-    { name: 'Hours per week', value: '40' },
-    { name: 'Paid time off', value: 'Unlimited' },
-]
+﻿import React from 'react';
+import Carousel from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
 
-function Home() {
+const Home = () => {
+    // Sample data for hackathon events
+    const hackathons = [
+        { title: 'Hackathon 1', date: 'April 15-17, 2024', location: 'Online' },
+        { title: 'Hackathon 2', date: 'May 20-22, 2024', location: 'San Francisco, CA' },
+        { title: 'Hackathon 3', date: 'June 25-27, 2024', location: 'New York, NY' },
+        // Add more hackathon events as needed
+    ];
+
+    // Configuration for the carousel
+    const carouselConfig = {
+        responsive: {
+            superLargeDesktop: {
+                breakpoint: { max: 4000, min: 3000 },
+                items: 5,
+            },
+            desktop: {
+                breakpoint: { max: 3000, min: 1024 },
+                items: 3,
+            },
+            tablet: {
+                breakpoint: { max: 1024, min: 464 },
+                items: 2,
+            },
+            mobile: {
+                breakpoint: { max: 464, min: 0 },
+                items: 1,
+            },
+        },
+    };
+
+    // Dynamic styles
+    const heroBackgroundColor = '#4C68D7'; // Dynamic background color for hero section
+    const ctaBackgroundColor = '#38B2AC'; // Dynamic background color for call to action section
+
     return (
-        <div className="relative isolate overflow-hidden bg-gray-900 py-24 sm:py-32">
-            <img
-                src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&crop=focalpoint&fp-y=.8&w=2830&h=1500&q=80&blend=111827&sat=-100&exp=15&blend-mode=multiply"
-                alt=""
-                className="absolute inset-0 -z-10 h-max w-full object-cover object-right md:object-center"
-            />
-            <div
-                className="hidden sm:absolute sm:-top-10 sm:right-1/2 sm:-z-10 sm:mr-10 sm:block sm:transform-gpu sm:blur-3xl"
-                aria-hidden="true"
-            >
-                <div
-                    className="aspect-[1097/845] w-[68.5625rem] bg-gradient-to-tr from-[#ff4694] to-[#776fff] opacity-20"
-                    style={{
-                        clipPath:
-                            'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
-                    }}
-                />
+        <div>
+            {/* Hero section */}
+            <div className="bg-gray-700 text-white py-20">
+                <div className="container mx-auto">
+                    <h1 className="text-5xl font-bold mb-4">Welcome to Our Hackathon Platform</h1>
+                    <p className="text-lg mb-8">Empowering innovators to solve real-world problems through technology.</p>
+                    <button className="bg-white text-blue-900 font-bold py-2 px-4 rounded-full">Join Now</button>
+                </div>
             </div>
-            <div
-                className="absolute -top-52 left-1/2 -z-10 -translate-x-1/2 transform-gpu blur-3xl sm:top-[-28rem] sm:ml-16 sm:translate-x-0 sm:transform-gpu"
-                aria-hidden="true"
-            >
-                <div
-                    className="aspect-[1097/845] w-[68.5625rem] bg-gradient-to-tr from-[#ff4694] to-[#776fff] opacity-20"
-                    style={{
-                        clipPath:
-                            'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
-                    }}
-                />
-            </div>
-            <div className="mx-auto max-w-7xl px-6 lg:px-8">
-                <div className="mx-auto max-w-2xl lg:mx-0">
-                    <h2 className="text-4xl font-bold tracking-tight text-white sm:text-6xl">Team Phoenix</h2>
-                    <p className="mt-6 text-lg leading-8 text-gray-300">
-                        Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt amet
-                        fugiat veniam occaecat fugiat aliqua.
+
+            {/* About Us section */}
+            <div className="bg-gray-100 py-16">
+                <div className="container mx-auto">
+                    <h2 className="text-3xl font-bold mb-8">About Us</h2>
+                    <p className="text-lg mb-4">
+                        We are passionate about fostering creativity and collaboration among developers, designers, and
+                        entrepreneurs to build solutions that make a difference.
+                    </p>
+                    <p className="text-lg">
+                        Our hackathons provide a platform for participants to showcase their skills, learn from industry experts,
+                        and network with like-minded individuals.
                     </p>
                 </div>
-                <div className="mx-auto mt-10 max-w-2xl lg:mx-0 lg:max-w-none">
-                    <div className="grid grid-cols-1 gap-x-8 gap-y-6 text-base font-semibold leading-7 text-white sm:grid-cols-2 md:flex lg:gap-x-10">
-                        {links.map((link) => (
-                            <a key={link.name} href={link.href}>
-                                {link.name} <span aria-hidden="true">&rarr;</span>
-                            </a>
-                        ))}
+            </div>
+
+            {/* How It Works section */}
+            <div className="py-16">
+                <div className="container mx-auto">
+                    <h2 className="text-3xl font-bold mb-8">How It Works</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div className="text-center">
+                            <h3 className="text-xl font-semibold mb-4">1. Register</h3>
+                            <p className="text-lg">
+                                Sign up for an account on our platform and register for upcoming hackathons that interest you.
+                            </p>
+                        </div>
+                        <div className="text-center">
+                            <h3 className="text-xl font-semibold mb-4">2. Participate</h3>
+                            <p className="text-lg">
+                                Join a hackathon team or work solo to develop innovative solutions within the specified time frame.
+                            </p>
+                        </div>
+                        <div className="text-center">
+                            <h3 className="text-xl font-semibold mb-4">3. Win Prizes</h3>
+                            <p className="text-lg">
+                                Showcase your project to judges and compete for prizes, recognition, and potential opportunities.
+                            </p>
+                        </div>
                     </div>
-                    <dl className="mt-16 grid grid-cols-1 gap-8 sm:mt-20 sm:grid-cols-2 lg:grid-cols-4">
-                        {stats.map((stat) => (
-                            <div key={stat.name} className="flex flex-col-reverse">
-                                <dt className="text-base leading-7 text-gray-300">{stat.name}</dt>
-                                <dd className="text-2xl font-bold leading-9 tracking-tight text-white">{stat.value}</dd>
+                </div>
+            </div>
+
+            {/* Upcoming Hackathons section */}
+            <div className="bg-gray-100 py-16">
+                <div className="container mx-auto">
+                    <h2 className="text-3xl font-bold mb-8">Upcoming Hackathons</h2>
+                    <Carousel {...carouselConfig}>
+                        {hackathons.map((hackathon, index) => (
+                            <div key={index} className="bg-white shadow-md rounded-lg p-6 mx-2">
+                                <h2 className="text-xl font-semibold mb-2">{hackathon.title}</h2>
+                                <p className="text-gray-600 mb-2">{hackathon.date}</p>
+                                <p className="text-gray-600">{hackathon.location}</p>
                             </div>
                         ))}
-                    </dl>
+                    </Carousel>
+                </div>
+            </div>
+
+            {/* Call to Action section */}
+            <div className="bg-gray-700 text-white py-16">
+                <div className="container mx-auto text-center">
+                    <h2 className="text-3xl font-bold mb-4">Ready to Join a Hackathon?</h2>
+                    <p className="text-lg mb-8">Don't miss out on the opportunity to innovate and make an impact!</p>
+                    <button className="bg-white text-blue-900 font-bold py-2 px-4 rounded-full">Get Started</button>
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
+
 export default Home;

@@ -27,9 +27,9 @@ function NavigationBar() {
 
         setNavigation(updatedNavigation); // Update the state with the modified navigation array
     }, [location.pathname]); // Re-run the effect when the pathname changes
-    return (
-        <Disclosure as="nav" className="bg-gray-800">
-            {({ open }) => (
+    return (<Disclosure as="nav" className="bg-gray-800">
+        {({ open }) => (
+            <div className="sticky-top">
                 <>
                     <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
                         <div className="relative flex h-16 items-center justify-between">
@@ -180,8 +180,10 @@ function NavigationBar() {
                         </div>
                     </Disclosure.Panel>
                 </>
+            </div>
             )}
         </Disclosure>
+        
     )
 }
 export default NavigationBar;

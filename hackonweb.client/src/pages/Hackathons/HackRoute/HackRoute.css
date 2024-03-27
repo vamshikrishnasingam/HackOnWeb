@@ -1,0 +1,9 @@
+
+.page1 {
+    height: 80vh;
+    width: 99vw;
+    position: relative;
+    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
