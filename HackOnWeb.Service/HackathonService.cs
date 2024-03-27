@@ -32,5 +32,9 @@ namespace HackOnWebService
         {
             return await _hackathonRepository.CreateNewUser(user);
         }
+        public async Task<string> HackathonDetails(HackathonModel hackdetails)
+        {
+            return await _hackathonRepository.HackathonDetails(hackdetails);
+        }
     }
 }

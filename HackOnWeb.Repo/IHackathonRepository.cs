@@ -16,5 +16,7 @@ namespace HackOnWebRepo
         public Task<UserModel> LoginWithPassword(string email, string password);
 
         public Task<UserModel> CreateNewUser(UserModel user);
+
+        public Task<string> HackathonDetails(HackathonModel hackdetails);
     }
 }

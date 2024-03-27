@@ -107,6 +107,22 @@ namespace HackOnWebRepo
             }
 
         }
+        public async Task<string> HackathonDetails(HackathonModel hackdetails)
+        {
+            var container = _cosmosclient.GetContainer(DatabaseId, "HackathonDetails");
+
+            try
+            {
+                hackdetails.id = Guid.NewGuid().ToString();
+                hackdetails.Hackathonid = Guid.NewGuid().ToString();
+                var response = await container.CreateItemAsync(hackdetails);
+                return $"Hackathon details inserted with status code: {response.StatusCode}";
+            }
+            catch (Exception ex)
+            {
+                return $"Error inserting hackathon details: {ex.Message}";
+            }
+        }
 
     }
 
