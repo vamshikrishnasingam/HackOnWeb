@@ -8,6 +8,9 @@ const Home = () => {
         { title: 'Hackathon 1', date: 'April 15-17, 2024', location: 'Online' },
         { title: 'Hackathon 2', date: 'May 20-22, 2024', location: 'San Francisco, CA' },
         { title: 'Hackathon 3', date: 'June 25-27, 2024', location: 'New York, NY' },
+        { title: 'Hackathon 4', date: 'April 15-17, 2024', location: 'Online' },
+        { title: 'Hackathon 5', date: 'May 20-22, 2024', location: 'San Francisco, CA' },
+        { title: 'Hackathon 6', date: 'June 25-27, 2024', location: 'New York, NY' },
         // Add more hackathon events as needed
     ];
 
@@ -15,11 +18,11 @@ const Home = () => {
     const carouselConfig = {
         responsive: {
             superLargeDesktop: {
-                breakpoint: { max: 4000, min: 3000 },
+                breakpoint: { max: 3700, min: 2000 },
                 items: 5,
             },
             desktop: {
-                breakpoint: { max: 3000, min: 1024 },
+                breakpoint: { max: 2400, min: 1024 },
                 items: 3,
             },
             tablet: {
@@ -32,16 +35,11 @@ const Home = () => {
             },
         },
     };
-
-    // Dynamic styles
-    const heroBackgroundColor = '#4C68D7'; // Dynamic background color for hero section
-    const ctaBackgroundColor = '#38B2AC'; // Dynamic background color for call to action section
-
     return (
         <div>
             {/* Hero section */}
             <div className="bg-gray-700 text-white py-20">
-                <div className="container mx-auto">
+                <div className="container p-10">
                     <h1 className="text-5xl font-bold mb-4">Welcome to Our Hackathon Platform</h1>
                     <p className="text-lg mb-8">Empowering innovators to solve real-world problems through technology.</p>
                     <button className="bg-white text-blue-900 font-bold py-2 px-4 rounded-full">Join Now</button>
@@ -50,7 +48,7 @@ const Home = () => {
 
             {/* About Us section */}
             <div className="bg-gray-100 py-16">
-                <div className="container mx-auto">
+                <div className="container mx-auto p-10">
                     <h2 className="text-3xl font-bold mb-8">About Us</h2>
                     <p className="text-lg mb-4">
                         We are passionate about fostering creativity and collaboration among developers, designers, and
@@ -65,7 +63,7 @@ const Home = () => {
 
             {/* How It Works section */}
             <div className="py-16">
-                <div className="container mx-auto">
+                <div className="container mx-auto p-10">
                     <h2 className="text-3xl font-bold mb-8">How It Works</h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         <div className="text-center">
@@ -92,7 +90,7 @@ const Home = () => {
 
             {/* Upcoming Hackathons section */}
             <div className="bg-gray-100 py-16">
-                <div className="container mx-auto">
+                <div className="container mx-auto p-10">
                     <h2 className="text-3xl font-bold mb-8">Upcoming Hackathons</h2>
                     <Carousel {...carouselConfig}>
                         {hackathons.map((hackathon, index) => (
