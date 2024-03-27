@@ -42,17 +42,70 @@ namespace HackOnWebRepo
 
             var query = "SELECT * FROM c WHERE c.id = @id";
             var queryDefinition = new QueryDefinition(query).WithParameter("@id", id);
-            var students = new List<UserModel>();
+            var users = new List<UserModel>();
 
             var resultSetIterator = container.GetItemQueryIterator<UserModel>(queryDefinition);
 
             while (resultSetIterator.HasMoreResults)
             {
                 var currentUser = await resultSetIterator.ReadNextAsync();
-                students.AddRange(currentUser);
+                users.AddRange(currentUser);
             }
 
-            return students;
+            return users;
+        }
+
+        public async Task<UserModel> LoginWithPassword(string email, string password)
+        {
+            var container = _cosmosclient.GetContainer(DatabaseId, ContainerId);
+
+            var query = "SELECT * FROM c WHERE c.email = @email";
+            UserModel user = null;
+            var queryDefinition = new QueryDefinition(query).WithParameter("@email", email);
+            var resultSetIterator = container.GetItemQueryIterator<UserModel>(queryDefinition);
+            while (resultSetIterator.HasMoreResults)
+            {
+                var response = await resultSetIterator.ReadNextAsync();
+                foreach (var currentUser in response)
+                {
+                    if (ValidatePassword(currentUser, password))
+                    {
+                        user = currentUser;
+                        break; // Exit the loop once a valid user is found
+                    }
+                }
+            }
+            return user;
+
+        }
+        private bool ValidatePassword(UserModel user, string password)
+        {
+            // Example: Implement password validation logic (e.g., using hashing and comparison)
+            // Compare hashed password stored in user.PasswordHash with the hashed password derived from input password
+            // Example: return PasswordHashing.VerifyPassword(password, user.PasswordHash);
+            return user.password == password; // This is a basic example; use a secure hashing algorithm in a real application
+        }
+
+        public async Task<UserModel> CreateNewUser(UserModel user)
+        {
+            var container = _cosmosclient.GetContainer(DatabaseId, ContainerId);
+
+            // Assuming UserModel has an 'Id' property for document identification
+            user.id = Guid.NewGuid().ToString(); // Generate a unique ID for the new user
+
+            // Insert the user document into the container
+            var response = await container.CreateItemAsync(user, new PartitionKey(user.email));
+
+            // Check if the user was successfully created
+            if (response.StatusCode == System.Net.HttpStatusCode.Created)
+            {
+                return user; 
+            }
+            else
+            {
+                throw new Exception("Failed to create user.");
+            }
+
         }
 
     }

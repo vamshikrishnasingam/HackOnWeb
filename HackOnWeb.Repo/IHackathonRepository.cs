@@ -12,5 +12,9 @@ namespace HackOnWebRepo
         public Task<List<UserModel>> getAllUsers();
 
         public Task<List<UserModel>> getUserById(string id);
+
+        public Task<UserModel> LoginWithPassword(string email, string password);
+
+        public Task<UserModel> CreateNewUser(UserModel user);
     }
 }

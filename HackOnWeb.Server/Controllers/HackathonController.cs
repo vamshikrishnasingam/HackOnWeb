@@ -44,5 +44,59 @@ namespace HackOnWeb.Server.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+        [HttpGet]
+        [Route("LoginWithPassword")]
+        public async Task<ActionResult<UserModel>> LoginWithPassword(string email,string password)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+                {
+                    return BadRequest("username and password are required.");
+                }
+                // Call the corresponding method in the service layer
+                UserModel user=await _hackathonService.LoginWithPassword(email,password);
+                if (user == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    return Ok(user);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or handle it as needed
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+        [HttpPost]
+        [Route("CreateNewUser")]
+        public async Task<ActionResult<UserModel>> CreateNewUser(UserModel user)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(user.email) || string.IsNullOrEmpty(user.password) || string.IsNullOrEmpty(user.firstname) || string.IsNullOrEmpty(user.lastname) || string.IsNullOrEmpty(user.phone))
+                {
+                    return BadRequest("All fields are required.");
+                }
+                // Call the corresponding method in the service layer
+                /*UserModel user = new UserModel
+                { 
+                    firstname = firstname,
+                    lastname = lastname,
+                    email = email,
+                    password = password,
+                    phone = phone
+                };*/
+                return Ok(await _hackathonService.CreateNewUser(user));
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or handle it as needed
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
     }
 }
