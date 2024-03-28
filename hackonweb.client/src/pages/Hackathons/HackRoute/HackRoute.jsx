@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom'
-import HackNavigationBar from '../../../components/HackNavigationBar';
+import HackNavigationBar from '../../../components/HackNavigationBar/HackNavigationBar';
 import './HackRoute.css'
 function HackRoute() {
   return (
