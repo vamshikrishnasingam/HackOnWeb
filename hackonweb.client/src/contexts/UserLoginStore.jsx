@@ -1,33 +1,30 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import axios from "axios";
 import { loginContext } from "./loginContext";
 
+// eslint-disable-next-line react/prop-types
 function UserLoginStore({ children }) {
     const [currentUser, setCurrentUser] = useState({});
     const [loginErr, setLoginErr] = useState("")
     const [userLoginStatus, setUserLoginStatus] = useState(false)
     //function to make user login reuqest
     const loginUser = async (userCredObj) => {
-        await axios.post("http://localhost:5000/user-api/user-login", userCredObj)
-            .then((response) => {
-                if (response.data.message === "success") {
-                    setCurrentUser({ ...response.data.user });
-                    setLoginErr("");
-                    setUserLoginStatus(true);
-                    //store jwt token in local or session storage
-                    localStorage.setItem("token", response.data.token);
-                }
-                else {
-                    setLoginErr(response.data.message)
-                }
-                //navigate to user profile
-                //console.log("navigated to user profile")
-            })
-            .catch((err) => {
-                console.log("err in user login:", err)
-                setLoginErr(err)
-            })
-    }
+        try {
+            const response = await axios.post("https://localhost:7151/api/Hackathons/LoginWithPassword", userCredObj);
+            if (response.status === 200) {
+                setCurrentUser(response.data);
+                setLoginErr("");
+                setUserLoginStatus(true);
+                // store jwt token in local storage (you need to adjust this based on your actual token handling)
+                localStorage.setItem("user", JSON.stringify(response.data));
+            } else {
+                setLoginErr("Login failed. Please check your credentials.");
+            }
+        } catch (error) {
+            console.error("Error in user login:", error);
+            setLoginErr("An error occurred during login.");
+        }
+    };
     //userlogout
     const logoutUser = () => {
         //clear local or session storage
@@ -37,7 +34,7 @@ function UserLoginStore({ children }) {
 
     }
     //to add in userlogincontextstore.js
-    const checkTokenAndFetchUser = async () => {
+   /* const checkTokenAndFetchUser = async () => {
         // Check if a token exists in local storage
         const token = localStorage.getItem('token');
 
@@ -76,10 +73,10 @@ function UserLoginStore({ children }) {
             console.error(error);
             return null;
         }
-    };
-    useEffect(() => {
+    };*/
+   /* useEffect(() => {
         checkTokenAndFetchUser();
-    }, []);
+    }, []);*/
     return (
         <loginContext.Provider value={[currentUser, loginUser, userLoginStatus, loginErr, logoutUser]}>
             {children}

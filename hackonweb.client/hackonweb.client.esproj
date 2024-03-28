@@ -9,8 +9,6 @@
     <PublishAssetsDirectory>$(MSBuildProjectDirectory)\dist</PublishAssetsDirectory>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="src\contexts\" />
-    <Folder Include="src\pages\Hackathons\HackComponents\" />
     <Folder Include="src\RootLayout\" />
   </ItemGroup>
 </Project>

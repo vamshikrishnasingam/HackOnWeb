@@ -90,8 +90,6 @@ namespace HackOnWebRepo
         {
             var container = _cosmosclient.GetContainer(DatabaseId, ContainerId);
 
-            // Assuming UserModel has an 'Id' property for document identification
-            user.id = Guid.NewGuid().ToString(); // Generate a unique ID for the new user
 
             // Insert the user document into the container
             var response = await container.CreateItemAsync(user, new PartitionKey(user.email));
