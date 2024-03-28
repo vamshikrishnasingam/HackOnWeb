@@ -9,7 +9,7 @@ import OnGoingHacks from './pages/Hackathons/HackComponents/OnGoingHacks';
 import UpcomingHacks from './pages/Hackathons/HackComponents/UpcomingHacks';
 import HackHost from './pages/Hackathons/HackComponents/HostHack';
 import SignUp from './pages/SignUp/SignUp';
-import Community from './pages/Hackathons/HackComponents/Community';
+import Community from './pages/Hackathons/HackComponents/Community2';
 function App() {
     return (
         <div className='App'>
