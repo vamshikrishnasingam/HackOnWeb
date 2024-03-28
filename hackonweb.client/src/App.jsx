@@ -9,7 +9,7 @@ import OnGoingHacks from './pages/Hackathons/HackComponents/OnGoingHacks';
 import UpcomingHacks from './pages/Hackathons/HackComponents/UpcomingHacks';
 import HackHost from './pages/Hackathons/HackComponents/HostHack';
 import SignUp from './pages/SignUp/SignUp';
-import Community from './pages/Hackathons/HackComponents/Community/Community';
+import CommunityComp from './pages/Hackathons/HackComponents/Community/ComunityComp';
 function App() {
     return (
         <div className='App'>
@@ -23,7 +23,8 @@ function App() {
                             <Route path="" element={<OnGoingHacks />} />
                             <Route path="upcoming" element={<UpcomingHacks />} />
                             <Route path="hack-host" element={<HackHost />} />
-                            <Route path="community" element={<Community/> }/>
+                            <Route path="community" element={<CommunityComp/>
+                        } />
                         </Route>
                     </Route>
                 </Routes>
