@@ -1,18 +1,18 @@
 using HackOnWebService;
 using HackOnWebRepo;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Cosmos;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IHackathonService, HackathonService>();
 builder.Services.AddScoped<IHackathonRepository, HackathonRepository>();
-
 
 var configuration1 = builder.Configuration;
 
@@ -39,6 +39,14 @@ var app = builder.Build();
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
+
+// Configure CORS
+app.UseCors(builder =>
+{
+    builder.WithOrigins("https://localhost:5173") // Update with your frontend origin URL
+           .AllowAnyHeader()
+           .AllowAnyMethod();
+});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -3,11 +3,15 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import { PhotoIcon, UserCircleIcon} from '@heroicons/react/24/solid'
 import { IoCloudUploadOutline } from "react-icons/io5";
+import axios from 'axios';
 
 function Community() {
     const hacname = "hackathon";
     const [image, setImage] = useState(null);
     const [file, setFile] = useState(null);
+    const [data, setData] = useState(null);
+
+
 
     const handleImageChange = (e) => {
         const img = e.target.files[0];
@@ -42,7 +46,17 @@ function Community() {
         setFile(null);
 
     }
-
+    const handleClickButton = async(event) => {
+        event.preventDefault()
+        console.log('clicked')
+        try {
+            const response = await axios.get('http://localhost:5014/api/Hackathons/GetAllUsers'); // Adjust URL to match your API endpoint
+            console.log(response.data);
+        } catch (error) {   
+            console.error('Error fetching data:', error);
+        }
+    }
+        
 
     return (
         <div>
@@ -53,6 +67,9 @@ function Community() {
                         <p className="mt-1 text-sm leading-6 text-gray-600">
                             This information will be displayed publicly so be careful what you share.
                         </p>
+                        <div>
+                            <button onClick={handleClickButton}>Click here</button>
+                        </div>
                         <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                             <div className="col-span-full">
                                 <label htmlFor="cover-photo" className="block text-sm font-medium leading-6 text-gray-900">
