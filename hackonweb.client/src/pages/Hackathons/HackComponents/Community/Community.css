@@ -1,0 +1,86 @@
+/* Community.css */
+
+/* Container styles */
+.community-container {
+    padding: 20px;
+}
+
+/* Profile section styles */
+.profile-section {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding-bottom: 20px;
+}
+
+    .profile-section h2 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 0.5rem;
+    }
+
+    .profile-section p {
+        font-size: 0.875rem;
+        color: #6B7280;
+        margin-top: 0.25rem;
+    }
+
+/* Cover photo styles */
+.cover-photo-label {
+    display: block;
+    text-align: center;
+    padding: 1rem;
+    margin-top: 2rem;
+    cursor: pointer;
+}
+
+    .cover-photo-label:hover {
+        color: #4F46E5;
+    }
+
+.upload-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0.375rem;
+    border: 1px dashed rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    margin-top: 1rem;
+}
+
+    .upload-container img {
+        max-width: 100%;
+        max-height: 200px;
+        display: block;
+        margin: 0 auto;
+    }
+
+.upload-text {
+    font-size: 0.875rem;
+    color: #6B7280;
+    margin-top: 0.5rem;
+}
+
+/* Description styles */
+.description-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #374151;
+    margin-top: 1.5rem;
+}
+
+.description-textarea {
+    width: 100%;
+    min-height: 100px;
+    border-radius: 0.375rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 0.75rem;
+    margin-top: 0.5rem;
+    resize: vertical;
+}
+
+    .description-textarea:focus {
+        outline: none;
+        border-color: #4F46E5;
+        box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+    }
