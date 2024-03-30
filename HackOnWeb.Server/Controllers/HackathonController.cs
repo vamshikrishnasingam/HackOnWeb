@@ -44,12 +44,14 @@ namespace HackOnWeb.Server.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
-        [HttpGet]
+        [HttpPost]
         [Route("LoginWithPassword")]
-        public async Task<ActionResult<UserModel>> LoginWithPassword(string email,string password)
+        public async Task<ActionResult<UserModel>> LoginWithPassword(LoginModel userCredObj)
         {
             try
             {
+                var email = userCredObj.email;
+                var password = userCredObj.password;
                 if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
                 {
                     return BadRequest("username and password are required.");
@@ -73,11 +75,11 @@ namespace HackOnWeb.Server.Controllers
         }
         [HttpPost]
         [Route("CreateNewUser")]
-        public async Task<ActionResult<UserModel>> CreateNewUser(UserModel user)
+        public async Task<ActionResult<UserModel>> CreateNewUser(SignUpModel user)
         {
             try
             {
-                if (string.IsNullOrEmpty(user.email) || string.IsNullOrEmpty(user.password) || string.IsNullOrEmpty(user.firstname) || string.IsNullOrEmpty(user.lastname) || string.IsNullOrEmpty(user.phone))
+                if (string.IsNullOrEmpty(user.username)||string.IsNullOrEmpty(user.email) || string.IsNullOrEmpty(user.password) || string.IsNullOrEmpty(user.firstname) || string.IsNullOrEmpty(user.lastname) || string.IsNullOrEmpty(user.phone))
                 {
                     return BadRequest("All fields are required.");
                 }
@@ -90,7 +92,20 @@ namespace HackOnWeb.Server.Controllers
                     password = password,
                     phone = phone
                 };*/
-                return Ok(await _hackathonService.CreateNewUser(user));
+
+                UserModel newUser = new UserModel
+                {
+                    username = user.username,
+                    email = user.email,
+                    password = user.password,
+                    firstname = user.firstname,
+                    lastname = user.lastname,
+                    id = Guid.NewGuid().ToString(), // You might adjust this based on your logic
+                    phone = user.phone
+                };
+                var createdUser = await _hackathonService.CreateNewUser(newUser);
+                return CreatedAtAction(nameof(GetUserById), new { id = createdUser.id }, createdUser);
+
             }
             catch (Exception ex)
             {
