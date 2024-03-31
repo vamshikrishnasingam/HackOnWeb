@@ -13,8 +13,8 @@ function NavigationBar() {
     const [navigation, setNavigation] = useState([
         { name: 'Home', to: '/', current: true },
         { name: 'Hackathons', to: '/hackathons', current: false },
-        { name: 'Mentors', to: '/login', current: false },
-        { name: 'Calendar', to: '/login', current: false },
+        { name: 'Mentors', to: '/mentors', current: false },
+        { name: 'Calendar', to: '/calendar', current: false },
     ]);
     const location = useLocation(); // Get the current location
 

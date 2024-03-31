@@ -100,7 +100,7 @@ export default function Community2() {
     ]
 
     return (
-        <div className="bg-white py-24 sm:py-32 flex flex-col">
+        <div className="bg-white sm:py-10 flex flex-col m-4">
             {/*  likes component  */}
             <h4 className="text-black font-bold mb-4 mt-0">VOTES</h4>
             <div className="flex gap-4 items-center">

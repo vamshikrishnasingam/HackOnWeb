@@ -1,5 +1,22 @@
 /* Community.css */
 
+
+.c1 {
+    height: 81.5vh;
+    position: relative;
+    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+}
+
+.c2 {
+    height: 81.5vh;
+    position: relative;
+    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
 /* Container styles */
 .community-container {
     padding: 20px;

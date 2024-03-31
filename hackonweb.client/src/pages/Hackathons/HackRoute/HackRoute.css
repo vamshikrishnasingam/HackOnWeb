@@ -1,6 +1,7 @@
 
 .page1 {
-    height: 80vh;
+    margin: 4px;
+    height: 81vh;
     width: 99vw;
     position: relative;
     overflow: auto;

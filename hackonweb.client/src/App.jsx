@@ -9,6 +9,8 @@ import UpcomingHacks from './pages/Hackathons/HackComponents/UpcomingHacks';
 import HackHost from './pages/Hackathons/HackComponents/HostHack';
 import SignUp from './pages/SignUp/SignUp';
 import CommunityComp from './pages/Hackathons/HackComponents/Community/ComunityComp';
+import Mentors from './pages/Metors/Mentors';
+import Calendar from './pages/Calendar/Calendar'
 function App() {
     return (
         <div className='App'>
@@ -16,6 +18,8 @@ function App() {
                 <Routes>
                     <Route path="/" element={<RootLayout />}>
                         <Route path="/" element={<Home />} />
+                        <Route path="/mentors" element={<Mentors />} />
+                        <Route path="/calendar" element={<Calendar/>} />
                         <Route path="/login" element={<LoginPage />} />
                         <Route path="/sign-up" element={<SignUp/>} />
                         <Route path="/hackathons" element={<HackRoute />}>

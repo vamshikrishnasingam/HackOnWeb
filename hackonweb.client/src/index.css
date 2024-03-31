@@ -29,7 +29,13 @@ a:hover {
 .content-container {
     min-height: calc(95vh - 34px);
 }
+::-webkit-scrollbar {
+    width: 0px;
+}
 
+::-webkit-scrollbar-track {
+    display: none;
+}
 .footer-container {
     position: relative;
     left: 0;
