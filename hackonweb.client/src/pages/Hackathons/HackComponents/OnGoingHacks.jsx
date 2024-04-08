@@ -2,7 +2,9 @@ import React from 'react';
 
 function OnGoingHacks() {
   return (
-    <p>Ongoing</p>
+      <p>
+      On Going Hacks
+      </p>
   );
 }
 
