@@ -132,6 +132,8 @@
 }
 .buttonlink {
     background-color: #972239;
+    border-bottom-left-radius: 0px;
+    border-top-left-radius: 0px;
     background-image: linear-gradient(315deg, #972239 0%, #db6885 74%); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 .desc {
