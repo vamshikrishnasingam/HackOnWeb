@@ -117,9 +117,9 @@ function Community() {
     }
 
     return (
-        <div>
+        <div className="">
             <form className="p-10">
-                <div className="space-y-12">
+                <div className=" space-y-12">
                     <div className="border-b border-gray-900/10 pb-12">
                         <div className="profile">
                             <h2 className="text-base font-semibold leading-7 text-white-900">{teamName}</h2>
@@ -138,12 +138,12 @@ function Community() {
                         </div>
 
                         <div className="mt-5 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                            <div className="posts col-span-full">
-                                <h4 className="text-black font-bold mb-4 pt-2">POST YOUR THOUGHTS</h4>
-                                <div className="flex justify-center rounded-lg border border-gray-900 px-5 py-5">
+                            <div className="col-span-full">
+                                <h4 className="heading font-bold mb-4 pt-2">POST YOUR THOUGHTS</h4>
+                                <div className="posts flex justify-center rounded-lg border border-gray-900 px-5 py-5">
                                     <label
                                         htmlFor="image-upload"
-                                        className="block cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+                                        className="block cursor-pointer rounded-md font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
                                         style={{ display: 'block', padding: '10px' }}
                                     >
                                         <div className=" text-center">
@@ -167,7 +167,7 @@ function Community() {
                                         </div>
                                     </label>
                                 </div>
-                                <button className="show mb-4 text-white" onClick={callShowImages}>Show Posts</button>
+                                <button className="show mb-4" onClick={callShowImages}>Show Posts</button>
                                 {showImages === true && (
                                     <div className="mt-10 sm:flex sm:overflow-x-auto">
                                         {uploadedImages.map((image, index) => (
@@ -181,7 +181,7 @@ function Community() {
                                         ))}
                                     </div>
                                 )}
-                                <h4 className="text-black font-bold mb-4 pt-2">UPLOAD FILES & LINKS</h4>
+                                <h4 className="heading font-bold mb-4 pt-2">UPLOAD FILES & LINKS</h4>
                                 <div className=" mt-3 grid gap-4 grid-cols-2" style={{ gridTemplateColumns: '1fr 3fr' }}>
                                     {/* first 2 pdfs */}
                                     <div className="flex justify-start gap-5">
@@ -249,13 +249,13 @@ function Community() {
                                 </div>
                             </div>
                             <div className="col-span-full">
-                                <h4 className="text-black font-bold mb-4 pt-2">DESCRIPTION</h4>
+                                <h4 className="heading font-bold mb-4 pt-2">DESCRIPTION</h4>
                                 <div className="mt-2">
                                     <textarea
                                         id="about"
                                         name="about"
                                         rows={5}
-                                        className=" desc  block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                        className=" desc  block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-black focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                         defaultValue={''}
                                     />
                                 </div>

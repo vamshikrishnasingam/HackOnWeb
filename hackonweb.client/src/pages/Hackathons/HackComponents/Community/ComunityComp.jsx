@@ -1,8 +1,9 @@
 import Community from "./Community";
 import Community2 from "./Community2";
+import './Community.css';
 function ComunityComp() {
     return (
-        <div className="flex flex-wrap">
+        <div className="total flex flex-wrap">
             <div className="w-full md:w-3/5 overflow-y-auto c1">
                 <div className="h-full community2-container">
                     <Community />

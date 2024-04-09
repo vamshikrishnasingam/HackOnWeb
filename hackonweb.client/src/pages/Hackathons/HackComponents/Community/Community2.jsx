@@ -100,9 +100,9 @@ export default function Community2() {
     ]
 
     return (
-        <div className="bg-white sm:py-8 px-9 flex flex-col">
+        <div className="sm:py-8 px-9 flex flex-col">
             {/*  likes component  */}
-            <h4 className="text-black font-bold mb-3 ">VOTES</h4>
+            <h4 className="heading font-bold mb-3 ">VOTES</h4>
             <div className="flex gap-4 items-center">
                 <div className="flex justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm ">
                     LIKES: {likeCount}
@@ -112,7 +112,7 @@ export default function Community2() {
                 </div>
             </div>
             {/* mentors component  */}
-            <h4 className="text-black font-bold mb-2">MENTORS :</h4>
+            <h4 className="heading font-bold mb-2">MENTORS :</h4>
             <TableContainer component={Paper} className="mentors">
                 <Table sx={{ maxWidth: 400 }} aria-label="simple table">
                     <TableBody >
@@ -132,7 +132,7 @@ export default function Community2() {
                 </Table>
             </TableContainer>
             {/* teams component  */}
-            <h4 className="text-black font-bold mb-4 pt-2">TEAM MEMBERS :</h4>
+            <h4 className="heading font-bold mb-4 pt-2">TEAM MEMBERS :</h4>
             <TableContainer component={Paper} className="members">
                 <Table sx={{ maxWidth: 400 }} aria-label="simple table">
                     <TableBody>
@@ -154,14 +154,14 @@ export default function Community2() {
             
             {/* comments component  */}
             <div>
-                <h2 className="text-xl font-bold mb-3 mt-3">COMMENTS</h2>
+                <h2 className="heading text-xl font-bold mb-3 mt-3">COMMENTS</h2>
                 {comments.length > 0 ? (
-                    <div className="border border-gray-200 rounded-lg p-4 mb-4">
+                    <div className="border border-gray-200 rounded-lg mb-2">
                         {comments.map((comment, index) => (
                             <div key={index}>
                                 <p className="comments_header text-black-700 font-bold">{comment.author}</p>
                                 <p className="comments_content text-black-900">{comment.content}</p>
-                                {index !== comments.length - 1 && <hr className="my-4 border-gray-200" />}
+                                {index !== comments.length - 1 && <hr className="my-2 border-gray-200" />}
                             </div>
                         ))}
                     </div>
