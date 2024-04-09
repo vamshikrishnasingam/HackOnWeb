@@ -6,6 +6,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import './Community2.css';
 export default function Community2() {
     const [likeCount, setLikeCount] = useState(0);
     const [dislikeCount, setDislikeCount] = useState(0);
@@ -53,7 +54,6 @@ export default function Community2() {
         {
             author: 'Pasha',
             content: "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.",
-           
         },
     ]
 
@@ -100,44 +100,44 @@ export default function Community2() {
     ]
 
     return (
-        <div className="bg-white sm:py-10 flex flex-col m-4">
+        <div className="bg-white sm:py-8 px-9 flex flex-col">
             {/*  likes component  */}
-            <h4 className="text-black font-bold mb-4 mt-0">VOTES</h4>
+            <h4 className="text-black font-bold mb-3 ">VOTES</h4>
             <div className="flex gap-4 items-center">
-                <div className="flex justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500">
+                <div className="flex justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm ">
                     LIKES: {likeCount}
                 </div>
-                <div className="flex justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500">
+                <div className="flex justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm ">
                     DISLIKES: {dislikeCount}
                 </div>
             </div>
             {/* mentors component  */}
-            <h4 className="text-black font-bold mb-4 pt-2">MENTORS :</h4>
-                <TableContainer component={Paper}>
-                    <Table sx={{ maxWidth:400 }} aria-label="simple table">
-                        <TableBody>
-                            {mentors.map((row) => (
-                                <TableRow
-                                    key={row.name}
-                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                >
-                                    <TableCell component="th" scope="row">
-                                        <img className="h-12 w-12 flex-none rounded-full bg-gray-50" src={row.imageUrl} alt="" />
-                                    </TableCell>
-                                    <TableCell align="center">{row.name}</TableCell>
-                                    <TableCell align="center">{row.role}</TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
+            <h4 className="text-black font-bold mb-2">MENTORS :</h4>
+            <TableContainer component={Paper} className="mentors">
+                <Table sx={{ maxWidth: 400 }} aria-label="simple table">
+                    <TableBody >
+                        {mentors.map((row) => (
+                            <TableRow 
+                                key={row.name}
+                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                            >
+                                <TableCell component="th" scope="row">
+                                    <img className="h-12 w-12 flex-none rounded-full bg-gray-50" src={row.imageUrl} alt="" />
+                                </TableCell>
+                                <TableCell className="cell text-white" align="center">{row.name}</TableCell>
+                                <TableCell align="center">{row.role}</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
             </TableContainer>
             {/* teams component  */}
             <h4 className="text-black font-bold mb-4 pt-2">TEAM MEMBERS :</h4>
-            <TableContainer component={Paper}>
+            <TableContainer component={Paper} className="members">
                 <Table sx={{ maxWidth: 400 }} aria-label="simple table">
                     <TableBody>
                         {people.map((row) => (
-                            <TableRow
+                            <TableRow className="mentorsrow"
                                 key={row.name}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
@@ -151,15 +151,16 @@ export default function Community2() {
                     </TableBody>
                 </Table>
             </TableContainer>
+            
             {/* comments component  */}
             <div>
-                <h2 className="text-xl font-bold mb-4">Comments</h2>
+                <h2 className="text-xl font-bold mb-3 mt-3">COMMENTS</h2>
                 {comments.length > 0 ? (
                     <div className="border border-gray-200 rounded-lg p-4 mb-4">
                         {comments.map((comment, index) => (
                             <div key={index}>
-                                <p className="text-gray-700 font-semibold">{comment.author}</p>
-                                <p className="text-gray-600">{comment.content}</p>
+                                <p className="comments_header text-black-700 font-bold">{comment.author}</p>
+                                <p className="comments_content text-black-900">{comment.content}</p>
                                 {index !== comments.length - 1 && <hr className="my-4 border-gray-200" />}
                             </div>
                         ))}
@@ -169,7 +170,6 @@ export default function Community2() {
                 )}
             </div>
 
-
-            </div>
+        </div>
     )
 }
