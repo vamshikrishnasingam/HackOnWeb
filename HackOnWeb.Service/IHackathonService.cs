@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 
 namespace HackOnWebService
 {
@@ -20,9 +19,5 @@ namespace HackOnWebService
         public Task<UserModel> CreateNewUser(UserModel user);
 
         public Task<string> HackathonDetails(HackathonModel hackdetails);
-
-        public Task<List<FileModel>> ListAsync();
-
-        public Task<FileResponseModel> UploadAsync(IFormFile blob);
     }
 }

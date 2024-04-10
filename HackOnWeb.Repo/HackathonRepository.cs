@@ -13,8 +13,6 @@ namespace HackOnWebRepo
         private readonly CosmosClient _cosmosclient;
         private const string DatabaseId = "HackathonMgmt";
         private const string ContainerId = "Users";
-        private const string FContainerId = "Files";
-
         public HackathonRepository(CosmosClient cosmosClient)
         {
             _cosmosclient = cosmosClient;
@@ -122,13 +120,6 @@ namespace HackOnWebRepo
             {
                 return $"Error inserting hackathon details: {ex.Message}";
             }
-        }
-
-        //uploading file
-        public async Task AddFile(FileModel file)
-        {
-            var container = _cosmosclient.GetContainer(DatabaseId,FContainerId);
-            await container.CreateItemAsync(file, new PartitionKey(file.FileName));
         }
 
     }
