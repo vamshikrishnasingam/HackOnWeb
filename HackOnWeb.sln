@@ -7,11 +7,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HackOnWeb.Server", "HackOnW
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "hackonweb.client", "hackonweb.client\hackonweb.client.esproj", "{134A10E3-417D-4073-B2EC-E032ECDA39A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{6B922354-B0C4-49DA-93B9-DD0F8FDC882E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csproj", "{6B922354-B0C4-49DA-93B9-DD0F8FDC882E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HackOnWebService", "HackOnWeb.Service\HackOnWebService.csproj", "{80C1DE0C-BB4B-4B5D-B490-B8856C74BF67}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HackOnWebService", "HackOnWeb.Service\HackOnWebService.csproj", "{80C1DE0C-BB4B-4B5D-B490-B8856C74BF67}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HackOnWebRepo", "HackOnWeb.Repo\HackOnWebRepo.csproj", "{FC605D56-CF8D-4D54-8491-526EFD1844D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HackOnWebRepo", "HackOnWeb.Repo\HackOnWebRepo.csproj", "{FC605D56-CF8D-4D54-8491-526EFD1844D9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B5170BF1-C47A-42F7-94A3-E5BC15E24546}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -113,5 +113,25 @@ namespace HackOnWeb.Server.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+
+        //file upload
+        [HttpGet]
+        [Route("ListFiles")]
+        public async Task<IActionResult> ListAllBlobs()
+        {
+            var result = await _hackathonService.ListAsync();
+            return Ok(result);
+        }
+
+        [HttpPost]
+        [Route("uploadFile")]
+        public async Task<IActionResult>Upload(IFormFile file)
+        {
+            var result = await _hackathonService.UploadAsync(file);
+            return Ok(result);
+        }
+
     }
-}
+
+
+    }
