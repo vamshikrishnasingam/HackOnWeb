@@ -12,7 +12,7 @@ namespace HackOnWebService
     public class HackathonService : IHackathonService
     {
         private readonly string _storageAccount = "fileblob1421";
-        private readonly string _accesskey = "VeL0hmaBlKb4v1f/80UU3gVcgIl4G+2CtU6/aCpOT9PFDXViG1QzLQ/IeBemcBhd7FquMm8A9fGF+AStmpY4Aw==";
+        private readonly string _accesskey = "";
         private readonly BlobContainerClient  _filesContainer;
         private readonly IHackathonRepository _hackathonRepository;
 
