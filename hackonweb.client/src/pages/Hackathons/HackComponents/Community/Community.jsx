@@ -5,7 +5,7 @@ import { OverlayTrigger, Tooltip, Button, Form, InputGroup } from 'react-bootstr
 import Switch from '@mui/material/Switch';
 import { IoCloudUploadOutline } from "react-icons/io5";
 import axios from 'axios';
-import './Community.css'
+import './Community.css';
 
 function Community() {
     const teamName = "PHOENIX";
