@@ -53,15 +53,14 @@ namespace HackOnWebService
             List<FileModel>files=new List<FileModel>();
             await foreach (var file in _filesContainer.GetBlobsAsync())
             {
-                string uri=_filesContainer.Uri.ToString();
-                var name=file.Name;
+                string uri = _filesContainer.Uri.ToString();
+                var name = file.Name;
                 var fullUri = $"{uri}/{name}";
                 files.Add(new FileModel
                 {
                     Uri = fullUri,
-                    Name = name,
                     ContentType = file.Properties.ContentType,
-                    FileName= name,
+                    Id = name,
                 });
             }
             return files;
@@ -72,7 +71,8 @@ namespace HackOnWebService
             
 
             FileResponseModel response = new();
-            BlobClient client = _filesContainer.GetBlobClient(blob.FileName);
+            var FileId = Guid.NewGuid().ToString();
+            BlobClient client = _filesContainer.GetBlobClient(FileId);
             await using (Stream? data = blob.OpenReadStream())
             {
                 await client.UploadAsync(data);
@@ -80,9 +80,9 @@ namespace HackOnWebService
             response.Status=$"File {blob.FileName} uploaded succesfully";
             response.Error = false;
             response.Blob.Uri = client.Uri.AbsoluteUri;
-            response.Blob.Name=client.Name;
-            response.Blob.FileName=blob.FileName;
-
+            response.Blob.Id=FileId;
+            response.Blob.FileName = blob.FileName;
+            response.Blob.ContentType=blob.ContentType;
             return response;
         }
        

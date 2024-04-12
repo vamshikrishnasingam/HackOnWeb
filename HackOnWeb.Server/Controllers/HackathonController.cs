@@ -125,7 +125,7 @@ namespace HackOnWeb.Server.Controllers
 
         [HttpPost]
         [Route("uploadFile")]
-        public async Task<IActionResult>Upload(IFormFile file)
+        public async Task<IActionResult>UploadPost(IFormFile file)
         {
             var result = await _hackathonService.UploadAsync(file);
             return Ok(result);
@@ -133,5 +133,4 @@ namespace HackOnWeb.Server.Controllers
 
     }
 
-
-    }
+}

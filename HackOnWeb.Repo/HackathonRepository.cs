@@ -12,7 +12,7 @@ namespace HackOnWebRepo
     {
         private readonly CosmosClient _cosmosclient;
         private const string DatabaseId = "HackathonMgmt";
-        private const string ContainerId = "Users";
+        private const string UserContainerId = "Users";
         private const string FContainerId = "Files";
 
         public HackathonRepository(CosmosClient cosmosClient)
@@ -21,7 +21,7 @@ namespace HackOnWebRepo
         }
         public async Task<List<UserModel>> getAllUsers()
         {
-            var container = _cosmosclient.GetContainer(DatabaseId, ContainerId);
+            var container = _cosmosclient.GetContainer(DatabaseId, UserContainerId);
 
             var query = "SELECT * FROM c";
             var queryDefinition = new QueryDefinition(query);
@@ -40,7 +40,7 @@ namespace HackOnWebRepo
 
         public async Task<List<UserModel>> getUserById(string id)
         {
-            var container = _cosmosclient.GetContainer(DatabaseId, ContainerId);
+            var container = _cosmosclient.GetContainer(DatabaseId, UserContainerId);
 
             var query = "SELECT * FROM c WHERE c.id = @id";
             var queryDefinition = new QueryDefinition(query).WithParameter("@id", id);
@@ -59,7 +59,7 @@ namespace HackOnWebRepo
 
         public async Task<UserModel> LoginWithPassword(string email, string password)
         {
-            var container = _cosmosclient.GetContainer(DatabaseId, ContainerId);
+            var container = _cosmosclient.GetContainer(DatabaseId, UserContainerId);
 
             var query = "SELECT * FROM c WHERE c.email = @email";
             UserModel user = null;
@@ -90,7 +90,7 @@ namespace HackOnWebRepo
 
         public async Task<UserModel> CreateNewUser(UserModel user)
         {
-            var container = _cosmosclient.GetContainer(DatabaseId, ContainerId);
+            var container = _cosmosclient.GetContainer(DatabaseId, UserContainerId);
 
 
             // Insert the user document into the container

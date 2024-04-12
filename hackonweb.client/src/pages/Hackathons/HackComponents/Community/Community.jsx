@@ -44,6 +44,7 @@ function Community() {
 
     const handleImageChange = (e) => {
         const img = e.target.files[0];
+        console.log(img);
         const reader = new FileReader();
         reader.onloadend = () => {
             setImage(reader.result);
@@ -56,11 +57,17 @@ function Community() {
     const handleImageUpload = () => {
         //upload image to database
         localStorage.setItem(`uploadedImage${uploadedImages.length + 1}`, image);
+        /*axios.post('http://localhost:5014/api/Hackathons/PostImage', { image: image })
+            .then((response) => {
+
+            }
+        );*/
+        console.log(image);
         setImage(null);
     };
 
     const handleImageUploadCancel = () => {
-        setImage(null);
+        //setImage(null);
         imageInputRef.current.value = null;
     };
 
