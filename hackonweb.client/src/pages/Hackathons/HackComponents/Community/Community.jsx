@@ -43,8 +43,8 @@ function Community() {
     };
 
     const handleImageChange = (e) => {
+        e.preventDefault()
         const img = e.target.files[0];
-        console.log(img);
         const reader = new FileReader();
         reader.onloadend = () => {
             setImage(reader.result);
@@ -54,15 +54,30 @@ function Community() {
         }
     };
 
-    const handleImageUpload = () => {
+    const handleImageUpload = async () => {
+        event.preventDefault()
+        /*if (!image) {
+            // Handle case when no image is selected
+            return;
+        }*/
         //upload image to database
-        localStorage.setItem(`uploadedImage${uploadedImages.length + 1}`, image);
-        /*axios.post('http://localhost:5014/api/Hackathons/PostImage', { image: image })
-            .then((response) => {
+        //localStorage.setItem(`uploadedImage${uploadedImages.length + 1}`, image);
+        // Create FormData object
+        const formData = new FormData();
+        formData.append('file', image); // 'file' should match the parameter name in your backend controller
 
-            }
-        );*/
-        console.log(image);
+        try {
+            // Send POST request to upload file
+            const response = await axios.post('https://localhost:7151/api/Hackathons/UploadFile', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data' // Set content type to multipart/form-data
+                }
+            });
+
+            console.log('File uploaded successfully:', response.data);
+        } catch (error) {
+            console.error('Error uploading file:', error);
+        }
         setImage(null);
     };
 
@@ -74,6 +89,7 @@ function Community() {
     //FILE RELATED FUNCTIONS
 
     const handleFileChange1 = (e) => {
+        e.preventDefault()
         const files = e.target.files[0];
         const reader = new FileReader();
         reader.onloadend = () => {
@@ -130,7 +146,7 @@ function Community() {
                     <div className="border-b border-gray-900/10 pb-12">
                         <div className="profile">
                             <h2 className="text-base font-semibold leading-7 text-white-900">{teamName}</h2>
-                            <p className="mt-1 text-sm leading-6 text-white-600">
+                            <div className="mt-1 text-sm leading-6 text-white-600">
                                 Welcome to your team page...!!
                                 <br />
                                 This information will be displayed publicly so be careful what you share.
@@ -141,7 +157,7 @@ function Community() {
                                     onChange={handleSetPublic}
                                     inputProps={{ 'aria-label': 'controlled' }}
                                 /></p>
-                            </p>
+                            </div>
                         </div>
 
                         <div className="mt-5 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">

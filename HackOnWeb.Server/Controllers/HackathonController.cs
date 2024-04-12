@@ -124,8 +124,8 @@ namespace HackOnWeb.Server.Controllers
         }
 
         [HttpPost]
-        [Route("uploadFile")]
-        public async Task<IActionResult>UploadPost(IFormFile file)
+        [Route("UploadFile")]
+        public async Task<IActionResult>UploadFile(IFormFile file)
         {
             var result = await _hackathonService.UploadAsync(file);
             return Ok(result);

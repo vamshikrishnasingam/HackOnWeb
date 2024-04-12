@@ -71,7 +71,7 @@ namespace HackOnWebService
             
 
             FileResponseModel response = new();
-            var FileId = Guid.NewGuid().ToString();
+            var FileId = Guid.NewGuid().ToString() + Path.GetExtension(blob.FileName);
             BlobClient client = _filesContainer.GetBlobClient(FileId);
             await using (Stream? data = blob.OpenReadStream())
             {
