@@ -140,6 +140,35 @@ namespace HackOnWeb.Server.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("GetCommunityDetails")]
+        public async Task<ActionResult<CommunityModel>>GetCommunityDetails(string Id)
+        {
+            try
+            {
+                var result = await _hackathonService.GetCommunityDetails(Id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpPut]
+        [Route("UpdateCommunityDetails")]
+        public async Task<ActionResult<CommunityModel>> UpdateCommunityDetails(CommunityModel community)
+        {
+            try
+            {
+                var result = await _hackathonService.UpdateCommunityDetails(community);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
     }
 
 }

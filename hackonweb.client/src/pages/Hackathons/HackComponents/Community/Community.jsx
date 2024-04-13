@@ -9,21 +9,40 @@ import './Community.css';
 
 function Community() {
     const teamName = "PHOENIX";
+    const [communityDetails, setCommunityDetails] = useState(null);
+    const [updatedCommunityDetails, setUpdatedCommunityDetails] = useState(null);
     const [image, setImage] = useState(null);
     const [readerImage, setReaderImage] = useState(null);
     const [file, setFile] = useState(null);
-    const [data, setData] = useState(null);
     const imageInputRef = useRef(null);
     const fileInputRef = useRef(null);  
     const [showImages, setShowImages] = useState(false);
     const [uploadedImages, setUploadedImages] = useState([]);
     const [publics, setPublic] = useState(false);
     useEffect(() => {
+        // Load images from local storage when component mounts
+        GetCommunityDetails();
+        console.log(communityDetails);
         if (showImages)
             loadImagesFromLocalStorage();
-
-        // Load images from local storage when component mounts
     }, [showImages]);
+
+    useEffect(() => {
+        GetCommunityDetails();
+    }, []);
+
+    const GetCommunityDetails = async () => {
+        try {
+            const Id = "asjlidfnvjd90erfsdasxz235kdjf";
+            const response = await axios.get(`https://localhost:7151/api/Hackathons/GetCommunityDetails?Id=${Id}`);
+            setCommunityDetails(response.data);
+            setUploadedImages(response.data.posts);
+            console.log(uploadedImages);
+            console.log('Data fetched successfully:', communityDetails);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
 
     //IMAGE RELATED FUNCTIONS
 
@@ -33,14 +52,8 @@ function Community() {
     }
 
     const loadImagesFromLocalStorage = () => {
-        const images = [];
-        for (let i = 0; i < localStorage.length; i++) {
-            const key = localStorage.key(i);
-            if (key.startsWith('uploadedImage')) {
-                images.push(localStorage.getItem(key));
-            }
-        }
-        setUploadedImages(images);
+        
+        
     };
 
     const handleImageChange = (e) => {
@@ -67,30 +80,38 @@ function Community() {
         // Create FormData object
         const fd = new FormData();
         fd.append('file', image); // 'file' should match the parameter name in your backend controller
-        console.log(fd.get('file'));
         try {
             // Send POST request to upload file
-            /*const response = await axios.post('https://localhost:7151/api/Hackathons/UploadFile', fd, {
-                headers: {
-                    'Content-Type': 'multipart/form-data' // Set content type to multipart/form-data
-                }
-            });*/
-            const response = await fetch('https://localhost:7151/api/Hackathons/UploadFile', {
+           const response = await fetch('https://localhost:7151/api/Hackathons/UploadFile', {
                 method: 'POST',
                 body: fd
             });
-            console.log(response);
-            let data = response.json();
-            console.log('File uploaded successfully:',data);
+            let data = await response.json();
+
+            console.log('File uploaded successfully:', data.blob.fileName);
+            // Once the image is uploaded, update the community details
+            const updatedPosts = [...uploadedImages, data.blob];
+            const updatedDetails = { ...communityDetails, posts: updatedPosts };
+            const response2 = await fetch('https://localhost:7151/api/Hackathons/UpdateCommunityDetails', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json' // Set the content type
+                },
+                body: JSON.stringify(updatedDetails)
+            });
+            GetCommunityDetails();
         } catch (error) {
             console.error('Error uploading file:', error);
         }
         setImage(null);
+        setReaderImage(null);
     };
 
     const handleImageUploadCancel = () => {
-        //setImage(null);
-        imageInputRef.current.value = null;
+        event.preventDefault();
+        setImage(null);
+        setReaderImage(null); 
+        imageInputRef.current = null;
     };
 
     //FILE RELATED FUNCTIONS
@@ -213,7 +234,7 @@ function Community() {
                                         {uploadedImages.map((image, index) => (
                                             <img
                                                 key={index}
-                                                src={image}
+                                                src={image.uri}
                                                 style={{ maxWidth: '20%', height: '20%', marginRight: '0.5rem' }}
                                                 className="sm:max-w-xs sm:h-auto"
                                                 alt={`Image ${index + 1}`}
