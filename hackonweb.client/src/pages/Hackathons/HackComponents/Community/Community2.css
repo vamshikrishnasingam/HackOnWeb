@@ -1,38 +1,70 @@
 
-.mentors {
-    background-color: #9fa4c4;
-    background-image: linear-gradient(315deg, #9fa4c4 0%, #9e768f 74%);
+:root {
+    --mentor-image: linear-gradient(-225deg, #A8BFFF 0%, #884D80 100%);
+     --member-image: linear-gradient(to left, #0250c5 0%, #d43f8d 100%);
+    --member-back-image: linear-gradient(to top, #f43b47 0%, #453a94 100%);
+    --comments-image: linear-gradient(to top, #ff0844 0%, #ffb199 100%);
+    ;
 }
-    /* Apply styles to every odd row within .mentors */
+.heading {
+    margin-top: 3vh;
+    color: white;
+    border: 2px;
+    text-align: center;
+    font-size: medium;
+    font-weight: 700;
+    border-radius: 20px 20px 0px 0px;
+    padding: 10px;
+}
+.heading#members{
+    margin-top:1vh;
+}
+.mentors td,
+.members td {
+    text-align: center;
+    padding: 1vh 2vw;
+    font-family: 'Times New Roman', Times, serif;
+    font-size:17px;
+}
 
-heading {
-    display: block;
-    padding: 5px;
+.heading#mentors {
+    background-image: var(--mentor-image);
+}
+.heading#members {
+    background-image: var(--member-image);
+}
+.heading#comments {
+    background-image: var(--comments-image);
+}
+.mentors td {
     color: black;
-    text-decoration: underline;
 }
-
+.members td {
+    color:black;
+}
+.mentors {
+    background-color: #F5F5F5;
+}
 .members {
-    background-color: #bdd4e7;
-    background-image: linear-gradient(315deg, #bdd4e7 0%, #8693ab 74%);
+    background-color: #F5F5F5;
 }
-
-.cell {
+.votes {
+    color: black;
+    padding-left:10px;
+    font-size: large;
+    font-weight: 700;
 }
-
+.comments {
+    background-color: #F5F5F5;
+}
 .comments_header {
-    padding:6px;
-    border-radius:6px;
-    background-color: #44b09e;
-    background-image: linear-gradient(70deg, #44b09e 0%, #e0d2c7 74%);
+    padding:6px 0px 0px 6px;
+    color:black;
+    font-weight:600;
 }
 .comments_content {
-    padding: 6px;
     border-radius: 6px;
-    background-color: #c3cbdc;
-    background-image: linear-gradient(147deg, #c3cbdc 0%, #edf1f4 74%);
-}
-.total {
-    background-color: #c3cbdc;
-    background-image: linear-gradient(147deg, #c3cbdc 0%, #edf1f4 74%);
+    padding-left:6px;
+    font-style:normal
+
 }

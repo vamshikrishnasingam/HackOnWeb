@@ -4,13 +4,13 @@ import './Community.css';
 function ComunityComp() {
     return (
         <div className="total flex flex-wrap">
-            <div className="w-full md:w-3/5 overflow-y-auto c1">
-                <div className="h-full community2-container">
+            <div className="md:w-3/5 overflow-y-auto c1">
+                <div className="">
                     <Community />
                 </div>
             </div>
-            <div className=" w-full md:w-2/5 overflow-y-auto relative c2">
-                <div className="h-full">
+            <div className="md:w-2/5 overflow-y-auto relative c2">
+                <div className="">
                     <Community2 />
                 </div>
             </div>
