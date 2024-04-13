@@ -5,12 +5,12 @@ namespace Common.Models
 {
     public class CommunityModel
     {
-        public string Id { get; set; }
-        public string CommunityName { get; set; }
-        public List<FileModel> Posts { get; set; }
-        public List<FileModel> Files { get; set; }
-        public string GithubLink { get; set; }
-        public string AppLink { get; set; }
-        public string Description { get; set; }
+        public string id { get; set; }
+        public string communityName { get; set; }
+        public List<FileModel> posts { get; set; }
+        public List<FileModel> files { get; set; }
+        public string githubLink { get; set; }
+        public string appLink { get; set; }
+        public string description { get; set; }
     }
 }

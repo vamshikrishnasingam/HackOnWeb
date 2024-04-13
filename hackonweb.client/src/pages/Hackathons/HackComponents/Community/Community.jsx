@@ -10,6 +10,7 @@ import './Community.css';
 function Community() {
     const teamName = "PHOENIX";
     const [communityDetails, setCommunityDetails] = useState(null);
+    const [updatedCommunityDetails, setUpdatedCommunityDetails] = useState(null);
     const [image, setImage] = useState(null);
     const [readerImage, setReaderImage] = useState(null);
     const [file, setFile] = useState(null);
@@ -32,11 +33,12 @@ function Community() {
 
     const GetCommunityDetails = async () => {
         try {
-            const Id = "jlidfnvjd90235kdjf";
+            const Id = "asjlidfnvjd90erfsdasxz235kdjf";
             const response = await axios.get(`https://localhost:7151/api/Hackathons/GetCommunityDetails?Id=${Id}`);
             setCommunityDetails(response.data);
             setUploadedImages(response.data.posts);
-            console.log(uploadedImages)
+            console.log(uploadedImages);
+            console.log('Data fetched successfully:', communityDetails);
         } catch (error) {
             console.error('Error fetching data:', error);
         }
@@ -86,7 +88,18 @@ function Community() {
             });
             let data = await response.json();
 
-            console.log('File uploaded successfully:',data.blob.fileName);
+            console.log('File uploaded successfully:', data.blob.fileName);
+            // Once the image is uploaded, update the community details
+            const updatedPosts = [...uploadedImages, data.blob];
+            const updatedDetails = { ...communityDetails, posts: updatedPosts };
+            const response2 = await fetch('https://localhost:7151/api/Hackathons/UpdateCommunityDetails', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json' // Set the content type
+                },
+                body: JSON.stringify(updatedDetails)
+            });
+            GetCommunityDetails();
         } catch (error) {
             console.error('Error uploading file:', error);
         }

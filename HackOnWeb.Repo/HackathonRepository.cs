@@ -151,13 +151,13 @@ namespace HackOnWebRepo
                     {
                         return new CommunityModel
                         {
-                            CommunityName = currentComm.CommunityName,
-                            Id = currentComm.Id,
-                            Description = currentComm.Description,
-                            AppLink = currentComm.AppLink,
-                            GithubLink = currentComm.GithubLink,
-                            Posts = currentComm.Posts,
-                            Files = currentComm.Files
+                            communityName = currentComm.communityName,
+                            id = currentComm.id,
+                            description = currentComm.description,
+                            appLink = currentComm.appLink,
+                            githubLink = currentComm.githubLink,
+                            posts = currentComm.posts,
+                            files = currentComm.files
                         };
                     }
                 }
@@ -170,35 +170,17 @@ namespace HackOnWebRepo
 
             return null; // or throw an exception if required
         }
-
         public async Task<string> UpdateCommunityDetails(CommunityModel community)
         {
             var container = _cosmosclient.GetContainer(DatabaseId, CommunityContainerId);
 
             try
             {
-                // Fetch the existing community document
-                var existingCommunity = await container.ReadItemAsync<CommunityModel>(community.Id, new PartitionKey(community.CommunityName));
+                var id=community.id;
+                var name = community.communityName;
+                var response = await container.ReplaceItemAsync(community, id, new PartitionKey(name));
 
-                if (existingCommunity != null)
-                {
-                    // Update the community properties
-                    existingCommunity.Resource.CommunityName = community.CommunityName;
-                    existingCommunity.Resource.Description = community.Description;
-                    existingCommunity.Resource.AppLink = community.AppLink;
-                    existingCommunity.Resource.GithubLink = community.GithubLink;
-                    existingCommunity.Resource.Posts = community.Posts;
-                    existingCommunity.Resource.Files = community.Files;
-
-                    // Replace the existing document with the updated one
-                    var response = await container.ReplaceItemAsync(existingCommunity.Resource, existingCommunity.Resource.Id, new PartitionKey(existingCommunity.Resource.CommunityName));
-
-                    return $"Community details updated with status code: {response.StatusCode}";
-                }
-                else
-                {
-                    return "Community not found.";
-                }
+                return $"Community details updated with status code: {response.StatusCode}";
             }
             catch (Exception ex)
             {
@@ -206,5 +188,8 @@ namespace HackOnWebRepo
             }
 
         }
+
+
+    }
 
 }
