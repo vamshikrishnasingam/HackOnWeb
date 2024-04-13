@@ -10,6 +10,7 @@ import './Community.css';
 function Community() {
     const teamName = "PHOENIX";
     const [image, setImage] = useState(null);
+    const [readerImage, setReaderImage] = useState(null);
     const [file, setFile] = useState(null);
     const [data, setData] = useState(null);
     const imageInputRef = useRef(null);
@@ -47,7 +48,8 @@ function Community() {
         const img = e.target.files[0];
         const reader = new FileReader();
         reader.onloadend = () => {
-            setImage(reader.result);
+            setImage(img);
+            setReaderImage(reader.result)
         };
         if (img) {
             reader.readAsDataURL(img);
@@ -68,13 +70,18 @@ function Community() {
         console.log(fd.get('file'));
         try {
             // Send POST request to upload file
-            const response = await axios.post('https://localhost:7151/api/Hackathons/UploadFile', fd, {
+            /*const response = await axios.post('https://localhost:7151/api/Hackathons/UploadFile', fd, {
                 headers: {
                     'Content-Type': 'multipart/form-data' // Set content type to multipart/form-data
                 }
+            });*/
+            const response = await fetch('https://localhost:7151/api/Hackathons/UploadFile', {
+                method: 'POST',
+                body: fd
             });
-
-            console.log('File uploaded successfully:', response.data);
+            console.log(response);
+            let data = response.json();
+            console.log('File uploaded successfully:',data);
         } catch (error) {
             console.error('Error uploading file:', error);
         }
@@ -100,6 +107,7 @@ function Community() {
         }
     };
     const handleFileChange2 = (e) => {
+        e.preventDefault()
         const files = e.target.files[0];
         const reader = new FileReader();
         reader.onloadend = () => {
@@ -111,11 +119,13 @@ function Community() {
     };
 
     const handleFileUpload = () => {
+        event.preventDefault()
         //upload file to database
         localStorage.setItem('uploadedFile', file);
         setFile(null);
     };
     const handleFileUploadCancel = () => {
+        event.preventDefault()
         setFile(null);
         fileInputRef.current.value = null;
     };
@@ -172,7 +182,7 @@ function Community() {
                                         <div className="text-center">
                                             {image ? (
                                                 <div className="mt-4 text-center">
-                                                    <img src={image} style={{ maxWidth: '100%', maxHeight: '300px' }} alt="Preview" />
+                                                    <img src={readerImage} style={{ maxWidth: '100%', maxHeight: '300px' }} alt="Preview" />
                                                     <button onClick={handleImageUpload}>Upload</button>
                                                     <button onClick={handleImageUploadCancel}>Cancel</button>
                                                 </div>

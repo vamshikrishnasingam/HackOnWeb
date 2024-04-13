@@ -18,7 +18,7 @@ namespace HackOnWebRepo
         public HackathonRepository(CosmosClient cosmosClient)
         {
             _cosmosclient = cosmosClient;
-        }
+        } 
         public async Task<List<UserModel>> getAllUsers()
         {
             var container = _cosmosclient.GetContainer(DatabaseId, UserContainerId);
