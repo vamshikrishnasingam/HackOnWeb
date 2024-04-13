@@ -127,8 +127,17 @@ namespace HackOnWeb.Server.Controllers
         [Route("UploadFile")]
         public async Task<IActionResult>UploadFile(IFormFile file)
         {
-            var result = await _hackathonService.UploadAsync(file);
-            return Ok(result);
+            try
+            {
+                if (file == null || file.Length == 0)
+                    return BadRequest("No file uploaded");
+                var result = await _hackathonService.UploadAsync(file);
+                return Ok(result); 
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
     }

@@ -43,7 +43,7 @@ app.UseStaticFiles();
 // Configure CORS
 app.UseCors(builder =>
 {
-    builder.WithOrigins("https://localhost:5173") // Update with your frontend origin URL
+    builder.WithOrigins("*") // Update with your frontend origin URL
            .AllowAnyHeader()
            .AllowAnyMethod();
 });

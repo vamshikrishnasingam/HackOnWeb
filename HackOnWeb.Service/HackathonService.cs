@@ -68,22 +68,33 @@ namespace HackOnWebService
 
         public async Task<FileResponseModel> UploadAsync (IFormFile blob)
         {
-            
 
-            FileResponseModel response = new();
-            var FileId = Guid.NewGuid().ToString() + Path.GetExtension(blob.FileName);
-            BlobClient client = _filesContainer.GetBlobClient(FileId);
-            await using (Stream? data = blob.OpenReadStream())
+            try
             {
-                await client.UploadAsync(data);
+
+                FileResponseModel response = new();
+                var FileId = Guid.NewGuid().ToString() + Path.GetExtension(blob.FileName);
+                BlobClient client = _filesContainer.GetBlobClient(FileId);
+                await using (Stream? data = blob.OpenReadStream())
+                {
+                    await client.UploadAsync(data);
+                }
+                response.Status = $"File {blob.FileName} uploaded succesfully";
+                response.Error = false;
+                response.Blob.Uri = client.Uri.AbsoluteUri;
+                response.Blob.Id = FileId;
+                response.Blob.FileName = blob.FileName;
+                response.Blob.ContentType = blob.ContentType;
+                return response;
             }
-            response.Status=$"File {blob.FileName} uploaded succesfully";
-            response.Error = false;
-            response.Blob.Uri = client.Uri.AbsoluteUri;
-            response.Blob.Id=FileId;
-            response.Blob.FileName = blob.FileName;
-            response.Blob.ContentType=blob.ContentType;
-            return response;
+            catch (Exception e)
+            {
+                return new FileResponseModel
+                {
+                    Status = e.Message,
+                    Error = true
+                };
+            }   
         }
        
     }

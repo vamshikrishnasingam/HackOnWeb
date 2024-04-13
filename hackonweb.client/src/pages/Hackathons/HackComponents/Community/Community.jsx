@@ -56,19 +56,19 @@ function Community() {
 
     const handleImageUpload = async () => {
         event.preventDefault()
-        /*if (!image) {
-            // Handle case when no image is selected
+        if (!image) {
+            console.error('No image selected');
             return;
-        }*/
+        }
         //upload image to database
         //localStorage.setItem(`uploadedImage${uploadedImages.length + 1}`, image);
         // Create FormData object
-        const formData = new FormData();
-        formData.append('file', image); // 'file' should match the parameter name in your backend controller
-
+        const fd = new FormData();
+        fd.append('file', image); // 'file' should match the parameter name in your backend controller
+        console.log(fd.get('file'));
         try {
             // Send POST request to upload file
-            const response = await axios.post('https://localhost:7151/api/Hackathons/UploadFile', formData, {
+            const response = await axios.post('https://localhost:7151/api/Hackathons/UploadFile', fd, {
                 headers: {
                     'Content-Type': 'multipart/form-data' // Set content type to multipart/form-data
                 }
@@ -169,19 +169,26 @@ function Community() {
                                         className="block cursor-pointer rounded-md font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
                                         style={{ display: 'block', padding: '10px' }}
                                     >
-                                        <div className=" text-center">
+                                        <div className="text-center">
                                             {image ? (
                                                 <div className="mt-4 text-center">
-                                                    <img src={image} style={{ maxWidth: '100%', maxHeight: '300px' }} />
-                                                    <button onClick={handleImageUpload}>upload</button>
-                                                    <button onClick={handleImageUploadCancel}>cancel</button>
+                                                    <img src={image} style={{ maxWidth: '100%', maxHeight: '300px' }} alt="Preview" />
+                                                    <button onClick={handleImageUpload}>Upload</button>
+                                                    <button onClick={handleImageUploadCancel}>Cancel</button>
                                                 </div>
                                             ) : (
                                                 <div>
                                                     <PhotoIcon className="mx-auto h-20 w-12 text-gray-300" aria-hidden="true" />
                                                     <div className="mt-4 flex text-sm leading-6 text-gray-600">
                                                         <span>Upload a file</span>
-                                                        <input id="image-upload" name="image-upload" type="file" className="sr-only" onChange={handleImageChange} ref={imageInputRef} />
+                                                        <input
+                                                            id="image-upload"
+                                                            name="image-upload"
+                                                            type="file"
+                                                            className="sr-only"
+                                                            onChange={handleImageChange}
+                                                            ref={imageInputRef}
+                                                        />
                                                     </div>
                                                     <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
                                                     <p className="pl-1">or drag and drop</p>
