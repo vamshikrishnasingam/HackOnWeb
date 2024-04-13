@@ -14,7 +14,7 @@ function Community() {
     const [file, setFile] = useState(null);
     const [data, setData] = useState(null);
     const imageInputRef = useRef(null);
-    const fileInputRef = useRef(null);
+    const fileInputRef = useRef(null);  
     const [showImages, setShowImages] = useState(false);
     const [uploadedImages, setUploadedImages] = useState([]);
     const [publics, setPublic] = useState(false);
@@ -152,14 +152,14 @@ function Community() {
     return (
         <div className="">
             <form className="p-10">
-                <div className=" space-y-12">
-                    <div className="border-b border-gray-900/10 pb-12">
+                <div className="">
+                    <div className="">
                         <div className="profile">
-                            <h2 className="text-base font-semibold leading-7 text-white-900">{teamName}</h2>
-                            <div className="mt-1 text-sm leading-6 text-white-600">
+                            <h2 className="mb-2 font-bold text">{teamName}</h2>
+                            <div className="mx-auto text-m">
                                 Welcome to your team page...!!
                                 <br />
-                                This information will be displayed publicly so be careful what you share.
+                                This information will be posted on your community so be careful what you share.
                                 <br />
                                 <p>Make Public <Switch
                                     label="Public"
@@ -170,13 +170,13 @@ function Community() {
                             </div>
                         </div>
 
-                        <div className="mt-5 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                        <div className="grid grid-cols-1">
                             <div className="col-span-full">
-                                <h4 className="heading font-bold mb-4 pt-2">POST YOUR THOUGHTS</h4>
-                                <div className="posts flex justify-center rounded-lg border border-gray-900 px-5 py-5">
+                                <h4 className="heading" id="posts">POST YOUR THOUGHTS</h4>
+                                <div className="posts flex justify-center border border-gray-900 px-5 py-5">
                                     <label
                                         htmlFor="image-upload"
-                                        className="block cursor-pointer rounded-md font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+                                        className="block cursor-pointer  font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
                                         style={{ display: 'block', padding: '10px' }}
                                     >
                                         <div className="text-center">
@@ -207,9 +207,9 @@ function Community() {
                                         </div>
                                     </label>
                                 </div>
-                                <button className="show mb-4" onClick={callShowImages}>Show Posts</button>
+                                <button className="show" onClick={callShowImages}>Show Posts</button>
                                 {showImages === true && (
-                                    <div className="mt-10 sm:flex sm:overflow-x-auto">
+                                    <div className="mt-3 sm:flex sm:overflow-x-auto">
                                         {uploadedImages.map((image, index) => (
                                             <img
                                                 key={index}
@@ -221,17 +221,17 @@ function Community() {
                                         ))}
                                     </div>
                                 )}
-                                <h4 className="heading font-bold mb-4 pt-2">UPLOAD FILES & LINKS</h4>
-                                <div className=" mt-3 grid gap-4 grid-cols-2" style={{ gridTemplateColumns: '1fr 3fr' }}>
+                                <h4 className="heading" id="files">UPLOAD FILES & LINKS</h4>
+                                <div className=" mt-2 grid gap-4 grid-cols-2" style={{ gridTemplateColumns: '1fr 3fr' }}>
                                     {/* first 2 pdfs */}
                                     <div className="flex justify-start gap-5">
                                         {/* First File Upload */}
                                         <div>
                                             <label
                                                 htmlFor="file-upload-1"
-                                                className="block cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+                                                className="block cursor-pointer  bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
                                             >
-                                                <div className="flex justify-center rounded-lg border border-gray-900" style={{ width: '100px', height: '100px' }}>
+                                                <div className="files flex justify-center" style={{ width: '100px', height: '100px' }}>
                                                     <div className="text-center" style={{ width: '100%', height: '100%' }}>
                                                         <div className="flex items-center justify-center h-full">
                                                             <IoCloudUploadOutline className="text-2xl text-gray-900" />
@@ -247,7 +247,7 @@ function Community() {
                                                 htmlFor="file-upload-2"
                                                 className="block cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
                                             >
-                                                <div className="flex justify-center rounded-lg border border-gray-900" style={{ width: '100px', height: '100px' }}>
+                                                <div className="files flex justify-center" style={{ width: '100px', height: '100px' }}>
                                                     <div className="text-center" style={{ width: '100%', height: '100%' }}>
                                                         <div className="flex items-center justify-center h-full">
                                                             <IoCloudUploadOutline className="text-2xl text-gray-900" />
@@ -289,14 +289,15 @@ function Community() {
                                 </div>
                             </div>
                             <div className="col-span-full">
-                                <h4 className="heading font-bold mb-4 pt-2">DESCRIPTION</h4>
-                                <div className="mt-2">
+                                <h4 className="heading" id="desc">DESCRIPTION</h4>
+                                <div className="">
                                     <textarea
                                         id="about"
                                         name="about"
                                         rows={5}
-                                        className=" desc  block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-black focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                        defaultValue={''}
+                                        placeholder="Describe your project"
+                                        className=" desc  block w-full p-1 py-2 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-black focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                        defaultValue={teamName}
                                     />
                                 </div>
                             </div>

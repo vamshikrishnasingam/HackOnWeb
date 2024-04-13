@@ -61,106 +61,111 @@ export default function Community2() {
         {
             name: 'Shashi',
             role: 'Co-Founder / CEO',
-            imageUrl:
-                'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-        },
+            },
         {
             name: 'Pasha',
             role: 'Co-Founder / CEO',
-            imageUrl:
-                'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-        },
+            },
     ]
 
     const people = [
         {
             name: 'Shashi',
             role: 'Co-Founder / CEO',
-            imageUrl:
-                'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-        },
+            },
         {
             name: 'Pasha',
             role: 'Co-Founder / CEO',
-            imageUrl:
-                'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
         },
         {
             name: 'Vamshi',
             role: 'Co-Founder / CEO',
-            imageUrl:
-                'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-        },
+          },
         {
             name: 'charan',
             role: 'Co-Founder / CEO',
-            imageUrl:
-                'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
         },
     ]
 
     return (
-        <div className="sm:py-8 px-9 flex flex-col">
-            {/*  likes component  */}
-            <h4 className="heading font-bold mb-3 ">VOTES</h4>
-            <div className="flex gap-4 items-center">
-                <div className="flex justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm ">
-                    LIKES: {likeCount}
+        <div className="sm:py-8 px-3 flex flex-col">
+            {/* teams component  */}
+            <h4 className="heading" id="members">TEAM MEMBERS :</h4>
+            <section className="members">
+                <div className="mx-auto">
+                    <div className="max-w-full">
+                        <table className="w-full table-auto">
+                            <tbody>
+                                {people.map((row, index) => (
+                                    <tr key={index}>
+                                        <td><img className="h-12 w-12  flex-none rounded-full" src={row.imageUrl} alt="" /></td>
+                                        <td>{row.name}</td>
+                                        <td>{row.role}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <div className="flex justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm ">
-                    DISLIKES: {dislikeCount}
+            </section>
+            {/* mentors component  */}
+            <h4 className="heading" id="mentors">MENTORS :</h4>
+            <section className="mentors">
+                <div className="mx-auto">
+                    <div className="max-w-full">
+                        <table className="w-full table-auto">
+                            <tbody>
+                                {mentors.map((row, index) => (
+                                    <tr key={index}>
+                                        <td><img className="h-12 w-12  flex-none rounded-full" src={row.imageUrl} alt="" /></td>
+                                        <td>{row.name}</td>
+                                        <td>{row.role}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            {/*  likes component  */}
+            <div className="flex gap-4 items-center mt-4">
+                <h4 className="votes">VOTES :</h4>
+                <div className="flex justify-center rounded-md bg-white px-3 py-2 border border-success font-bold text-success">
+                    LIKES: <p className="text-black pl-2">{likeCount}</p>
+                </div>
+                <div className="flex justify-center rounded-md bg-white px-3 py-2 border border-danger font-bold text-danger">
+                    DISLIKES: <p className="text-black pl-2">{dislikeCount}</p>
                 </div>
             </div>
-            {/* mentors component  */}
-            <h4 className="heading font-bold mb-2">MENTORS :</h4>
-            <TableContainer component={Paper} className="mentors">
+            {/*<TableContainer component={Paper} className="mentors">
                 <Table sx={{ maxWidth: 400 }} aria-label="simple table">
-                    <TableBody >
+                    <TableBody className="table_body">
                         {mentors.map((row) => (
                             <TableRow 
                                 key={row.name}
-                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+
                             >
                                 <TableCell component="th" scope="row">
-                                    <img className="h-12 w-12 flex-none rounded-full bg-gray-50" src={row.imageUrl} alt="" />
+                                    <img className="h-12 w-12 flex-none rounded-full" src={row.imageUrl} alt="" />
                                 </TableCell>
-                                <TableCell className="cell text-white" align="center">{row.name}</TableCell>
+                                <TableCell className="cell text-violet" align="center">{row.name}</TableCell>
                                 <TableCell align="center">{row.role}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
                 </Table>
-            </TableContainer>
-            {/* teams component  */}
-            <h4 className="heading font-bold mb-4 pt-2">TEAM MEMBERS :</h4>
-            <TableContainer component={Paper} className="members">
-                <Table sx={{ maxWidth: 400 }} aria-label="simple table">
-                    <TableBody>
-                        {people.map((row) => (
-                            <TableRow className="mentorsrow"
-                                key={row.name}
-                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                            >
-                                <TableCell component="th" scope="row">
-                                    <img className="h-12 w-12 flex-none rounded-full bg-gray-50" src={row.imageUrl} alt="" />
-                                </TableCell>
-                                <TableCell align="center">{row.name}</TableCell>
-                                <TableCell align="center">{row.role}</TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-            
+            </TableContainer>*/}
+           
+
             {/* comments component  */}
             <div>
-                <h2 className="heading text-xl font-bold mb-3 mt-3">COMMENTS</h2>
+                <h2 className="heading" id="comments">COMMENTS</h2>
                 {comments.length > 0 ? (
-                    <div className="border border-gray-200 rounded-lg mb-2">
+                    <div className="comments">
                         {comments.map((comment, index) => (
                             <div key={index}>
-                                <p className="comments_header text-black-700 font-bold">{comment.author}</p>
-                                <p className="comments_content text-black-900">{comment.content}</p>
+                                <p className="comments_header">{comment.author}</p>
+                                <p className="comments_content">{comment.content}</p>
                                 {index !== comments.length - 1 && <hr className="my-2 border-gray-200" />}
                             </div>
                         ))}
