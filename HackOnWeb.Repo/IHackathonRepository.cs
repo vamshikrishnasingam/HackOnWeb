@@ -20,5 +20,9 @@ namespace HackOnWebRepo
         public Task<string> HackathonDetails(HackathonModel hackdetails);
         
         public Task AddFile(FileModel file);
+
+        public Task<CommunityModel> GetCommunityDetails(string Id);
+
+        public Task<string> UpdateCommunityDetails(CommunityModel community);
     }
 }

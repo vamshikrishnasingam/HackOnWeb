@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Common.Models;
+using Azure;
+using Newtonsoft.Json;
 
 namespace HackOnWebRepo
 {
@@ -14,6 +16,7 @@ namespace HackOnWebRepo
         private const string DatabaseId = "HackathonMgmt";
         private const string UserContainerId = "Users";
         private const string FContainerId = "Files";
+        private const string CommunityContainerId = "Communities";
 
         public HackathonRepository(CosmosClient cosmosClient)
         {
@@ -131,6 +134,77 @@ namespace HackOnWebRepo
             await container.CreateItemAsync(file, new PartitionKey(file.FileName));
         }
 
-    }
+        public async Task<CommunityModel> GetCommunityDetails(string Id)
+        {
+            var container = _cosmosclient.GetContainer(DatabaseId, CommunityContainerId);
+
+            var query = "SELECT * FROM c WHERE c.id = @Id";
+            var queryDefinition = new QueryDefinition(query).WithParameter("@Id", Id);
+            try
+            {
+                var resultSetIterator = container.GetItemQueryIterator<CommunityModel>(queryDefinition);
+                if (resultSetIterator.HasMoreResults)
+                {
+                    var response = await resultSetIterator.ReadNextAsync();
+                    var currentComm = response.FirstOrDefault();
+                    if (currentComm != null)
+                    {
+                        return new CommunityModel
+                        {
+                            CommunityName = currentComm.CommunityName,
+                            Id = currentComm.Id,
+                            Description = currentComm.Description,
+                            AppLink = currentComm.AppLink,
+                            GithubLink = currentComm.GithubLink,
+                            Posts = currentComm.Posts,
+                            Files = currentComm.Files
+                        };
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle exception
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+
+            return null; // or throw an exception if required
+        }
+
+        public async Task<string> UpdateCommunityDetails(CommunityModel community)
+        {
+            var container = _cosmosclient.GetContainer(DatabaseId, CommunityContainerId);
+
+            try
+            {
+                // Fetch the existing community document
+                var existingCommunity = await container.ReadItemAsync<CommunityModel>(community.Id, new PartitionKey(community.CommunityName));
+
+                if (existingCommunity != null)
+                {
+                    // Update the community properties
+                    existingCommunity.Resource.CommunityName = community.CommunityName;
+                    existingCommunity.Resource.Description = community.Description;
+                    existingCommunity.Resource.AppLink = community.AppLink;
+                    existingCommunity.Resource.GithubLink = community.GithubLink;
+                    existingCommunity.Resource.Posts = community.Posts;
+                    existingCommunity.Resource.Files = community.Files;
+
+                    // Replace the existing document with the updated one
+                    var response = await container.ReplaceItemAsync(existingCommunity.Resource, existingCommunity.Resource.Id, new PartitionKey(existingCommunity.Resource.CommunityName));
+
+                    return $"Community details updated with status code: {response.StatusCode}";
+                }
+                else
+                {
+                    return "Community not found.";
+                }
+            }
+            catch (Exception ex)
+            {
+                return $"Error updating community details: {ex.Message}";
+            }
+
+        }
 
 }

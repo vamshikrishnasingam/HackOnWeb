@@ -96,6 +96,14 @@ namespace HackOnWebService
                 };
             }   
         }
-       
+        public async Task<CommunityModel> GetCommunityDetails(string Id)
+        {
+            return await _hackathonRepository.GetCommunityDetails(Id);
+        }
+
+        public async Task<string> UpdateCommunityDetails(CommunityModel community)
+        {
+            return await _hackathonRepository.UpdateCommunityDetails(community);
+        }
     }
 }
