@@ -157,7 +157,8 @@ namespace HackOnWebRepo
                             appLink = currentComm.appLink,
                             githubLink = currentComm.githubLink,
                             posts = currentComm.posts,
-                            files = currentComm.files
+                            files = currentComm.files,
+                            visibility = currentComm.visibility
                         };
                     }
                 }

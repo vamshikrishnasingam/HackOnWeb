@@ -12,5 +12,6 @@ namespace Common.Models
         public string githubLink { get; set; }
         public string appLink { get; set; }
         public string description { get; set; }
+        public bool visibility { get; set; }
     }
 }
