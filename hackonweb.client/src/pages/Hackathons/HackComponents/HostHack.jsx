@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 
 function HostHack() {
     const [step, setStep] = useState(1); // Current step
@@ -13,9 +13,10 @@ function HostHack() {
     });
 
     const [roundsData, setRoundsData] = useState([]);
-    for (let i = 0; i < 3; i++) {
-        roundsData.push({});
-    }
+    useEffect(() => {
+        setRoundsData(Array.from({ length: hackathonDetails.rounds }, () => ({})));
+    }, [hackathonDetails.rounds]);
+
 
     const handleChangeHackathonDetails = (e) => {
         const { name, value } = e.target;
@@ -528,6 +529,43 @@ function HostHack() {
                             </div>
                         </div>
                     )}
+                    {step === hackathonDetails.rounds + 2 && (
+                        <div>
+                            <h2 className="text-6xl font-bold mb-4 text-center text-blue-900">Preview</h2>
+                            <div className="bg-gray-100 p-4 rounded-lg">
+                                <h3 className="text-lg font-semibold">Hackathon Details</h3>
+                                <p><strong>Hackathon Name:</strong> {hackathonDetails.HackathonName}</p>
+                                <p><strong>Description:</strong> {hackathonDetails.HackathonDescription}</p>
+                                <p><strong>Start Date:</strong> {hackathonDetails.startDate}</p>
+                                <p><strong>End Date:</strong> {hackathonDetails.endDate}</p>
+                                <p><strong>Coding Round:</strong> {hackathonDetails.coding}</p>
+                                <p><strong>Location:</strong> {hackathonDetails.location}</p>
+                            </div>
+                            {/* Preview round details */}
+                            {roundsData.map((round, index) => (
+                                <div key={index} className="bg-gray-100 p-4 mt-4 rounded-lg">
+                                    <h3 className="text-lg font-semibold">Round {index + 1} Details</h3>
+                                    <p><strong>Contest Name:</strong> {round.Round1Name}</p>
+                                    <p><strong>Platform:</strong> {round.platform}</p>
+                                    <p><strong>Link:</strong> {round.Link}</p>
+                                    <p><strong>Start Date:</strong> {round.StartDate1}</p>
+                                    <p><strong>End Date:</strong> {round.endDate1}</p>
+                                    {/* Additional fields based on coding round selection */}
+                                    {hackathonDetails.coding === 'yes' && (
+                                        <div>
+                                            <p><strong>Problem Statements:</strong> {round.ProblemStatements}</p>
+                                            <p><strong>Mode Of Submission:</strong> {round.ModeOfSubmission}</p>
+                                            <p><strong>Start Date:</strong> {round.StartDate2}</p>
+                                            <p><strong>End Date:</strong> {round.EndDate2}</p>
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                           
+                        </div>
+                    )}
+
+
                     {/* Navigation buttons */}
                     <div className="flex justify-between mt-4">
                         {step > 1 && (
@@ -539,7 +577,7 @@ function HostHack() {
                                 Previous
                             </button>
                         )}
-                        {step < hackathonDetails.rounds + 1 && (
+                        {step <=hackathonDetails.rounds + 1 && (
                             <button
                                 className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                 type="button"
@@ -548,7 +586,7 @@ function HostHack() {
                                 Next
                             </button>
                         )}
-                        {step === hackathonDetails.rounds + 1 && (
+                        {step === hackathonDetails.rounds + 2 && (
                             <button
                                 className="text-white bg-green-500 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
                                 type="submit"
