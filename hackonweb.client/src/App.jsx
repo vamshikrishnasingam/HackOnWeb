@@ -4,13 +4,14 @@ import LoginPage from './pages/Login/LoginPage';
 import RootLayout from './RootLayout/RootLayout';
 import Home from './pages/Home/Home'
 import HackRoute from './pages/Hackathons/HackRoute/HackRoute';
-import OnGoingHacks from './pages/Hackathons/HackComponents/OnGoingHacks';
-import UpcomingHacks from './pages/Hackathons/HackComponents/UpcomingHacks';
-import HackHost from './pages/Hackathons/HackComponents/HostHack';
+import OnGoingHacks from './pages/Hackathons/HackComponents/Hacks/OnGoingHacks';
+import UpcomingHacks from './pages/Hackathons/HackComponents/Hacks/UpcomingHacks';
+import HackHost from './pages/Hackathons/HackComponents/HostHack/HostHack';
 import SignUp from './pages/SignUp/SignUp';
 import CommunityComp from './pages/Hackathons/HackComponents/Community/ComunityComp';
 import Mentors from './pages/Metors/Mentors';
 import Calendar from './pages/Calendar/Calendar'
+import HostHackVerification from './pages/Hackathons/HackComponents/HostHack/HostHackVerification';
 function App() {
     return (
         <div className='App'>
@@ -25,7 +26,7 @@ function App() {
                         <Route path="/hackathons" element={<HackRoute />}>
                             <Route path="" element={<OnGoingHacks />} />
                             <Route path="upcoming" element={<UpcomingHacks />} />
-                            <Route path="hack-host" element={<HackHost />} />
+                            <Route path="hack-host" element={<HostHackVerification/>} />
                             <Route path="community" element={<CommunityComp/>
                         } />
                         </Route>
