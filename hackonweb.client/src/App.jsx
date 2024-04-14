@@ -12,6 +12,7 @@ import CommunityComp from './pages/Hackathons/HackComponents/Community/ComunityC
 import Mentors from './pages/Metors/Mentors';
 import Calendar from './pages/Calendar/Calendar'
 import HostHackVerification from './pages/Hackathons/HackComponents/HostHack/HostHackVerification';
+import AddJuryMentor from './pages/Hackathons/HackComponents/MentorJury/AddJuryMentor';
 function App() {
     return (
         <div className='App'>
@@ -27,8 +28,8 @@ function App() {
                             <Route path="" element={<OnGoingHacks />} />
                             <Route path="upcoming" element={<UpcomingHacks />} />
                             <Route path="hack-host" element={<HostHackVerification/>} />
-                            <Route path="community" element={<CommunityComp/>
-                        } />
+                            <Route path="community" element={<CommunityComp />} />
+                            <Route path="jury-mentors" element={<AddJuryMentor/>} />
                         </Route>
                     </Route>
                 </Routes>

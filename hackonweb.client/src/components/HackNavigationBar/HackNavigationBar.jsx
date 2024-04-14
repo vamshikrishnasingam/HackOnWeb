@@ -1,9 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState,useRef,useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import './HackNavigationBar.css'
+import { FaChevronDown } from 'react-icons/fa'
 function HackNavigationBar() {
     const location = useLocation();
     const [isOpen, setIsOpen] = useState(false);
+    const [isDropOpen, setIsDropOpen] = useState(false);
+    const dropdownRef = useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setIsDropOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
+    const toggleDropdown = () => {
+        setIsDropOpen(!isOpen);
+    };
 
     return (
         <nav className="hacknav bg-blue-100 dark:bg-gray-900 w-full border-b border-gray-200 dark:border-gray-600">
@@ -24,25 +45,65 @@ function HackNavigationBar() {
                     <ul className=" navele flex flex-col md:p-0 font-medium  md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0  dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
                         <Link
                             to=""
-                            className={`flex justify-center items-center block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-green dark:border-gray-700 ${location.pathname === '/hackathons' ? 'text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800' : 'text-gray-900'}`}
+                            className={`flex justify-center items-center block py-2 px-3 rounded hover:bg-green-800 hover:text-white md:hover:bg-green dark:border-gray-700 ${location.pathname === '/hackathons' ? 'text-white bg-blue-700 hover:bg-blue-400 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800' : 'text-gray-900'}`}
                         >
                             OnGoing Hacks
                         </Link>
                         <Link
                             to="upcoming"
-                            className={`flex justify-center items-center block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-green dark:border-gray-700 ${location.pathname === '/hackathons/upcoming' ? 'text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800' : 'text-gray-900'}`}
+                            className={`flex justify-center items-center block py-2 px-3 rounded hover:bg-green-800 hover:text-white md:hover:bg-green dark:border-gray-700 ${location.pathname === '/hackathons/upcoming' ? 'text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800' : 'text-gray-900'}`}
                        >
                             Upcoming Hacks
                         </Link>
-                        <Link
+                       {/* <Link
                             to="hack-host"
                             className={`flex justify-center items-center block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-green dark:border-gray-700 ${location.pathname === '/hackathons/hack-host' ? 'text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800' : 'text-gray-900'}`}
                         >
                             Host A Hack
+                        </Link>*/}
+                        <Link ref={dropdownRef} 
+                            className={`relative inline-block text-left flex justify-center items-center block rounded hover:bg-green-800 hover:text-white md:hover:bg-green dark:border-gray-700 ${(location.pathname === '/hackathons/hack-host' || location.pathname === '/hackathons/mentors') ? 'text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 px-2 py-1 rounded-lg text-sm  dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800' : 'text-gray-900'}`}
+                      >
+                            <button
+                                id="dropdownHoverButton"
+                                onMouseEnter={toggleDropdown}
+                                className='border-0'
+                                  type="button"
+                            >
+                                Host A Hack
+                            </button>
+
+                            {/* Dropdown menu */}
+                            {isDropOpen && (
+                                <div
+                                    id="dropdownHover"
+                                    className="z-10 absolute top-full left-0 mt-1 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
+                                >
+                                    <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownHoverButton">
+                                        <li>
+                                            <Link
+                                                to="hack-host"
+                                                className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                            >
+                                                Host A Hack
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link
+                                                to="jury-mentors"
+                                                className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                            >
+                                                Add Mentor/Jury
+                                            </Link>
+                                        </li>
+                                    </ul>
+                                </div>
+                            )}
                         </Link>
+                       
                         <Link
                             to="community"
-                            className={`flex justify-center items-center block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-green dark:border-gray-700 ${location.pathname === '/hackathons/community' ? 'text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800' : 'text-gray-900'}`}
+                            className={`flex justify-center items-center block py-2 px-3 rounded hover:bg-green-800 hover:text-white md:hover:bg-green dark:border-gray-700 ${location.pathname === '/hackathons/community' ? 'text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800' : 'text-gray-900'}`}
                         >
                             community
                         </Link>

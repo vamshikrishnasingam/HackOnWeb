@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import HostHack from './HostHack'; // Import the HostHack component
+import { FaCheckCircle } from 'react-icons/fa';
 
 const HostHackVerification = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [document, setDocument] = useState(null);
     const [loading, setLoading] = useState(false);
-    const [verified, setVerified] = useState(false); // State to track if verification is successful
+    const [verified, setVerified] = useState(false); 
+    const [showHostHack, setShowHostHack] = useState(false);
     const [errors, setErrors] = useState({});
 
     const handleEmailChange = (e) => {
@@ -63,10 +65,17 @@ const HostHackVerification = () => {
             setLoading(false);
         }
     };
+    useEffect(() => {
+        if (verified) {
+            setTimeout(() => {
+                setShowHostHack(true);
+            }, 2000); // Show HostHack component after 2 seconds
+        }
+    }, [verified]);
 
     return (
         <div className="justify-center items-center p-5 mt-10">
-            {!verified ? (
+            {!showHostHack ? (
                 <div className="max-w-xl mx-auto p-10 border rounded-lg bg-gray-50">
                     <h2 className="text-xl font-semibold mb-4 text-center">Host Hack Verification</h2>
                     {errors.apiError && <div className="text-red-600 text-sm mb-4">{errors.apiError}</div>}
@@ -106,9 +115,15 @@ const HostHackVerification = () => {
                             />
                             {errors.document && <p className="text-red-600 text-sm mt-1">{errors.document}</p>}
                         </div>
-                        <button type="submit" className={`bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 w-full ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}>
-                            {loading ? 'Verifying...' : 'Verify'}
-                        </button>
+                        {verified ? (
+                            <button type="button" className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 w-full">
+                                <FaCheckCircle className="inline-block mr-2" /> Verified!
+                            </button>
+                        ) : (
+                            <button type="submit" className={`bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 w-full ${loading ? 'opacity-50 cursor-not-allowed' : ''}`} disabled={loading}>
+                                {loading ? 'Verifying...' : 'Verify'}
+                            </button>
+                        )}
                     </form>
                 </div>
             ) : (
