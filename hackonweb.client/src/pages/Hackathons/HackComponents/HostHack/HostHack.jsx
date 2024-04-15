@@ -37,8 +37,23 @@ function HostHack() {
         setErrors({ ...errors, [name]: '' });
     };
     // Define handleChangeFile function
-    const handleChangeFile = (e, index) => {
-        const file = e.target.files[0]; // Get the uploaded file
+    const handleChangeFile = async (e, index) => {
+        const file = e.target.files[0];// Get the uploaded file
+        const fd = new FormData();
+        fd.append('file', file);
+        try {
+            // Send POST request to upload file
+            const response = await fetch('https://localhost:7151/api/Hackathons/UploadFile', {
+                method: 'POST',
+                body: fd
+            });
+            let data = await response.json();
+
+            console.log('problem statement file uploaded succesfully :', data.blob);
+            // Once the image is uploaded, update the community details
+        } catch (error) {
+            console.error('Error uploading post image:', error);
+        }
         if (file) {
             // If a file is uploaded, read its contents
             const reader = new FileReader();

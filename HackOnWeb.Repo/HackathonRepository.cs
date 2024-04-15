@@ -16,12 +16,13 @@ namespace HackOnWebRepo
         private const string DatabaseId = "HackathonMgmt";
         private const string UserContainerId = "Users";
         private const string FContainerId = "Files";
+        private const string HackathonContainerId = "HackathonDetails";
         private const string CommunityContainerId = "Communities";
 
         public HackathonRepository(CosmosClient cosmosClient)
         {
             _cosmosclient = cosmosClient;
-        } 
+        }
         public async Task<List<UserModel>> getAllUsers()
         {
             var container = _cosmosclient.GetContainer(DatabaseId, UserContainerId);
@@ -40,6 +41,45 @@ namespace HackOnWebRepo
 
             return Users;
         }
+        //getHackathonDetails
+        public async Task<List<HackathonModel>> GetHackathonDetails()
+        {
+            var container = _cosmosclient.GetContainer(DatabaseId, HackathonContainerId);
+            var query = "SELECT * FROM c";
+            var queryDefinition = new QueryDefinition(query);
+            var hackathons = new List<HackathonModel>();
+            var resultSetIterator = container.GetItemQueryIterator<HackathonModel>(queryDefinition);
+            while (resultSetIterator.HasMoreResults)
+            {
+                var CurrentHackathon = await resultSetIterator.ReadNextAsync();
+                hackathons.AddRange(CurrentHackathon);
+            }
+            return hackathons;
+        }
+        //uploadHackathonDetails
+        public async Task<HackathonModel> uploadHackathon(HackathonModel hackathon)
+        {
+            var container = _cosmosclient.GetContainer(DatabaseId, HackathonContainerId);
+            var response = await container.CreateItemAsync(hackathon, new PartitionKey(hackathon.HackathonId));
+
+            // Check if the user was successfully created
+            if (response.StatusCode == System.Net.HttpStatusCode.Created)
+            {
+                return hackathon;
+            }
+            else
+            {
+                throw new Exception("Failed to create user.");
+            }
+
+        }
+
+
+
+
+
+
+
 
         public async Task<List<UserModel>> getUserById(string id)
         {
@@ -102,7 +142,7 @@ namespace HackOnWebRepo
             // Check if the user was successfully created
             if (response.StatusCode == System.Net.HttpStatusCode.Created)
             {
-                return user; 
+                return user;
             }
             else
             {
@@ -116,8 +156,7 @@ namespace HackOnWebRepo
 
             try
             {
-                hackdetails.id = Guid.NewGuid().ToString();
-                hackdetails.Hackathonid = Guid.NewGuid().ToString();
+                hackdetails.HackathonId = Guid.NewGuid().ToString();
                 var response = await container.CreateItemAsync(hackdetails);
                 return $"Hackathon details inserted with status code: {response.StatusCode}";
             }
@@ -130,7 +169,7 @@ namespace HackOnWebRepo
         //uploading file
         public async Task AddFile(FileModel file)
         {
-            var container = _cosmosclient.GetContainer(DatabaseId,FContainerId);
+            var container = _cosmosclient.GetContainer(DatabaseId, FContainerId);
             await container.CreateItemAsync(file, new PartitionKey(file.FileName));
         }
 
@@ -177,7 +216,7 @@ namespace HackOnWebRepo
 
             try
             {
-                var id=community.id;
+                var id = community.id;
                 var name = community.communityName;
                 var response = await container.ReplaceItemAsync(community, id, new PartitionKey(name));
 

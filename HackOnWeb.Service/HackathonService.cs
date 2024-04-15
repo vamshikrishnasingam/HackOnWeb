@@ -43,10 +43,10 @@ namespace HackOnWebService
         {
             return await _hackathonRepository.CreateNewUser(user);
         }
-        public async Task<string> HackathonDetails(HackathonModel hackdetails)
+      /*  public async Task<string> HackathonDetails(HackathonModel hackdetails)
         {
             return await _hackathonRepository.HackathonDetails(hackdetails);
-        }
+        }*/
 
         public async Task<List<FileModel>> ListAsync()
         {
@@ -105,5 +105,16 @@ namespace HackOnWebService
         {
             return await _hackathonRepository.UpdateCommunityDetails(community);
         }
+
+        public async Task<List<HackathonModel>> GetHackathonDetails()
+        {
+            return await _hackathonRepository.GetHackathonDetails();
+        }
+        public async Task<HackathonModel> uploadHackathon(HackathonModel hackathon)
+        {
+            return await _hackathonRepository.uploadHackathon(hackathon);
+
+        }
+
     }
 }

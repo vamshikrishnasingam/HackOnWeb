@@ -19,8 +19,8 @@ namespace HackOnWebService
 
         public Task<UserModel> CreateNewUser(UserModel user);
 
-        public Task<string> HackathonDetails(HackathonModel hackdetails);
-
+        public Task<List<HackathonModel> >GetHackathonDetails();
+        public Task<HackathonModel> uploadHackathon(HackathonModel hackathon);
         public Task<List<FileModel>> ListAsync();
 
         public Task<FileResponseModel> UploadAsync(IFormFile blob);

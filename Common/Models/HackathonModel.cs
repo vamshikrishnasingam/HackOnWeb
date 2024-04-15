@@ -8,50 +8,49 @@ namespace Common.Models
 {
     public class HackathonModel
     {
-        public string id { get; set; }
-        public string Hackathonid { get; set; }
+        public string HackathonId { get; set; }
         public string HackathonName { get; set; }
         public string HackathonDescription { get; set; }
+        public DateOnly StartDate { get; set; }
+        public DateOnly EndDate { get; set; }
+        public bool IsRound1 { get; set; }
+        public string Organization { get; set; }
         public Round1Details Round1 { get; set; }
         public Round2Details Round2 { get; set; }
+        public Round3Details Round3 { get; set; }
+
 
     }
     public class Round1Details
     {
-        public bool IsRound1 { get; set; }
         public string Round1Name { get; set; }
+        public string Platform { get; set; }
         public string Link { get; set; }
+        public DateOnly CodingDate { get; set; }
+        public TimeOnly StartTime { get; set; }
+        public TimeOnly EndTime { get; set; }
     }
     public class Round2Details
     {
         public string Round2Name { get; set; }
-        public List<string> ProblemStatements { get; set; }
+        public string ProblemStatementsURL { get; set; }
         public string ModeOfProblemStatements { get; set; }
-
-        public PPTSubmission pptround { get; set; }
-
-        public class PPTSubmission
-        {
-            public string Type { get; set; }
-
-            // 1 submit ppt online
-            public string MainLink { get; set; }
-            /*                public List<string> pptLink { get; set; }
-            */
-            // check for summary
-            public bool summarize { get; set; }
-            /*                    public List<string> SummarizedPPT { get; set; }
-            */                    // 2 manual check
-            public List<string> Qualifiers { get; set; }
-            // 2 make online presentation
-            // 
-            // 3 
-        }
+        public DateOnly PPTStartDate { get; set; }
+        public DateOnly PPTEndDate { get; set; }
+        public TimeOnly PPTStartTime { get; set; }
+        public TimeOnly PPTEndTime { get; set; }
+        public string TypeOfSubmission { get; set; }
     }
     public class Round3Details
     {
-        public string Id { get; set; }
-        public string Name { get; set; }
+        public string Round2Name { get; set; }
+        public string DiscordURL { get; set; }
+        public string ModeOfHack { get; set; }
+        public DateOnly HackStartDate { get; set; }
+        public DateOnly HackEndDate { get; set; }
+        public TimeOnly HackStartTime { get; set; }
+        public TimeOnly HackEndTime { get; set; }
+        public string Venue { get; set; }
     }
 
 }

@@ -169,6 +169,35 @@ namespace HackOnWeb.Server.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+
+        [HttpGet]
+        [Route("GetHackathonDetails")]
+        public async Task<ActionResult<List<HackathonModel>>> GetHackathonDetails()
+        {
+            try
+            {
+                var result = await _hackathonService.GetHackathonDetails();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+        [HttpPost]
+        [Route("UploadHackathonDetails")]
+        public async Task<ActionResult<List<HackathonModel>>> UploadHackathon(HackathonModel hackathon)
+        {
+            try
+            {
+                var result = await _hackathonService.GetHackathonDetails();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
     }
 
 }

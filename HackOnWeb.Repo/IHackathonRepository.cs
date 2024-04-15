@@ -17,8 +17,10 @@ namespace HackOnWebRepo
 
         public Task<UserModel> CreateNewUser(UserModel user);
 
-        public Task<string> HackathonDetails(HackathonModel hackdetails);
-        
+        public Task<List<HackathonModel>> GetHackathonDetails();
+        public Task<HackathonModel> uploadHackathon(HackathonModel hackathon);
+
+
         public Task AddFile(FileModel file);
 
         public Task<CommunityModel> GetCommunityDetails(string Id);
