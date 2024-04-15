@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import HostHack from './HostHack'; // Import the HostHack component
 import { FaCheckCircle } from 'react-icons/fa';
@@ -13,32 +14,50 @@ const HostHackVerification = () => {
 
     const handleEmailChange = (e) => {
         setEmail(e.target.value);
+
+        // Clear validation error for the current field
+        setErrors({ ...errors, ['email']: '' });
+       
     };
 
     const handlePasswordChange = (e) => {
         setPassword(e.target.value);
+
+        // Clear validation error for the current field
+        setErrors({ ...errors, ['password']: '' });
+
     };
 
     const handleDocumentChange = (e) => {
         setDocument(e.target.files[0]);
+
+        // Clear validation error for the current field
+        setErrors({ ...errors, ['document']: '' });
     };
 
     const validateInputs = () => {
         const errors = {};
+        let hasErrors = false;
 
         if (!email.trim()) {
             errors.email = 'Email is required';
+            hasErrors = true;
         }
 
         if (!password.trim()) {
             errors.password = 'Password is required';
+            hasErrors = true;
         }
 
         if (!document) {
             errors.document = 'Document is required';
+            hasErrors = true;
         }
-
-        setErrors(errors);
+        if (hasErrors) {
+            setErrors(errors);
+            console.log(errors)
+            return;
+        }
 
         return Object.keys(errors).length === 0;
     };
@@ -46,6 +65,35 @@ const HostHackVerification = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        //form data
+        const fd = new FormData();
+        fd.append('file', document);
+        try {
+            const response = await fetch('http://localhost:7151/api/Hackothans/UpdateCommunityDetails', {
+                method: 'POST',
+                body: fd
+            });
+            console.log(response)
+            let data = await response.json();
+            console.log('File uploaded Successfully', data.blob.fileName);
+
+
+            // Once the image is uploaded, update the community details
+            const response2 = await fetch('https://localhost:7151/api/Hackathons/UpdateCommunityDetails', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json' // Set the content type
+                },
+                body: JSON.stringify()
+            });
+
+
+
+        } catch (error) {
+            console.error('Error uploading document:', error);
+            setErrors({ apiError: 'An error occurred while uploading the document. Please try again later.' });
+            return;
+        }
         if (!validateInputs()) return;
 
         setLoading(true);

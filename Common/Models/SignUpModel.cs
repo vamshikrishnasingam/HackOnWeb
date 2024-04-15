@@ -14,5 +14,13 @@ namespace Common.Models
         public string lastname { get; set; }
         public string phone { get; set; }
         public string email { get; set; }
+        public bool verified { get; set; }
+        public FileModel verificationDocs { get; set; }
+
+        public SignUpModel()
+        {
+            verified = false;
+            verificationDocs = new FileModel();
+        }
     }
 }

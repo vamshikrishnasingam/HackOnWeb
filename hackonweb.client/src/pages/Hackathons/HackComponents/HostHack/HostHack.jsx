@@ -5,10 +5,10 @@ function HostHack() {
     const [hackathonDetails, setHackathonDetails] = useState({
         HackathonName: '',
         HackathonDescription: '',
-        startDate: '',
-        endDate: '',
+        StartDate: '',
+        EndDate: '',
         coding: '',
-        location: '',
+        Organization: '',
         rounds: 3, // Default number of rounds
     });
 
@@ -17,7 +17,9 @@ function HostHack() {
         setRoundsData(Array.from({ length: hackathonDetails.rounds }, () => ({})));
     }, [hackathonDetails.rounds]);
 
-
+    const handleSubmitDetails = () => {
+        console.log(hackathonDetails,roundsData);
+    }
     const handleChangeHackathonDetails = (e) => {
         const { name, value } = e.target;
         if (name === 'coding') {
@@ -37,33 +39,24 @@ function HostHack() {
         setErrors({ ...errors, [name]: '' });
     };
     // Define handleChangeFile function
-    const handleChangeFile = async (e, index) => {
+   const handleChangeFile = async (e, index) => {
         const file = e.target.files[0];// Get the uploaded file
         const fd = new FormData();
         fd.append('file', file);
         try {
             // Send POST request to upload file
-            const response = await fetch('https://localhost:7151/api/Hackathons/UploadFile', {
+            const response = await fetch('http://localhost:7151/api/Hackathons/UploadFile', {
                 method: 'POST',
                 body: fd
             });
             let data = await response.json();
-
             console.log('problem statement file uploaded succesfully :', data.blob);
+            const newRoundsData = [...roundsData];
+            newRoundsData[index].ProblemStatements = data.blob.uri;
+                setRoundsData(newRoundsData);
             // Once the image is uploaded, update the community details
         } catch (error) {
             console.error('Error uploading post image:', error);
-        }
-        if (file) {
-            // If a file is uploaded, read its contents
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                // Update the state with the file contents
-                const newRoundsData = [...roundsData];
-                newRoundsData[index].ProblemStatements = event.target.result;
-                setRoundsData(newRoundsData);
-            };
-            reader.readAsText(file); // Read the file as text
         }
         handleChangeRoundDetails(e, step - 2)
     };
@@ -91,20 +84,20 @@ function HostHack() {
             newErrors.HackathonDescription = 'Hackathon Description is required';
             hasErrors = true;
         }
-        if (!hackathonDetails.startDate) {
-            newErrors.startDate = 'Start Date is required';
+        if (!hackathonDetails.StartDate) {
+            newErrors.StartDate = 'Start Date is required';
             hasErrors = true;
         }
-        if (!hackathonDetails.endDate) {
-            newErrors.endDate = 'End Date is required';
+        if (!hackathonDetails.EndDate) {
+            newErrors.EndDate = 'End Date is required';
             hasErrors = true;
         }
         if (!hackathonDetails.coding) {
             newErrors.coding = 'Coding Round is required';
             hasErrors = true;
         }
-        if (!hackathonDetails.location) {
-            newErrors.location = 'Location is required';
+        if (!hackathonDetails.organization) {
+            newErrors.organization = 'Organization is required';
             hasErrors = true;
         }
         if (step === 2 && hackathonDetails.coding === 'yes') {
@@ -120,33 +113,87 @@ function HostHack() {
                 newErrors.Link = 'Link is required';
                 hasErrors = true;
             }
-            if (!roundsData[step - 2].StartDate1) {
-                newErrors.StartDate1 = 'Start Date is required';
+            if (!roundsData[step - 2].CodingDate) {
+                newErrors.CodingDate = 'Coding Round Date is required';
                 hasErrors = true;
             }
-            if (!roundsData[step - 2].endDate1) {
-                newErrors.endDate1 = 'End Date is required';
+            if (!roundsData[step - 2].StartTime) {
+                newErrors.StartTime = 'Start Time is required';
+                hasErrors = true;
+            }
+            if (!roundsData[step - 2].EndTime ){
+                newErrors.EndTime = 'End Time is required';
                 hasErrors = true;
             }
         }
         if ((step === 3 && hackathonDetails.coding === 'yes') || (step === 2 && hackathonDetails.coding === 'no')) {
+            if (!roundsData[step - 2].Round2Name) {
+                newErrors.Round2Name = 'Round Name is required';
+                hasErrors = true;
+            }
             if (!roundsData[step - 2].ProblemStatements) {
                 newErrors.ProblemStatements = 'Problem Statements are required';
+                hasErrors = true;
+            }
+            if (!roundsData[step - 2].ModeOfProblemStatements) {
+                newErrors.ModeOfProblemStatements = 'Mode Of Problem Statements is required';
                 hasErrors = true;
             }
             if (!roundsData[step - 2].ModeOfSubmission) {
                 newErrors.ModeOfSubmission = 'Mode Of Submission is required';
                 hasErrors = true;
             }
-            if (!roundsData[step - 2].StartDate2) {
-                newErrors.StartDate2 = 'Start Date is required';
+            if (!roundsData[step - 2].PPTStartDate) {
+                newErrors.PPTStartDate = 'Start Date is required';
                 hasErrors = true;
             }
-            if (!roundsData[step - 2].EndDate2) {
-                newErrors.EndDate2 = 'End Date is required';
+            if (!roundsData[step - 2].PPTEndDate) {
+                newErrors.PPTEndDate = 'End Date is required';
                 hasErrors = true;
             }
-        }        
+            if (!roundsData[step - 2].PPTStartTime) {
+                newErrors.PPTStartTime = 'Start Time is required';
+                hasErrors = true;
+            }
+            if (!roundsData[step - 2].PPTEndTime) {
+                newErrors.PPTEndTime = 'End Time is required';
+                hasErrors = true;
+            }
+        } 
+        if ((step === 4 && hackathonDetails.coding === 'yes') || (step === 3 && hackathonDetails.coding === 'no')) {
+            if (!roundsData[step - 2].Round3Name) {
+                newErrors.Round3Name = 'Round Name is required';
+                hasErrors = true;
+            }
+            if (!roundsData[step - 2].DiscordURL) {
+                newErrors.DiscordURL = 'DiscordURL is required';
+                hasErrors = true;
+            }
+            if (!roundsData[step - 2].Venue) {
+                newErrors.Venue = 'Venue is required';
+                hasErrors = true;
+            }
+            if (!roundsData[step - 2].ModeOfHack) {
+                newErrors.ModeOfHack = 'Mode of Hack is required';
+                hasErrors = true;
+            }
+            if (!roundsData[step - 2].HackStartDate) {
+                newErrors.HackStartDate = 'Start Date is required';
+                hasErrors = true;
+            }
+            if (!roundsData[step - 2].HackEndDate) {
+                newErrors.HackEndDate = 'End Date is required';
+                hasErrors = true;
+            }
+            if (!roundsData[step - 2].HackStartTime) {
+                newErrors.HackStartTime = 'Start Time is required';
+                hasErrors = true;
+            }
+            if (!roundsData[step - 2].HackEndTime) {
+                newErrors.HackEndTime = 'End Time is required';
+                hasErrors = true;
+            }
+        }
 
         // If there are validation errors, update the errors state and return
         if (hasErrors) {
@@ -157,6 +204,7 @@ function HostHack() {
 
         // If no errors, proceed to the next step
         setStep(step + 1);
+        handleSubmitDetails();
     };
 
     const prevStep = () => {
@@ -168,34 +216,7 @@ function HostHack() {
         // Handle submission of hackathon details and round details here
         console.log(hackathonDetails)
         console.log(roundsData);
-        let hasErrors = false;
-        const newErrors = {};
-        if ((step === 4 && hackathonDetails.coding === 'yes') || (step === 3 && hackathonDetails.coding === 'no')) {
-            if (!roundsData[step - 2].venue) {
-                newErrors.venue = 'Venue is required';
-                hasErrors = true;
-            }
-            if (!roundsData[step - 2].mode) {
-                newErrors.mode = 'Mode is required';
-                hasErrors = true;
-            }
-            if (!roundsData[step - 2].StartDate3) {
-                newErrors.StartDate3 = 'Start Date is required';
-                hasErrors = true;
-            }
-            if (!roundsData[step - 2].EndDate3) {
-                newErrors.EndDate3 = 'End Date is required';
-                hasErrors = true;
-            }
-        }
-        // If there are validation errors, update the errors state and return
-        if (hasErrors) {
-            setErrors(newErrors);
-            return;
-        } 
-
-        // Clear validation error for the current field
-        setErrors({ ...errors, [name]: '' });
+        
     };
 
     return (
@@ -236,34 +257,34 @@ function HostHack() {
                             </div>
                             <div className="mb-5 flex space-x-4">
                                 <div className="w-1/2">
-                                    <label htmlFor="startDate" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                    <label htmlFor="StartDate" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                         Start Date
                                     </label>
                                     <input
-                                        className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${errors.startDate && 'border-red-500'}`}
-                                        id="startDate"
+                                        className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${errors.StartDate && 'border-red-500'}`}
+                                        id="StartDate"
                                         type="date"
                                         placeholder="Enter Start Date"
-                                        name="startDate"
-                                        value={hackathonDetails.startDate}
+                                        name="StartDate"
+                                        value={hackathonDetails.StartDate}
                                         onChange={handleChangeHackathonDetails}
                                     />
-                                    {errors.startDate && <p className="text-red-500 text-sm mt-1">{errors.startDate}</p>}
+                                    {errors.StartDate && <p className="text-red-500 text-sm mt-1">{errors.StartDate}</p>}
                                 </div>
                                 <div className="w-1/2">
-                                    <label htmlFor="endDate" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                    <label htmlFor="EndDate" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                         End Date
                                     </label>
                                     <input
-                                        className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${errors.endDate && 'border-red-500'}`}
-                                        id="endDate"
+                                        className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${errors.EndDate && 'border-red-500'}`}
+                                        id="EndDate"
                                         type="date"
                                         placeholder="Enter End Date"
-                                        name="endDate"
-                                        value={hackathonDetails.endDate}
+                                        name="EndDate"
+                                        value={hackathonDetails.EndDate}
                                         onChange={handleChangeHackathonDetails}
                                     />
-                                    {errors.endDate && <p className="text-red-500 text-sm mt-1">{errors.endDate}</p>}
+                                    {errors.EndDate && <p className="text-red-500 text-sm mt-1">{errors.EndDate}</p>}
                                 </div>
                             </div>
                             <div className="mb-5">
@@ -285,18 +306,18 @@ function HostHack() {
                             </div>
                             <div className="mb-5">
                                 <label htmlFor="location" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                    Location
+                                    Organization
                                 </label>
                                 <input
-                                    className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${errors.location && 'border-red-500'}`}
-                                    id="location"
+                                    className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${errors.organization && 'border-red-500'}`}
+                                    id="organiztion"
                                     type="text"
-                                    placeholder="Enter Location"
-                                    name="location"
-                                    value={hackathonDetails.location}
+                                    placeholder="Enter Organization"
+                                    name="organization"
+                                    value={hackathonDetails.organization}
                                     onChange={handleChangeHackathonDetails}
                                 />
-                                {errors.location && <p className="text-red-500 text-sm mt-1">{errors.location}</p>}
+                                {errors.organization && <p className="text-red-500 text-sm mt-1">{errors.organization}</p>}
                             </div>
                         </div>
                     )}
@@ -352,35 +373,50 @@ function HostHack() {
                                             />
                                             {errors.Link && <p className="text-red-500 text-sm mt-1">{errors.Link}</p>}
                                         </div>
-                                        <div className="mb-4">
-                                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor={`round${step - 1}-StartDate1`}>
-                                                Start Date
+                                        <div className="col-span-2 mb-4">
+                                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor={`round${step - 1}-CodingDate`}>
+                                                Coding Date
                                             </label>
                                             <input
-                                                className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${errors.StartDate1 && 'border-red-500'}`}
-                                                id={`round${step - 1}-ModeOfProblemStatements`}
+                                                className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${errors.CodingDate && 'border-red-500'}`}
+                                                id={`round${step - 1}-CodingDate`}
                                                 type="date"
-                                                placeholder="Enter Start Date"
-                                                name="StartDate1"
-                                                value={roundsData[step - 2].StartDate1 || ''}
+                                                placeholder="Enter Coding Round Date"
+                                                name="CodingDate"
+                                                value={roundsData[step - 2].CodingDate || ''}
                                                 onChange={(e) => handleChangeRoundDetails(e, step - 2)}
                                             />
-                                            {errors.StartDate1 && <p className="text-red-500 text-sm mt-1">{errors.StartDate1}</p>}
+                                            {errors.CodingDate && <p className="text-red-500 text-sm mt-1">{errors.CodingDate}</p>}
                                         </div>
                                         <div className="mb-4">
-                                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor={`round${step - 1}-EndDate1`}>
-                                                End Date
+                                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor={`round${step - 1}-StartTime`}>
+                                                Start Time
                                             </label>
                                             <input
-                                                className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${errors.endDate1 && 'border-red-500'}`}
-                                                id={`round${step - 1}-ModeOfProblemStatements`}
-                                                type="date"
-                                                placeholder="Enter End Date"
-                                                name="endDate1"
-                                                value={roundsData[step - 2].endDate1 || ''}
+                                                className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${errors.StartTime && 'border-red-500'}`}
+                                                id={`round${step - 1}-StartTime`}
+                                                type="time"
+                                                placeholder="Enter Start Time"
+                                                name="StartTime"
+                                                value={roundsData[step - 2].StartTime || ''}
                                                 onChange={(e) => handleChangeRoundDetails(e, step - 2)}
                                             />
-                                            {errors.endDate1 && <p className="text-red-500 text-sm mt-1">{errors.endDate1}</p>}
+                                            {errors.StartTime && <p className="text-red-500 text-sm mt-1">{errors.StartTime}</p>}
+                                        </div>
+                                        <div className="mb-4">
+                                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor={`round${step - 1}-EndTime`}>
+                                                End Time
+                                            </label>
+                                            <input
+                                                className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${errors.EndTime && 'border-red-500'}`}
+                                                id={`round${step - 1}-EndTime`}
+                                                type="time"
+                                                placeholder="Enter End Time"
+                                                name="EndTime"
+                                                value={roundsData[step - 2].EndTime || ''}
+                                                onChange={(e) => handleChangeRoundDetails(e, step - 2)}
+                                            />
+                                            {errors.EndTime && <p className="text-red-500 text-sm mt-1">{errors.EndTime}</p>}
                                         </div>
                                     </>
                                 )}
@@ -388,6 +424,22 @@ function HostHack() {
                                 {((step === 3 && hackathonDetails.coding === 'yes') || (step === 2 && hackathonDetails.coding === 'no')) && (
                                     <>
                                         <h2 className="text-2xl font-bold mb-4">Idea Submission</h2>
+                                        <div className="col-span-2 mb-4">
+                                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor={`round${step - 1}-Round2Name`}>
+                                               Round Name
+                                            </label>
+                                            <input
+                                                className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${errors.Round2Name && 'border-red-500'}`}
+                                                id={`round${step - 1}-Round2Name`}
+                                                type="text"
+                                                placeholder={`Enter round ${step - 1} name`}
+                                                name="Round2Name"
+                                                value={roundsData[step - 2].Round2Name || ''}
+                                                onChange={(e) => handleChangeRoundDetails(e, step - 2)}
+                                            />
+                                            {errors.Round2Name && <p className="text-red-500 text-sm mt-1">{errors.Round2Name}</p>}
+                                        </div>
+                                       
                                         <div className="col-span-2 mb-4">
                                             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor={`round${step - 1}-ProblemStatements`}>
                                                 Problem Statements
@@ -413,7 +465,24 @@ function HostHack() {
                                             </div>
                                             {errors.ProblemStatements && <p className="text-red-500 text-sm mt-1">{errors.ProblemStatements}</p>}
                                         </div>
-
+                                        <div className="col-span-2 mb-4">
+                                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor={`round${step - 1}-ModeOfProblemStatements`}>
+                                                Mode Of Problem Statements
+                                            </label>
+                                            <select
+                                                className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${errors.ModeOfProblemStatements && 'border-red-500'}`}
+                                                id={`round${step - 1}-ModeOfProblemStatements`}
+                                                name="ModeOfProblemStatements"
+                                                value={roundsData[step - 2].ModeOfProblemStatements || ''}
+                                                onChange={(e) => handleChangeRoundDetails(e, step - 2)}
+                                            >
+                                                <option value="">Select Mode Of Problem Statements</option>
+                                                <option value="Option 1">Random Generated</option>
+                                                <option value="Option 2">Manual Choosing</option>
+                                                <option value="Option 4">Based on User Choice</option>
+                                            </select>
+                                            {errors.ModeOfProblemStatements && <p className="text-red-500 text-sm mt-1">{errors.ModeOfProblemStatements}</p>}
+                                        </div>
                                         <div className="col-span-2 mb-4">
                                             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor={`round${step - 1}-ModeOfSubmission`}>
                                                 Mode Of Submission
@@ -425,8 +494,8 @@ function HostHack() {
                                                 value={roundsData[step - 2].ModeOfSubmission || ''}
                                                 onChange={(e) => handleChangeRoundDetails(e, step - 2)}
                                             >
-                                                <option value="">Select Mode Of Problem Statements</option>
-                                                <option value="Option 1">Option 1</option>
+                                                <option value="">Select Mode of Submission</option>
+                                                <option value="Option 1"></option>
                                                 <option value="Option 2">Option 2</option>
                                                 <option value="Option 3">Option 3</option>
                                                 <option value="Option 4">Option 4</option>
@@ -436,35 +505,65 @@ function HostHack() {
 
                                         {/* Date Inputs */}
                                         <div className="mb-4">
-                                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor={`round${step - 1}-StartDate2`}>
+                                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor={`round${step - 1}-PPTStartDate`}>
                                                 Start Date
                                             </label>
                                             <input
-                                                className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${errors.StartDate2 && 'border-red-500'}`}
-                                                id={`round${step - 1}-StartDate2`}
+                                                className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${errors.PPTStartDate && 'border-red-500'}`}
+                                                id={`round${step - 1}-PPTStartDate`}
                                                 type="date"
                                                 placeholder="Enter Start Date"
-                                                name="StartDate2"
-                                                value={roundsData[step - 2].StartDate2 || ''}
+                                                name="PPTStartDate"
+                                                value={roundsData[step - 2].PPTStartDate || ''}
                                                 onChange={(e) => handleChangeRoundDetails(e, step - 2)}
                                             />
-                                            {errors.StartDate2 && <p className="text-red-500 text-sm mt-1">{errors.StartDate2}</p>}
+                                            {errors.PPTStartDate && <p className="text-red-500 text-sm mt-1">{errors.PPTStartDate}</p>}
                                         </div>
 
                                         <div className="mb-4">
-                                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor={`round${step - 1}-EndDate2`}>
+                                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor={`round${step - 1}-PPTEndDate`}>
                                                 End Date
                                             </label>
                                             <input
-                                                className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${errors.EndDate2 && 'border-red-500'}`}
-                                                id={`round${step - 1}-EndDate2`}
+                                                className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${errors.PPTEndDate && 'border-red-500'}`}
+                                                id={`round${step - 1}-PPTEndDate`}
                                                 type="date"
                                                 placeholder="Enter End Date"
-                                                name="EndDate2"
-                                                value={roundsData[step - 2].EndDate2 || ''}
+                                                name="PPTEndDate"
+                                                value={roundsData[step - 2].PPTEndDate || ''}
                                                 onChange={(e) => handleChangeRoundDetails(e, step - 2)}
                                             />
-                                            {errors.EndDate2 && <p className="text-red-500 text-sm mt-1">{errors.EndDate2}</p>}
+                                            {errors.PPTEndDate && <p className="text-red-500 text-sm mt-1">{errors.PPTEndDate}</p>}
+                                        </div>
+                                        <div className="mb-4">
+                                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor={`round${step - 1}-PPTStartTime`}>
+                                                Start Time
+                                            </label>
+                                            <input
+                                                className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${errors.PPTStartTime && 'border-red-500'}`}
+                                                id={`round${step - 1}-PPTStartTime`}
+                                                type="time"
+                                                placeholder="Enter Start Time"
+                                                name="PPTStartTime"
+                                                value={roundsData[step - 2].PPTStartTime || ''}
+                                                onChange={(e) => handleChangeRoundDetails(e, step - 2)}
+                                            />
+                                            {errors.PPTStartTime && <p className="text-red-500 text-sm mt-1">{errors.PPTStartTime}</p>}
+                                        </div>
+                                        <div className="mb-4">
+                                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor={`round${step - 1}-PPTEndTime`}>
+                                                End Time
+                                            </label>
+                                            <input
+                                                className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${errors.PPTEndTime && 'border-red-500'}`}
+                                                id={`round${step - 1}-PPTEndTime`}
+                                                type="time"
+                                                placeholder="Enter End Time"
+                                                name="PPTEndTime"
+                                                value={roundsData[step - 2].PPTEndTime || ''}
+                                                onChange={(e) => handleChangeRoundDetails(e, step - 2)}
+                                            />
+                                            {errors.PPTEndTime && <p className="text-red-500 text-sm mt-1">{errors.PPTEndTime}</p>}
                                         </div>
                                     </>
                                 )}
@@ -473,70 +572,130 @@ function HostHack() {
                                     <>
                                         <h2 className="text-2xl font-bold mb-4">Hackathon</h2>
                                         <div className="col-span-2 mb-4">
-                                            <label htmlFor="venue" className="font-medium text-gray-900 dark:text-white mb-2">
+                                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor={`round${step - 1}-Round3Name`}>
+                                                Round Name
+                                            </label>
+                                            <input
+                                                className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${errors.Round3Name && 'border-red-500'}`}
+                                                id={`round${step - 1}-Round3Name`}
+                                                type="text"
+                                                placeholder={`Enter round ${step - 1} name`}
+                                                name="Round3Name"
+                                                value={roundsData[step - 2].Round3Name || ''}
+                                                onChange={(e) => handleChangeRoundDetails(e, step - 2)}
+                                            />
+                                            {errors.Round3Name && <p className="text-red-500 text-sm mt-1">{errors.Round3Name}</p>}
+                                        </div>
+
+                                        <div className="col-span-2 mb-4">
+                                            <label htmlFor="Venue" className="font-medium text-gray-900 dark:text-white mb-2">
                                                 Venue
                                             </label>
                                             <input
                                                 className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${errors.Venue && 'border-red-500'}`}
-                                                id="venue"
+                                                id="Venue"
                                                 type="text"
-                                                placeholder="Enter venue"
-                                                name="venue"
-                                                value={roundsData[step - 2].venue || ''}
+                                                placeholder="Enter Venue"
+                                                name="Venue"
+                                                value={roundsData[step - 2].Venue || ''}
                                                 onChange={(e) => handleChangeRoundDetails(e, step - 2)}
                                             />
-                                            {errors.venue && <p className="text-red-500 text-sm mt-1">{errors.venue}</p>}
+                                            {errors.Venue && <p className="text-red-500 text-sm mt-1">{errors.Venue}</p>}
                                         </div>
 
                                         <div className="col-span-2 mb-4">
-                                            <label htmlFor="mode" className="font-medium text-gray-900 dark:text-white mb-2">
+                                            <label htmlFor="ModeOfHack" className="font-medium text-gray-900 dark:text-white mb-2">
                                                 Mode (Offline/Online)
                                             </label>
                                             <select
                                                 className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${errors.Mode && 'border-red-500'}`}
-                                                id="mode"
-                                                name="mode"
-                                                value={roundsData[step - 2].mode || ''}
+                                                id="ModeOfHack"
+                                                name="ModeOfHack"
+                                                value={roundsData[step - 2].ModeOfHack || ''}
                                                 onChange={(e) => handleChangeRoundDetails(e, step - 2)}
                                             >
                                                 <option value="">Select option</option>
                                                 <option value="online">Online</option>
                                                 <option value="offline">Offline</option>
                                             </select>
-                                            {errors.mode && <p className="text-red-500 text-sm mt-1">{errors.mode}</p>}
+                                            {errors.ModeOfHack && <p className="text-red-500 text-sm mt-1">{errors.ModeOfHack}</p>}
                                         </div>
-
+                                        <div className="col-span-2 mb-4">
+                                            <label htmlFor="Venue" className="font-medium text-gray-900 dark:text-white mb-2">
+                                                Discord URL
+                                            </label>
+                                            <input
+                                                className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${errors.DiscordURL && 'border-red-500'}`}
+                                                id="DiscordURL"
+                                                type="text"
+                                                placeholder="Enter Discord URL"
+                                                name="DiscordURL"
+                                                value={roundsData[step - 2].DiscordURL || ''}
+                                                onChange={(e) => handleChangeRoundDetails(e, step - 2)}
+                                            />
+                                            {errors.DiscordURL && <p className="text-red-500 text-sm mt-1">{errors.DiscordURL}</p>}
+                                        </div>
                                         {/* Date Inputs */}
                                         <div className="mb-4">
-                                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor={`round${step - 1}-StartDate3`}>
+                                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor={`round${step - 1}-HackStartDate`}>
                                                 Start Date
                                             </label>
                                             <input
-                                                className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${errors.StartDate3 && 'border-red-500'}`}
-                                                id={`round${step - 1}-StartDate3`}
+                                                className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${errors.HackStartDate && 'border-red-500'}`}
+                                                id={`round${step - 1}-HackStartDate`}
                                                 type="date"
                                                 placeholder="Enter Start Date"
-                                                name="StartDate3"
-                                                value={roundsData[step - 2].StartDate3 || ''}
+                                                name="HackStartDate"
+                                                value={roundsData[step - 2].HackStartDate || ''}
                                                 onChange={(e) => handleChangeRoundDetails(e, step - 2)}
                                             />
-                                            {errors.StartDate3 && <p className="text-red-500 text-sm mt-1">{errors.StartDate3}</p>}
+                                            {errors.HackStartDate && <p className="text-red-500 text-sm mt-1">{errors.HackStartDate}</p>}
                                         </div>
 
                                         <div className="mb-4">
-                                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor={`round${step - 1}-EndDate3`}>
+                                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor={`round${step - 1}-HackEndDate`}>
                                                 End Date
                                             </label>
                                             <input
-                                                className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${errors.EndDate3 && 'border-red-500'}`}
-                                                id={`round${step - 1}-EndDate3`}
+                                                className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${errors.HackEndDate && 'border-red-500'}`}
+                                                id={`round${step - 1}-HackEndDate`}
                                                 type="date"
                                                 placeholder="Enter End Date"
-                                                name="EndDate3"
-                                                value={roundsData[step - 2].EndDate3 || ''}
+                                                name="HackEndDate"
+                                                value={roundsData[step - 2].HackEndDate || ''}
                                                 onChange={(e) => handleChangeRoundDetails(e, step - 2)}
                                             />
-                                            {errors.EndDate3 && <p className="text-red-500 text-sm mt-1">{errors.EndDate3}</p>}
+                                            {errors.HackEndDate && <p className="text-red-500 text-sm mt-1">{errors.HackEndDate}</p>}
+                                        </div>
+                                        <div className="mb-4">
+                                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor={`round${step - 1}-HackStartTime`}>
+                                                Start Time
+                                            </label>
+                                            <input
+                                                className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${errors.HackStartTime && 'border-red-500'}`}
+                                                id={`round${step - 1}-HackStartTime`}
+                                                type="time"
+                                                placeholder="Enter Start Time"
+                                                name="HackStartTime"
+                                                value={roundsData[step - 2].HackStartTime || ''}
+                                                onChange={(e) => handleChangeRoundDetails(e, step - 2)}
+                                            />
+                                            {errors.HackStartTime && <p className="text-red-500 text-sm mt-1">{errors.HackStartTime}</p>}
+                                        </div>
+                                        <div className="mb-4">
+                                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor={`round${step - 1}-HackEndTime`}>
+                                                End Time
+                                            </label>
+                                            <input
+                                                className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${errors.PPTEndTime && 'border-red-500'}`}
+                                                id={`round${step - 1}-HackEndTime`}
+                                                type="time"
+                                                placeholder="Enter End Time"
+                                                name="HackEndTime"
+                                                value={roundsData[step - 2].HackEndTime || ''}
+                                                onChange={(e) => handleChangeRoundDetails(e, step - 2)}
+                                            />
+                                            {errors.HackEndTime && <p className="text-red-500 text-sm mt-1">{errors.HackEndTime}</p>}
                                         </div>
                                     </>
                                 )}

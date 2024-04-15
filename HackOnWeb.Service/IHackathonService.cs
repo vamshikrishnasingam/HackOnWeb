@@ -29,6 +29,8 @@ namespace HackOnWebService
 
         public Task<string> UpdateCommunityDetails(CommunityModel community);
 
+        public Task<UserModel> VerifyHost(VerifyModel vm);
+
 
     }
 }

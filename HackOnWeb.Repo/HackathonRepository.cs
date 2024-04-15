@@ -108,16 +108,15 @@ namespace HackOnWebRepo
             UserModel user = null;
             var queryDefinition = new QueryDefinition(query).WithParameter("@email", email);
             var resultSetIterator = container.GetItemQueryIterator<UserModel>(queryDefinition);
-            while (resultSetIterator.HasMoreResults)
+            if (resultSetIterator.HasMoreResults)
             {
                 var response = await resultSetIterator.ReadNextAsync();
-                foreach (var currentUser in response)
+
+                var currentUser = response.FirstOrDefault();
+                if (ValidatePassword(currentUser, password))
                 {
-                    if (ValidatePassword(currentUser, password))
-                    {
-                        user = currentUser;
-                        break; // Exit the loop once a valid user is found
-                    }
+                    user = currentUser;
+                    return user; // Exit the loop once a valid user is found
                 }
             }
             return user;
@@ -227,6 +226,45 @@ namespace HackOnWebRepo
                 return $"Error updating community details: {ex.Message}";
             }
 
+        }
+
+        public async Task<UserModel> VerifyHost(VerifyModel vm)
+        {
+            try
+            {
+                var container = _cosmosclient.GetContainer(DatabaseId, UserContainerId);
+
+                var query = "SELECT * FROM c WHERE c.email = @email";
+                UserModel user = null;
+                var queryDefinition = new QueryDefinition(query).WithParameter("@email", vm.email);
+                var resultSetIterator = container.GetItemQueryIterator<UserModel>(queryDefinition);
+                if (resultSetIterator.HasMoreResults)
+                {
+                    var response = await resultSetIterator.ReadNextAsync();
+
+                    var currentUser = response.FirstOrDefault();
+                    if (ValidatePassword(currentUser, vm.password))
+                    {
+                        user = currentUser;
+                    }
+                    user.verified = false;
+                    user.verificationDocs = vm.verificationDocs;
+                    var response = await container.ReplaceItemAsync(user, user.id, new PartitionKey(user.email));
+                    return user;
+                }
+                return new UserModel
+                {
+                    password = $"Error password not matching"
+                };
+            }
+            catch (Exception ex)
+            {
+
+                return new UserModel
+                {
+                    username = $"Error verifying host details: {ex.Message}",
+                };
+            }
         }
 
 

@@ -198,6 +198,21 @@ namespace HackOnWeb.Server.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+        [HttpPost]
+        [Route("VerifyHost")]
+        public async Task<ActionResult<UserModel>> VerifyHost(VerifyModel vm)
+        {
+            try
+            {
+                vm.verified = false;
+                var result = await _hackathonService.VerifyHost(vm);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
     }
 
 }

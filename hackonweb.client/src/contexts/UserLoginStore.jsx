@@ -5,21 +5,41 @@ import { loginContext } from "./loginContext";
 // eslint-disable-next-line react/prop-types
 function UserLoginStore({ children }) {
     const [currentUser, setCurrentUser] = useState({});
+    const [verified,setVerified]=useState(false);
     const [loginErr, setLoginErr] = useState("")
     const [userLoginStatus, setUserLoginStatus] = useState(false)
     //function to make user login reuqest
     const loginUser = async (userCredObj) => {
+        console.log(userCredObj)
         try {
-            const response = await axios.post("https://localhost:7151/api/Hackathons/LoginWithPassword", userCredObj);
-            if (response.status === 200) {
-                setCurrentUser(response.data);
+            fetch("https://localhost:7151/api/Hackathons/LoginWithPassword", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(userCredObj)
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error("Login failed. Please check your credentials.");
+                }
+            })
+            .then(data => {
+                setCurrentUser(data);
+                console.log(data);
                 setLoginErr("");
                 setUserLoginStatus(true);
+                setVerified(currentUser.verified);
                 // store jwt token in local storage (you need to adjust this based on your actual token handling)
-                localStorage.setItem("user", JSON.stringify(response.data));
-            } else {
-                setLoginErr("Login failed. Please check your credentials.");
-            }
+                localStorage.setItem("user", JSON.stringify(data));
+            })
+            .catch(error => {
+                setLoginErr(error.message);
+                setUserLoginStatus(false);
+            });
+
         } catch (error) {
             console.error("Error in user login:", error);
             setLoginErr("An error occurred during login.");
@@ -78,7 +98,7 @@ function UserLoginStore({ children }) {
         checkTokenAndFetchUser();
     }, []);*/
     return (
-        <loginContext.Provider value={[currentUser, loginUser, userLoginStatus, loginErr, logoutUser]}>
+        <loginContext.Provider value={[currentUser, loginUser, userLoginStatus, loginErr, logoutUser, verified]}>
             {children}
         </loginContext.Provider>
     )
