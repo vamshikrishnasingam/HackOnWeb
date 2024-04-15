@@ -1,8 +1,11 @@
 /* Community.css */
 :root {
-    --posts-image: linear-gradient(to top, #f43b47 0%, #453a94 100%);
+/*    --posts-image: linear-gradient(to top, #f43b47 0%, #453a94 100%);
     --files-image: linear-gradient(to top, #e14fad 0%, #f9d423 100%);
-    --desc-image: linear-gradient(to bottom, #30cfd0 0%, #330867 100%);
+    --desc-image: linear-gradient(to bottom, #30cfd0 0%, #330867 100%);*/
+    --posts-image: linear-gradient(225deg, #A8BFFF 0%, #884D80 100%);
+    --files-image: linear-gradient(225deg, #A8BFFF 0%, #884D80 100%);
+    --desc-image: linear-gradient(225deg, #A8BFFF 0%, #884D80 100%);
 }
 .total {
     background-color:white;
