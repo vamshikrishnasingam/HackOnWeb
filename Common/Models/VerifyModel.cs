@@ -13,5 +13,8 @@ namespace Common.Models
 
         public bool verified { get; set; }
         public FileModel verificationDocs { get; set; }
+        public VerifyModel() {
+            verified = false;
+        }
     }
 }

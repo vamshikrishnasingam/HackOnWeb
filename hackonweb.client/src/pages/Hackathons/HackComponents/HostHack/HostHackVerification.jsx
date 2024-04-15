@@ -69,25 +69,28 @@ const HostHackVerification = () => {
         const fd = new FormData();
         fd.append('file', document);
         try {
-            const response = await fetch('http://localhost:7151/api/Hackothans/UpdateCommunityDetails', {
+            const response = await fetch('http://localhost:7151/api/Hackothans/UploadFile', {
                 method: 'POST',
                 body: fd
             });
             console.log(response)
             let data = await response.json();
             console.log('File uploaded Successfully', data.blob.fileName);
-
-
+            var verificationDocs = data.blob;
+            var verifyObj = {
+                email,
+                password,
+                verificationDocs
+            }
             // Once the image is uploaded, update the community details
-            const response2 = await fetch('https://localhost:7151/api/Hackathons/UpdateCommunityDetails', {
+            const response2 = await fetch('https://localhost:7151/api/Hackathons/VerifyHost', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json' // Set the content type
                 },
-                body: JSON.stringify()
+                body: JSON.stringify(verifyObj)
             });
-
-
+            console.log(response2);
 
         } catch (error) {
             console.error('Error uploading document:', error);
