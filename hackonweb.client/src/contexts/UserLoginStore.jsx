@@ -65,7 +65,7 @@ function UserLoginStore({ children }) {
 
         // Token exists, send a request to verify it with the server
         try {
-            const response = await axios.post('http://localhost:5000/user-api/verify-token', null, {
+            const response = await axios.post('https://localhost:5000/user-api/verify-token', null, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -73,7 +73,7 @@ function UserLoginStore({ children }) {
 
             if (response.data.message === 'Token is valid') {
                 // Token is valid, fetch user data
-                const userDataResponse = await axios.get('http://localhost:5000/user-api/get-user-info', {
+                const userDataResponse = await axios.get('https://localhost:5000/user-api/get-user-info', {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },

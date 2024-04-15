@@ -249,7 +249,7 @@ namespace HackOnWebRepo
                     }
                     user.verified = false;
                     user.verificationDocs = vm.verificationDocs;
-                    var response = await container.ReplaceItemAsync(user, user.id, new PartitionKey(user.email));
+                    var response2 = await container.ReplaceItemAsync(user, user.id, new PartitionKey(user.email));
                     return user;
                 }
                 return new UserModel
