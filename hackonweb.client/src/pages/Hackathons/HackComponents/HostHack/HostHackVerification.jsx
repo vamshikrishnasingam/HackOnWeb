@@ -69,11 +69,11 @@ const HostHackVerification = () => {
         const fd = new FormData();
         fd.append('file', document);
         try {
-            const response = await fetch('https://localhost:7151/api/Hackothans/UpdateCommunityDetails', {
+            const response = await fetch('https://localhost:7151/api/Hackothans/UploadFile', {
                 method: 'POST',
                 body: fd
             });
-            console.log(response)
+            console.log(response.data)
             let data = await response.json();
             console.log('File uploaded Successfully', data.blob.fileName);
             var verificationDocs = data.blob;
