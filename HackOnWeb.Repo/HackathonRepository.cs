@@ -60,27 +60,14 @@ namespace HackOnWebRepo
         public async Task<HackathonModel> uploadHackathon(HackathonModel hackathon)
         {
             var container = _cosmosclient.GetContainer(DatabaseId, HackathonContainerId);
+            hackathon.HackathonId = Guid.NewGuid().ToString();
+            hackathon.id = Guid.NewGuid().ToString();
             var response = await container.CreateItemAsync(hackathon, new PartitionKey(hackathon.HackathonId));
-
+            Console.WriteLine(response);
             // Check if the user was successfully created
-            if (response.StatusCode == System.Net.HttpStatusCode.Created)
-            {
-                return hackathon;
-            }
-            else
-            {
-                throw new Exception("Failed to create user.");
-            }
+            return hackathon;
 
         }
-
-
-
-
-
-
-
-
         public async Task<List<UserModel>> getUserById(string id)
         {
             var container = _cosmosclient.GetContainer(DatabaseId, UserContainerId);
