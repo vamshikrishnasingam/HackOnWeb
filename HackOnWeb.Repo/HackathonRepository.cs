@@ -228,7 +228,7 @@ namespace HackOnWebRepo
 
         }
 
-        public async Task<UserModel> VerifyHost(VerifyModel vm)
+        public async Task<int> VerifyHost(VerifyModel vm)
         {
             try
             {
@@ -243,27 +243,27 @@ namespace HackOnWebRepo
                     var response = await resultSetIterator.ReadNextAsync();
 
                     var currentUser = response.FirstOrDefault();
-                    if (ValidatePassword(currentUser, vm.password))
+
+                    if (currentUser!=null && ValidatePassword(currentUser, vm.password))
                     {
                         user = currentUser;
+                        user.verified = false;
+                        user.verificationDocs = vm.verificationDocs;
                     }
-                    user.verified = false;
-                    user.verificationDocs = vm.verificationDocs;
+                    else
+                    {
+                        return 401;
+                    }
                     var response2 = await container.ReplaceItemAsync(user, user.id, new PartitionKey(user.email));
-                    return user;
+                    return 201;
                 }
-                return new UserModel
-                {
-                    password = $"Error password not matching"
-                };
+                return 402;
+                
             }
             catch (Exception ex)
             {
 
-                return new UserModel
-                {
-                    username = $"Error verifying host details: {ex.Message}",
-                };
+                return 500;
             }
         }
 

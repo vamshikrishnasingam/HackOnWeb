@@ -116,7 +116,7 @@ namespace HackOnWebService
 
         }
 
-        public async Task<UserModel> VerifyHost(VerifyModel vm)
+        public async Task<int> VerifyHost(VerifyModel vm)
         {
             return await _hackathonRepository.VerifyHost(vm);
         }
