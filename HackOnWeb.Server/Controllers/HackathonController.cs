@@ -186,11 +186,11 @@ namespace HackOnWeb.Server.Controllers
         }
         [HttpPost]
         [Route("UploadHackathonDetails")]
-        public async Task<ActionResult<List<HackathonModel>>> UploadHackathon(HackathonModel hackathon)
+        public async Task<ActionResult<HackathonModel>> UploadHackathon(HackathonModel hackathon)
         {
             try
             {
-                var result = await _hackathonService.GetHackathonDetails();
+                var result = await _hackathonService.uploadHackathon(hackathon);
                 return Ok(result);
             }
             catch (Exception ex)

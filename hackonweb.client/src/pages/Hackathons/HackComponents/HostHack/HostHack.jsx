@@ -1,5 +1,4 @@
-import React, { useState,useEffect } from 'react';
-
+import React, { useState, useEffect } from 'react';
 function HostHack() {
     const [step, setStep] = useState(1); // Current step
     const [hackathonDetails, setHackathonDetails] = useState({
@@ -11,15 +10,65 @@ function HostHack() {
         Organization: '',
         rounds: 3, // Default number of rounds
     });
+    const hackModel = {
+        HackathonId: '1',
+        HackathonName: "WE HACK",
+        HackathonDescription: "edo okatinle ra babu",
+        StartDate: "0000-00-00",
+        EndDate: "0000-00-00",
+        coding: "yes",
+        organization: "vnrvjiet",
+        Round1Details: {
+            Round1Name: "coding round",
+            platform: "hackerrank",
+            Link: "link",
+            CodingDate: "0000-00-00",
+            StartTime: "00:00",
+            EndTime: "00:00"
+        },
+        Round2Details: {
+            Round2Name: "idea submission",
+            ProblemStatementsURL: "url",
+            ModeOfProblemStatements: "random",
+            PPTStartDate: "0000-00-00",
+            PPTEndDate: "0000-00-00",
+            PPTStartTime: "00:00",
+            PPTEndTime: "00:00",
+            ModeOfSubmission: "online"
+        },
+        Round3Details: {
+            Round3Name: "code for good",
+            DiscordURL: "discord",
+            ModeOfHack: "online",
+            HackStartDate: "0000-00-00",
+            HackEndDate: "0000-00-00",
+            HackStartTime: "00:00",
+            HackEndTime: "00:00",
+            Venue: "hyderabad"
+        }
+    };
 
     const [roundsData, setRoundsData] = useState([]);
     useEffect(() => {
         setRoundsData(Array.from({ length: hackathonDetails.rounds }, () => ({})));
     }, [hackathonDetails.rounds]);
 
-    const handleSubmitDetails = () => {
-        console.log(hackathonDetails,roundsData);
+    const handleSubmitDetails = async() => {
+        console.log(hackModel);
+        try {
+            // Send POST request to upload file
+            const response = await fetch('https://localhost:7151/api/Hackathons/UploadHackathonDetails', {
+                method: 'POST',
+                body: hackModel
+            });
+            let data = await response.json();
+            console.log('details uploaded succesfully :', data);
+            // Once the image is uploaded, update the community details
+        } catch (error) {
+            console.error('Error uploading:', error);
+        }
     }
+
     const handleChangeHackathonDetails = (e) => {
         const { name, value } = e.target;
         if (name === 'coding') {
@@ -204,7 +253,6 @@ function HostHack() {
 
         // If no errors, proceed to the next step
         setStep(step + 1);
-        handleSubmitDetails();
     };
 
     const prevStep = () => {
@@ -743,6 +791,8 @@ function HostHack() {
                     {/* Navigation buttons */}
                     <div className="flex justify-between mt-4">
                         {step > 1 && (
+                            <div>
+
                             <button
                                 className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                 type="button"
@@ -750,8 +800,10 @@ function HostHack() {
                             >
                                 Previous
                             </button>
+                            </div>
                         )}
-                        {step <=hackathonDetails.rounds + 1 && (
+                        {step <= hackathonDetails.rounds + 1 && (
+                            <div>
                             <button
                                 className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                 type="button"
@@ -759,6 +811,14 @@ function HostHack() {
                             >
                                 Next
                             </button>
+                              <button
+                                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                    type="button"
+                                    onClick={handleSubmitDetails}
+                            >
+                                Submit
+                                </button>
+                                </div>
                         )}
                         {step === hackathonDetails.rounds + 2 && (
                             <button
