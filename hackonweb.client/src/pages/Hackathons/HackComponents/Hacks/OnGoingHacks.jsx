@@ -58,7 +58,7 @@ const OnGoingHacks= () => {
         }
     ];
 
-    /*useEffect(() => {
+    useEffect(() => {
         // Fetch hackathon data from the API
         axios.get('/api/hackathons')
             .then(response => {
@@ -67,7 +67,7 @@ const OnGoingHacks= () => {
             .catch(error => {
                 console.error('Error fetching hackathons:', error);
             });
-    }, []);*/
+    }, []);
 
     return (
         <div className="max-w-3xl mx-auto p-4">

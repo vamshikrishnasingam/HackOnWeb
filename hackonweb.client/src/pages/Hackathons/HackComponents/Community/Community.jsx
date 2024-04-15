@@ -28,7 +28,7 @@ function Community() {
     const [visibility, setVisibility] = useState(false);
 
     useEffect(() => {
-        GetCommunityDetails
+        GetCommunityDetails();
         console.log(communityDetails);
     }, []);
 

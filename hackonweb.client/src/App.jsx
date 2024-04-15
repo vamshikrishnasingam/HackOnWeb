@@ -6,7 +6,7 @@ import Home from './pages/Home/Home'
 import HackRoute from './pages/Hackathons/HackRoute/HackRoute';
 import OnGoingHacks from './pages/Hackathons/HackComponents/Hacks/OnGoingHacks';
 import UpcomingHacks from './pages/Hackathons/HackComponents/Hacks/UpcomingHacks';
-import HackHost from './pages/Hackathons/HackComponents/HostHack/HostHack';
+import HostHack from './pages/Hackathons/HackComponents/HostHack/HostHack';
 import SignUp from './pages/SignUp/SignUp';
 import CommunityComp from './pages/Hackathons/HackComponents/Community/ComunityComp';
 import Mentors from './pages/Metors/Mentors';
@@ -27,7 +27,8 @@ function App() {
                         <Route path="/hackathons" element={<HackRoute />}>
                             <Route path="" element={<OnGoingHacks />} />
                             <Route path="upcoming" element={<UpcomingHacks />} />
-                            <Route path="hack-host" element={<HostHackVerification/>} />
+                            <Route path="hack-host" element={<HostHack/>} />
+                            <Route path="host-verify" element={<HostHackVerification />} />
                             <Route path="community" element={<CommunityComp />} />
                             <Route path="jury-mentors" element={<AddJuryMentor/>} />
                         </Route>

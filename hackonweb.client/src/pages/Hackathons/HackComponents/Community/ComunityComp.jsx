@@ -27,7 +27,7 @@ function ComunityComp() {
     return (
         <motion.div className="total flex flex-wrap"
             initial="hidden"
-            variants={popInVariant}
+            variants={itemVariants}
             animate={sectionInView ? "visible" : "hidden"}
             ref={sectionRef}>
             <div className="md:w-3/5 overflow-y-auto c1 overflow-hidden lg:pb-[90px] bg-white dark:bg-dark animate__animated animate__fadeIn"
