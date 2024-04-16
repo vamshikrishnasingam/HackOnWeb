@@ -200,12 +200,12 @@ namespace HackOnWeb.Server.Controllers
         }
         [HttpPost]
         [Route("VerifyHost")]
-        public async Task<ActionResult<UserModel>> VerifyHost(VerifyModel vm)
+        public async Task<ActionResult<int>> VerifyHost(VerifyModel vm)
         {
             try
             {
                 vm.verified = false;
-                var result = await _hackathonService.VerifyHost(vm);
+                int result = await _hackathonService.VerifyHost(vm);
                 return Ok(result);
             }
             catch (Exception ex)

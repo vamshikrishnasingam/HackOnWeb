@@ -2,22 +2,25 @@
 import React, { useState, useEffect } from 'react';
 import HostHack from './HostHack'; // Import the HostHack component
 import { FaCheckCircle } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 const HostHackVerification = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [document, setDocument] = useState(null);
     const [loading, setLoading] = useState(false);
-    const [verified, setVerified] = useState(false); 
+    const [verified, setVerified] = useState(false);
+    const [status, setStatus] = useState('');
     const [showHostHack, setShowHostHack] = useState(false);
+    const [showContinue, setShowContinue] = useState(false);
     const [errors, setErrors] = useState({});
-
+    let navigate = useNavigate()
     const handleEmailChange = (e) => {
         setEmail(e.target.value);
 
         // Clear validation error for the current field
         setErrors({ ...errors, ['email']: '' });
-       
+
     };
 
     const handlePasswordChange = (e) => {
@@ -65,9 +68,12 @@ const HostHackVerification = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        if (!validateInputs()) return;
+
+        setLoading(true);
         //form data
         const fd = new FormData();
-        fd.append('file', document  ); // 'file' should match the parameter name in your backend controller
+        fd.append('file', document); // 'file' should match the parameter name in your backend controller
         try {
             // Send POST request to upload file
             const response = await fetch('https://localhost:7151/api/Hackathons/UploadFile', {
@@ -78,49 +84,54 @@ const HostHackVerification = () => {
             console.log('File uploaded Successfully', data.blob.fileName);
             var verificationDocs = data.blob;
             var verifyObj = {
-                email:email,
-                password:password,
+                email: email,
+                password: password,
                 verificationDocs: verificationDocs
             }
             // Once the image is uploaded, update the community details
             const response2 = await fetch('https://localhost:7151/api/Hackathons/VerifyHost', {
-                method: 'PUT',
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json' // Set the content type
                 },
                 body: JSON.stringify(verifyObj)
             });
-            console.log(response2);
+            let data2 = await response2.json();
+            console.log(data2);
+            if (data2!=201) {
+                setErrors({ apiError: "Error Verification failed"   });
+            }
+            if (data2==201) {
+                try {
+                    // Simulate API call with setTimeout
+                    await new Promise(resolve => setTimeout(resolve, 2000));
 
+                    // For demo purposes, assume verification is successful if all fields are filled
+                    setVerified(true);
+                    setStatus('Pending');
+                    setShowContinue(true);
+                    setShowHostHack(true)
+                    setErrors({});
+                } catch (error) {
+                    console.error('Verification error:', error);
+                    // Set error message based on the actual error response from API
+                    setErrors({ apiError: 'An error occurred while verifying. Please try again later.' });
+                }
+            }
         } catch (error) {
             console.error('Error uploading document:', error);
             setErrors({ apiError: 'An error occurred while uploading the document. Please try again later.' });
             return;
-        }
-        if (!validateInputs()) return;
-
-        setLoading(true);
-
-        try {
-            // Simulate API call with setTimeout
-            await new Promise(resolve => setTimeout(resolve, 2000));
-
-            // For demo purposes, assume verification is successful if all fields are filled
-            setVerified(true);
-            setErrors({});
-        } catch (error) {
-            console.error('Verification error:', error);
-            // Set error message based on the actual error response from API
-            setErrors({ apiError: 'An error occurred while verifying. Please try again later.' });
         } finally {
             setLoading(false);
         }
     };
+
     useEffect(() => {
         if (verified) {
             setTimeout(() => {
-                setShowHostHack(true);
-            }, 2000); // Show HostHack component after 2 seconds
+                setStatus('Verified');
+            }, 20000); // Show HostHack component after 2 seconds
         }
     }, [verified]);
 
@@ -139,7 +150,7 @@ const HostHackVerification = () => {
                                 className={`mt-2 p-3 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 ${errors.email ? 'border-red-500' : ''}`}
                                 value={email}
                                 onChange={handleEmailChange}
-                               
+
                             />
                             {errors.email && <p className="text-red-600 text-sm mt-1">{errors.email}</p>}
                         </div>
@@ -162,7 +173,7 @@ const HostHackVerification = () => {
                                 className={`mt-1 block w-full ${errors.document ? 'border-red-500' : ''}`}
                                 onChange={handleDocumentChange}
                                 accept=".pdf,.doc,.docx,.jpg,.png"
-                               
+
                             />
                             {errors.document && <p className="text-red-600 text-sm mt-1">{errors.document}</p>}
                         </div>
@@ -178,7 +189,18 @@ const HostHackVerification = () => {
                     </form>
                 </div>
             ) : (
-                <HostHack />
+                <>
+                    <div className="max-w-xl mx-auto p-10 border rounded-lg bg-gray-50">
+                        <h2 className="text-xl font-semibold mb-4 text-center">Verification Status</h2>
+                            <p className={`mb-4 text-gray-700 text-center ${status=='pending'? 'text-danger':'text-success'}`}>Status: {status}</p>
+                        <button
+                                className="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 w-full"
+                                onClick={() => navigate('../hack-host')}
+                        >
+                            Continue to Host Hackathon
+                        </button>
+                    </div>
+                </>
             )}
         </div>
     );
