@@ -61,10 +61,13 @@ export default function Community2() {
         {
             name: 'Shashi',
             role: 'Co-Founder / CEO',
+            imageUrl: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
             },
         {
             name: 'Pasha',
             role: 'Co-Founder / CEO',
+            imageUrl: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+
             },
     ]
 
@@ -72,18 +75,26 @@ export default function Community2() {
         {
             name: 'Shashi',
             role: 'Co-Founder / CEO',
+            imageUrl: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+
             },
         {
             name: 'Pasha',
             role: 'Co-Founder / CEO',
+            imageUrl: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+
         },
         {
             name: 'Vamshi',
             role: 'Co-Founder / CEO',
+            imageUrl: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+
           },
         {
             name: 'charan',
             role: 'Co-Founder / CEO',
+            imageUrl: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+
         },
     ]
 
