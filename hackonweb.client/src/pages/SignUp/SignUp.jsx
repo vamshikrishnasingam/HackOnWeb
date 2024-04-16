@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import './SignUp.css';
-
+import { useNavigate } from 'react-router-dom';
 function SignUp() {
+    let navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
@@ -17,6 +18,7 @@ function SignUp() {
             console.log(response.data); // Assuming the API response contains relevant data upon successful signup
             setSuccess(true);
             setError(null);
+            navigate('/login')
         } catch (error) {
             console.error('Error signing up:', error);
             setError('An error occurred during signup.');
