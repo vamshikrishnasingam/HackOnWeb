@@ -111,8 +111,8 @@ namespace HackOnWebRepo
             if (resultSetIterator.HasMoreResults)
             {
                 var response = await resultSetIterator.ReadNextAsync();
-
                 var currentUser = response.FirstOrDefault();
+                if (currentUser == null) return null;
                 if (ValidatePassword(currentUser, password))
                 {
                     user = currentUser;

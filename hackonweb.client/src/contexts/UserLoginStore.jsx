@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState,useEffect } from "react"
 import axios from "axios";
 import { loginContext } from "./loginContext";
 
@@ -53,6 +53,19 @@ function UserLoginStore({ children }) {
         setUserLoginStatus(false)
 
     }
+    const FetchUser = async () => {
+        const storedUser = localStorage.getItem("user");
+        if (storedUser) {
+            setCurrentUser(JSON.parse(storedUser));
+            setUserLoginStatus(true);
+            setVerified(storedUser.verified);
+        } else {
+            return null;
+        }
+        const response = await axios.post(`https://localhost:7151/api/Hackathons/GetUserById?id=${currentUser.id}`)
+        const data = response.data;
+        console.log(data)
+    }
     //to add in userlogincontextstore.js
    /* const checkTokenAndFetchUser = async () => {
         // Check if a token exists in local storage
@@ -94,9 +107,10 @@ function UserLoginStore({ children }) {
             return null;
         }
     };*/
-   /* useEffect(() => {
-        checkTokenAndFetchUser();
-    }, []);*/
+    useEffect(() => {
+        /*checkTokenAndFetchUser();*/
+        FetchUser();
+    }, []);
     return (
         <loginContext.Provider value={[currentUser, loginUser, userLoginStatus, loginErr, logoutUser, verified]}>
             {children}
