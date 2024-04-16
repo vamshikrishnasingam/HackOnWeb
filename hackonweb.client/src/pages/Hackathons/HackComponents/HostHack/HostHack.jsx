@@ -11,6 +11,7 @@ function HostHack() {
         rounds: 3, // Default number of rounds
     });
     const hackModel = {
+        id:"1234",
         HackathonId: '1',
         HackathonName: "WE HACK",
         HackathonDescription: "edo okatinle ra babu",
@@ -18,7 +19,7 @@ function HostHack() {
         EndDate: "0000-00-00",
         coding: "yes",
         organization: "vnrvjiet",
-        Round1Details: {
+        Round1: {
             Round1Name: "coding round",
             platform: "hackerrank",
             Link: "link",
@@ -26,7 +27,7 @@ function HostHack() {
             StartTime: "00:00",
             EndTime: "00:00"
         },
-        Round2Details: {
+        Round2: {
             Round2Name: "idea submission",
             ProblemStatementsURL: "url",
             ModeOfProblemStatements: "random",
@@ -36,7 +37,7 @@ function HostHack() {
             PPTEndTime: "00:00",
             ModeOfSubmission: "online"
         },
-        Round3Details: {
+        Round3: {
             Round3Name: "code for good",
             DiscordURL: "discord",
             ModeOfHack: "online",

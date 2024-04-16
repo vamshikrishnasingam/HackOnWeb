@@ -139,7 +139,6 @@ namespace HackOnWebRepo
         public async Task<string> HackathonDetails(HackathonModel hackdetails)
         {
             var container = _cosmosclient.GetContainer(DatabaseId, "HackathonDetails");
-
             try
             {
                 hackdetails.HackathonId = Guid.NewGuid().ToString();
