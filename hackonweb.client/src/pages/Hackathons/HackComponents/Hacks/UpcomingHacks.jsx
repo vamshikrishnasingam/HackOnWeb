@@ -7,7 +7,7 @@ function UpcomingHacks() {
             name: 'Webothan',
             href: '#',
             price: '$48',
-            imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-01.jpg',
+            imageSrc: 'https://images.squarespace-cdn.com/content/v1/5e6542d2ae16460bb741a9eb/1603318636443-A846ACUKNYUBA0RPLJ94/marvin-meyer-SYTO3xs06fU-unsplash.jpg',
             imageAlt: 'Tall slender porcelain bottle with natural clay textured body and cork stopper.',
         },
         {
@@ -15,7 +15,7 @@ function UpcomingHacks() {
             name: 'VJ HACK',
             href: '#',
             price: '$35',
-            imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-02.jpg',
+            imageSrc: 'https://images.squarespace-cdn.com/content/v1/5e6542d2ae16460bb741a9eb/1603318636443-A846ACUKNYUBA0RPLJ94/marvin-meyer-SYTO3xs06fU-unsplash.jpg',
             imageAlt: 'Olive drab green insulated bottle with flared screw lid and flat top.',
         },
         {
@@ -23,7 +23,7 @@ function UpcomingHacks() {
             name: 'Kruthomedth',
             href: '#',
             price: '$89',
-            imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-03.jpg',
+            imageSrc: 'https://images.squarespace-cdn.com/content/v1/5e6542d2ae16460bb741a9eb/1603318636443-A846ACUKNYUBA0RPLJ94/marvin-meyer-SYTO3xs06fU-unsplash.jpg',
             imageAlt: 'Person using a pen to cross a task off a productivity paper card.',
         },
         {
@@ -31,7 +31,7 @@ function UpcomingHacks() {
             name: 'TeamSprint',
             href: '#',
             price: '$35',
-            imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-04.jpg',
+            imageSrc: 'https://images.squarespace-cdn.com/content/v1/5e6542d2ae16460bb741a9eb/1603318636443-A846ACUKNYUBA0RPLJ94/marvin-meyer-SYTO3xs06fU-unsplash.jpg',
             imageAlt: 'Hand holding black machined steel mechanical pencil with brass tip and top.',
         },
         {
@@ -39,7 +39,7 @@ function UpcomingHacks() {
             name: 'Webothan',
             href: '#',
             price: '$48',
-            imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-01.jpg',
+            imageSrc: 'https://images.squarespace-cdn.com/content/v1/5e6542d2ae16460bb741a9eb/1603318636443-A846ACUKNYUBA0RPLJ94/marvin-meyer-SYTO3xs06fU-unsplash.jpg',
             imageAlt: 'Tall slender porcelain bottle with natural clay textured body and cork stopper.',
         },  
         {
@@ -47,7 +47,7 @@ function UpcomingHacks() {
             name: 'VJ HACK',
             href: '#',
             price: '$35',
-            imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-02.jpg',
+            imageSrc: 'https://images.squarespace-cdn.com/content/v1/5e6542d2ae16460bb741a9eb/1603318636443-A846ACUKNYUBA0RPLJ94/marvin-meyer-SYTO3xs06fU-unsplash.jpg',
             imageAlt: 'Olive drab green insulated bottle with flared screw lid and flat top.',
         },
         {
@@ -55,7 +55,7 @@ function UpcomingHacks() {
             name: 'Kruthomedth',
             href: '#',
             price: '$89',
-            imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-03.jpg',
+            imageSrc: 'https://images.squarespace-cdn.com/content/v1/5e6542d2ae16460bb741a9eb/1603318636443-A846ACUKNYUBA0RPLJ94/marvin-meyer-SYTO3xs06fU-unsplash.jpg',
             imageAlt: 'Person using a pen to cross a task off a productivity paper card.',
         },
         {
@@ -63,7 +63,7 @@ function UpcomingHacks() {
             name: 'TeamSprint',
             href: '#',
             price: '$35',
-            imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-04.jpg',
+            imageSrc: 'https://images.squarespace-cdn.com/content/v1/5e6542d2ae16460bb741a9eb/1603318636443-A846ACUKNYUBA0RPLJ94/marvin-meyer-SYTO3xs06fU-unsplash.jpg',
             imageAlt: 'Hand holding black machined steel mechanical pencil with brass tip and top.',
         },
         // More products...

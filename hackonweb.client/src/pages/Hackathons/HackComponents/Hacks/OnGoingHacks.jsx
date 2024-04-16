@@ -24,7 +24,7 @@ const Hackathon = ({ hackathon }) => {
 const HackathonList = ({ hackathons }) => {
     return (
         <div>
-            <h1 className="text-2xl font-bold mb-4">Upcoming and Ongoing Hackathons</h1>
+            <h1 className="text-2xl font-bold mb-4">Ongoing Hackathons</h1>
             {hackathons.map((hackathon, index) => (
                 <Hackathon key={index} hackathon={hackathon} />
             ))}
