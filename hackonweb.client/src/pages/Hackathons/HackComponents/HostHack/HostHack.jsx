@@ -11,43 +11,44 @@ function HostHack() {
         rounds: 3, // Default number of rounds
     });
     const hackModel = {
-        "id": "string",
-            "hackathonId": "string",
-                "hackathonName": "string",
-                    "hackathonDescription": "string",
-                        "startDate": "string",
-                            "endDate": "string",
-                                "coding": "string",
-                                    "organization": "string",
-                                        "round1": {
-            "round1Name": "string",
-                "platform": "string",
-                    "link": "string",
-                        "codingDate": "string",
-                            "startTime": "string",
-                                "endTime": "string"
+        "id": "HACK001",
+        "hackathonId": "HACK2024",
+        "hackathonName": "CodeFest 2024",
+        "hackathonDescription": "Join us for an exciting coding competition!",
+        "startDate": "2024-05-01",
+        "endDate": "2024-05-03",
+        "coding": "JavaScript",
+        "organization": "TechFest",
+        "round1": {
+            "round1Name": "Qualification Round",
+            "platform": "Codeforces",
+            "link": "https://codeforces.com/",
+            "codingDate": "2024-05-01",
+            "startTime": "09:00 AM",
+            "endTime": "12:00 PM"
         },
         "round2": {
-            "round2Name": "string",
-                "problemStatementsURL": "string",
-                    "modeOfProblemStatements": "string",
-                        "pptStartDate": "string",
-                            "pptEndDate": "string",
-                                "pptStartTime": "string",
-                                    "pptEndTime": "string",
-                                        "modeOfSubmission": "string"
+            "round2Name": "Semi-final Round",
+            "problemStatementsURL": "https://codefest2024/problems",
+            "modeOfProblemStatements": "PDF",
+            "pptStartDate": "2024-05-02",
+            "pptEndDate": "2024-05-02",
+            "pptStartTime": "10:00 AM",
+            "pptEndTime": "01:00 PM",
+            "modeOfSubmission": "Online"
         },
         "round3": {
-            "round3Name": "string",
-                "discordURL": "string",
-                    "modeOfHack": "string",
-                        "hackStartDate": "string",
-                            "hackEndDate": "string",
-                                "hackStartTime": "string",
-                                    "hackEndTime": "string",
-                                        "venue": "string"
+            "round3Name": "Final Round",
+            "discordURL": "https://discord.com/codefest2024",
+            "modeOfHack": "Live",
+            "hackStartDate": "2024-05-03",
+            "hackEndDate": "2024-05-03",
+            "hackStartTime": "02:00 PM",
+            "hackEndTime": "05:00 PM",
+            "venue": "TechFest Auditorium"
         }
     };
+
 
     const [roundsData, setRoundsData] = useState([]);
     useEffect(() => {
@@ -247,6 +248,7 @@ function HostHack() {
                 hasErrors = true;
             }
         }
+        hasErrors = false;
 
         // If there are validation errors, update the errors state and return
         if (hasErrors) {
@@ -269,6 +271,20 @@ function HostHack() {
         console.log(hackathonDetails)
         console.log(roundsData);
         
+    };
+    const renderNestedObject = (obj) => {
+        return Object.entries(obj).map(([key, value], index) => (
+            <div key={index}>
+                <p>{key} :</p>
+                {typeof value === 'object' ? (
+                    <div style={{ marginLeft: '20px' }}>
+                        {renderNestedObject(value)}
+                    </div>
+                ) : (
+                    <p style={{ marginLeft: '20px' }}>{value}</p>
+                )}
+            </div>
+        ));
     };
 
     return (
@@ -756,39 +772,31 @@ function HostHack() {
                         </div>
                     )}
                     {step === hackathonDetails.rounds + 2 && (
-                        <div>
+                        <div className="container mt-4">
                             <h2 className="text-6xl font-bold mb-4 text-center text-blue-900">Preview</h2>
-                            <div className="bg-gray-100 p-4 rounded-lg">
-                                <h3 className="text-lg font-semibold">Hackathon Details</h3>
-                                <p><strong>Hackathon Name:</strong> {hackathonDetails.HackathonName}</p>
-                                <p><strong>Description:</strong> {hackathonDetails.HackathonDescription}</p>
-                                <p><strong>Start Date:</strong> {hackathonDetails.startDate}</p>
-                                <p><strong>End Date:</strong> {hackathonDetails.endDate}</p>
-                                <p><strong>Coding Round:</strong> {hackathonDetails.coding}</p>
-                                <p><strong>Location:</strong> {hackathonDetails.location}</p>
-                            </div>
-                            {/* Preview round details */}
-                            {roundsData.map((round, index) => (
-                                <div key={index} className="bg-gray-100 p-4 mt-4 rounded-lg">
-                                    <h3 className="text-lg font-semibold">Round {index + 1} Details</h3>
-                                    <p><strong>Contest Name:</strong> {round.Round1Name}</p>
-                                    <p><strong>Platform:</strong> {round.platform}</p>
-                                    <p><strong>Link:</strong> {round.Link}</p>
-                                    <p><strong>Start Date:</strong> {round.StartDate1}</p>
-                                    <p><strong>End Date:</strong> {round.endDate1}</p>
-                                    {/* Additional fields based on coding round selection */}
-                                    {hackathonDetails.coding === 'yes' && (
-                                        <div>
-                                            <p><strong>Problem Statements:</strong> {round.ProblemStatements}</p>
-                                            <p><strong>Mode Of Submission:</strong> {round.ModeOfSubmission}</p>
-                                            <p><strong>Start Date:</strong> {round.StartDate2}</p>
-                                            <p><strong>End Date:</strong> {round.EndDate2}</p>
-                                        </div>
-                                    )}
+                            {Object.entries(hackModel).map(([key, value], index) => (
+                                <div key={index} className="card mb-4">
+                                    <div className="card-body">
+                                        <h5 className="card-title font-semibold">{key}</h5>
+                                        {typeof value === 'object' ? (
+                                            <div className="row">
+                                                {Object.entries(value).map(([nestedKey, nestedValue], nestedIndex) => (
+                                                    <div key={nestedIndex} className="">
+                                                        <p className="card-text"><strong>{nestedKey}: </strong>{nestedValue}</p>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        ) : (
+                                            <p className="card-text"><strong>{key}: </strong>{value}</p>
+                                        )}
+                                    </div>
                                 </div>
                             ))}
-                           
+                            {console.log(hackModel)}
                         </div>
+
+
+
                     )}
 
 
@@ -815,19 +823,21 @@ function HostHack() {
                             >
                                 Next
                             </button>
-                              <button
+                             {/* <button
                                 className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                     type="button"
                                     onClick={handleSubmitDetails}
                             >
                                 Submit
-                                </button>
+                                </button>*/}
                                 </div>
                         )}
                         {step === hackathonDetails.rounds + 2 && (
                             <button
                                 className="text-white bg-green-500 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
                                 type="submit"
+                                onClick={handleSubmitDetails}
+
                             >
                                 Submit
                             </button>

@@ -74,25 +74,25 @@ export default function Community2() {
     const people = [
         {
             name: 'Shashi',
-            role: 'Co-Founder / CEO',
+            role: 'team lead',
             imageUrl: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
 
             },
         {
             name: 'Pasha',
-            role: 'Co-Founder / CEO',
+            role: 'frontend',
             imageUrl: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
 
         },
         {
             name: 'Vamshi',
-            role: 'Co-Founder / CEO',
+            role: 'backend',
             imageUrl: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
 
           },
         {
-            name: 'charan',
-            role: 'Co-Founder / CEO',
+            name: 'Charan',
+            role: 'tester',
             imageUrl: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
 
         },
