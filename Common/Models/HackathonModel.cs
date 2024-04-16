@@ -15,7 +15,7 @@ namespace Common.Models
         public string HackathonDescription { get; set; }
         public string StartDate { get; set; }
         public string EndDate { get; set; }
-        public bool coding { get; set; }
+        public string coding { get; set; }
         public string organization { get; set; }
         public Round1Details Round1 { get; set; }
         public Round2Details Round2 { get; set; }

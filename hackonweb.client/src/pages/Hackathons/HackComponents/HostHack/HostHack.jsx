@@ -11,40 +11,41 @@ function HostHack() {
         rounds: 3, // Default number of rounds
     });
     const hackModel = {
-        HackathonId: '1',
-        HackathonName: "WE HACK",
-        HackathonDescription: "edo okatinle ra babu",
-        StartDate: "0000-00-00",
-        EndDate: "0000-00-00",
-        coding: "yes",
-        organization: "vnrvjiet",
-        Round1Details: {
-            Round1Name: "coding round",
-            platform: "hackerrank",
-            Link: "link",
-            CodingDate: "0000-00-00",
-            StartTime: "00:00",
-            EndTime: "00:00"
+        "id": "string",
+            "hackathonId": "string",
+                "hackathonName": "string",
+                    "hackathonDescription": "string",
+                        "startDate": "string",
+                            "endDate": "string",
+                                "coding": "string",
+                                    "organization": "string",
+                                        "round1": {
+            "round1Name": "string",
+                "platform": "string",
+                    "link": "string",
+                        "codingDate": "string",
+                            "startTime": "string",
+                                "endTime": "string"
         },
-        Round2Details: {
-            Round2Name: "idea submission",
-            ProblemStatementsURL: "url",
-            ModeOfProblemStatements: "random",
-            PPTStartDate: "0000-00-00",
-            PPTEndDate: "0000-00-00",
-            PPTStartTime: "00:00",
-            PPTEndTime: "00:00",
-            ModeOfSubmission: "online"
+        "round2": {
+            "round2Name": "string",
+                "problemStatementsURL": "string",
+                    "modeOfProblemStatements": "string",
+                        "pptStartDate": "string",
+                            "pptEndDate": "string",
+                                "pptStartTime": "string",
+                                    "pptEndTime": "string",
+                                        "modeOfSubmission": "string"
         },
-        Round3Details: {
-            Round3Name: "code for good",
-            DiscordURL: "discord",
-            ModeOfHack: "online",
-            HackStartDate: "0000-00-00",
-            HackEndDate: "0000-00-00",
-            HackStartTime: "00:00",
-            HackEndTime: "00:00",
-            Venue: "hyderabad"
+        "round3": {
+            "round3Name": "string",
+                "discordURL": "string",
+                    "modeOfHack": "string",
+                        "hackStartDate": "string",
+                            "hackEndDate": "string",
+                                "hackStartTime": "string",
+                                    "hackEndTime": "string",
+                                        "venue": "string"
         }
     };
 
@@ -59,7 +60,10 @@ function HostHack() {
             // Send POST request to upload file
             const response = await fetch('https://localhost:7151/api/Hackathons/UploadHackathonDetails', {
                 method: 'POST',
-                body: hackModel
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(hackModel)
             });
             let data = await response.json();
             console.log('details uploaded succesfully :', data);
