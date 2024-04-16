@@ -27,6 +27,6 @@ namespace HackOnWebRepo
 
         public Task<string> UpdateCommunityDetails(CommunityModel community);
 
-        public Task<UserModel> VerifyHost(VerifyModel vm);
+        public Task<int> VerifyHost(VerifyModel vm);
     }
 }

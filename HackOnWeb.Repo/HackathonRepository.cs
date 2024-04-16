@@ -60,27 +60,14 @@ namespace HackOnWebRepo
         public async Task<HackathonModel> uploadHackathon(HackathonModel hackathon)
         {
             var container = _cosmosclient.GetContainer(DatabaseId, HackathonContainerId);
+            hackathon.HackathonId = Guid.NewGuid().ToString();
+            hackathon.id = Guid.NewGuid().ToString();
             var response = await container.CreateItemAsync(hackathon, new PartitionKey(hackathon.HackathonId));
-
+            Console.WriteLine(response);
             // Check if the user was successfully created
-            if (response.StatusCode == System.Net.HttpStatusCode.Created)
-            {
-                return hackathon;
-            }
-            else
-            {
-                throw new Exception("Failed to create user.");
-            }
+            return hackathon;
 
         }
-
-
-
-
-
-
-
-
         public async Task<List<UserModel>> getUserById(string id)
         {
             var container = _cosmosclient.GetContainer(DatabaseId, UserContainerId);
@@ -228,7 +215,7 @@ namespace HackOnWebRepo
 
         }
 
-        public async Task<UserModel> VerifyHost(VerifyModel vm)
+        public async Task<int> VerifyHost(VerifyModel vm)
         {
             try
             {
@@ -243,27 +230,27 @@ namespace HackOnWebRepo
                     var response = await resultSetIterator.ReadNextAsync();
 
                     var currentUser = response.FirstOrDefault();
-                    if (ValidatePassword(currentUser, vm.password))
+
+                    if (currentUser!=null && ValidatePassword(currentUser, vm.password))
                     {
                         user = currentUser;
+                        user.verified = false;
+                        user.verificationDocs = vm.verificationDocs;
                     }
-                    user.verified = false;
-                    user.verificationDocs = vm.verificationDocs;
+                    else
+                    {
+                        return 401;
+                    }
                     var response2 = await container.ReplaceItemAsync(user, user.id, new PartitionKey(user.email));
-                    return user;
+                    return 201;
                 }
-                return new UserModel
-                {
-                    password = $"Error password not matching"
-                };
+                return 402;
+                
             }
             catch (Exception ex)
             {
 
-                return new UserModel
-                {
-                    username = $"Error verifying host details: {ex.Message}",
-                };
+                return 500;
             }
         }
 

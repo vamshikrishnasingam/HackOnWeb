@@ -186,11 +186,11 @@ namespace HackOnWeb.Server.Controllers
         }
         [HttpPost]
         [Route("UploadHackathonDetails")]
-        public async Task<ActionResult<List<HackathonModel>>> UploadHackathon(HackathonModel hackathon)
+        public async Task<ActionResult<HackathonModel>> UploadHackathon(HackathonModel hackathon)
         {
             try
             {
-                var result = await _hackathonService.GetHackathonDetails();
+                var result = await _hackathonService.uploadHackathon(hackathon);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -200,12 +200,12 @@ namespace HackOnWeb.Server.Controllers
         }
         [HttpPost]
         [Route("VerifyHost")]
-        public async Task<ActionResult<UserModel>> VerifyHost(VerifyModel vm)
+        public async Task<ActionResult<int>> VerifyHost(VerifyModel vm)
         {
             try
             {
                 vm.verified = false;
-                var result = await _hackathonService.VerifyHost(vm);
+                int result = await _hackathonService.VerifyHost(vm);
                 return Ok(result);
             }
             catch (Exception ex)
