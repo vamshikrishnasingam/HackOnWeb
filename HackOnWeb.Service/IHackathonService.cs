@@ -26,6 +26,7 @@ namespace HackOnWebService
         public Task<FileResponseModel> UploadAsync(IFormFile blob);
 
         public Task<CommunityModel> GetCommunityDetails(string Id);
+        public Task<List<CommunityModel>> GetAllCommunityDetails();
 
         public Task<string> UpdateCommunityDetails(CommunityModel community);
 

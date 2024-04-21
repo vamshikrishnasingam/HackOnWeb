@@ -155,6 +155,21 @@ namespace HackOnWeb.Server.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("GetAllCommunityDetails")]
+        public async Task<ActionResult<List<CommunityModel>>> GetAllCommunityDetails()
+        {
+            try
+            {
+                var result = await _hackathonService.GetAllCommunityDetails();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
         [HttpPut]
         [Route("UpdateCommunityDetails")]
         public async Task<ActionResult<CommunityModel>> UpdateCommunityDetails(CommunityModel community)

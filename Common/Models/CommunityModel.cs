@@ -9,6 +9,11 @@ namespace Common.Models
         public string communityName { get; set; }
         public List<FileModel> posts { get; set; }
         public List<FileModel> files { get; set; }
+        public List<CommentModel> comments { get; set; }
+        public int likes { get; set; }
+        public int disLikes { get; set; }
+
+
         public string githubLink { get; set; }
         public string appLink { get; set; }
         public string description { get; set; }

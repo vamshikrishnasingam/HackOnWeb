@@ -195,6 +195,20 @@ namespace HackOnWebRepo
 
             return null; // or throw an exception if required
         }
+        public async Task<List<CommunityModel>> GetAllCommunityDetails()
+        {
+            var container = _cosmosclient.GetContainer(DatabaseId, CommunityContainerId);
+            var query = "SELECT * FROM c";
+            var queryDefinition = new QueryDefinition(query);
+            var hackathons = new List<CommunityModel>();
+            var resultSetIterator = container.GetItemQueryIterator<CommunityModel>(queryDefinition);
+            while (resultSetIterator.HasMoreResults)
+            {
+                var CurrentHackathon = await resultSetIterator.ReadNextAsync();
+                hackathons.AddRange(CurrentHackathon);
+            }
+            return hackathons;// or throw an exception if required
+        }
         public async Task<string> UpdateCommunityDetails(CommunityModel community)
         {
             var container = _cosmosclient.GetContainer(DatabaseId, CommunityContainerId);

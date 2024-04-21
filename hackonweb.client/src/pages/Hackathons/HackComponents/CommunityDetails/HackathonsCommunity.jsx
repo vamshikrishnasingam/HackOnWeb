@@ -5,51 +5,117 @@ function HackathonsCommunity() {
     const [selectedTeam, setSelectedTeam] = useState(null);
     const [likes, setLikes] = useState({});
     const [posts, setPosts] = useState([]);
-    const id = "asjlidfnvjd90erfsdasxz235kdjf";
+    const [commentInput, setCommentInput] = useState("");
+    const [liked, setLiked] = useState(false);
+    const [disliked, setDisliked] = useState(false);
+
+
+    //intital fetching of the data to show
+    //need to change the fetching function based on hackathonid
+    const fetchDetails = async () => {
+        try {
+            const response = await fetch(`https://localhost:7151/api/Hackathons/GetAllCommunityDetails
+`, {
+                method: 'GET'
+            });
+            if (!response.ok) {
+                throw new Error('Failed to fetch data');
+            }
+            const data = await response.json();
+            setPosts(data);
+            console.log(data)
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
 
     useEffect(() => {
-        const fetchDetails = async () => {
-            try {
-                const response = await fetch(`https://localhost:7151/api/Hackathons/GetCommunityDetails?id=${id}`, {
-                    method: 'GET'
-                });
-                if (!response.ok) {
-                    throw new Error('Failed to fetch data');
-                }
-                const data = await response.json();
-                console.log(data)
-                setPosts([data, data, data]);
-                console.log(data)
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
-
         fetchDetails();
-
     }, []);
 
-    // Extract unique team names from posts
     useEffect(() => {
         const fn = () => {
-            // Extract all team names from posts
-                const allTeams = posts.map(post => post.communityName);
-                setTeams(allTeams);
+            // Extract  team names from posts
+            const allTeams = posts.map(post => post.communityName);
+            setTeams(allTeams);
             console.log(allTeams);
         }
-        if(posts.length>0)fn();
-
+        if (posts.length > 0) fn();
     }, [posts]);
+
+
+    
 
     const handleShowPosts = (team) => {
         setSelectedTeam(team);
     };
 
-    const handleLikeDislike = (team, action) => {
-        setLikes(prevLikes => ({
-            ...prevLikes,
-            [team]: action === 'like' ? (prevLikes[team] || 0) + 1 : (prevLikes[team] || 0) - 1
-        }));
+    //completely done with liking and disliking functions for an user for fetching to updating
+    const handleLikeDislike = async(post,action) => {
+        let updatedDetails;
+        if (action === 'like') {
+            if (liked === false) {
+                updatedDetails = { ...post, likes: post.likes + 1 };
+                setLiked(true);
+                if (disliked === true)
+                    updatedDetails = { ...updatedDetails, disLikes: post.disLikes - 1 };
+                setDisliked(false);
+            }
+            else {
+                console.log('already liked');
+            }
+            
+        }
+        else {
+            if (disliked === false) {
+                updatedDetails = { ...post, disLikes: post.disLikes + 1};
+                setDisliked(true);
+                if (liked === true) {
+                    updatedDetails = { ...updatedDetails, likes: post.likes - 1 };
+                    setLiked(false);
+                }
+            }
+            else {
+                console.log('already disliked');
+            }
+            
+        }
+        const response2 = await fetch('https://localhost:7151/api/Hackathons/UpdateCommunityDetails', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json' // Set the content type
+            },
+            body: JSON.stringify(updatedDetails)
+        });
+        fetchDetails();
+
+    };
+    const handleCommentChange = (team, event) => {
+        setCommentInput({
+            ...commentInput,
+            [team]: event.target.value
+        });
+    };
+    const handleCommentSubmit = async(post) => {
+        // Check if the user has already commented
+        const comments_ = post.comments;    
+        const obj = {
+            userId: 'userdummy',
+            userName: 'big dummy',
+            comment : 'this is dummy of dummies'
+        }
+        comments_.push(obj);
+        const updatedDetails = { ...post, comments: comments_ };
+        console.log(posts, updatedDetails);
+        const response2 = await fetch('https://localhost:7151/api/Hackathons/UpdateCommunityDetails', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json' // Set the content type
+            },
+            body: JSON.stringify(updatedDetails)
+        });
+        fetchDetails();
+
     };
 
     return (
@@ -75,12 +141,10 @@ function HackathonsCommunity() {
                                         <div key={index}>
                                             {post.posts.map((data, ind) => (
                                                 <div key={ind}>
-                                                    {/* Render post content here */}
-                                                    {/* For example, render an image */}
                                                     <img className="" src={data.uri} alt="" />
-                                                    <button onClick={() => handleLikeDislike(selectedTeam, 'like')}>Like</button>
-                                                    <button onClick={() => handleLikeDislike(selectedTeam, 'dislike')}>Dislike</button>
-                                                    <span>Likes: {likes[selectedTeam] || 0}</span>
+                                                    <br/>   
+                            {/*                     <button onClick={() => handleLikeDislike(selectedTeam, 'like')}>Like</button>
+                                                    <button onClick={() => handleLikeDislike(selectedTeam, 'dislike')}>Dislike</button>*/}
                                                 </div>
                                             ))}
                                         </div>
@@ -89,8 +153,34 @@ function HackathonsCommunity() {
                             </div>
                         </div>
                         <div className="w-1/2 pl-4">
-                            <h2>Comments</h2>
-                            {/* Add your comments component here */}
+                            {posts
+                                .filter(post => post.communityName === selectedTeam)
+                                .map((post, index) => (
+                                    <div>
+                                        <div key={index}>
+                                            <button onClick={() => handleLikeDislike( post,'like' )} >Like  :  <span>{post.likes}</span></button>
+                                            <button onClick={() => handleLikeDislike(post,'dislike')} >Dislike :  <span>{post.disLikes}</span></button>
+                                        </div>
+                                        <h1>Comments</h1>
+                                        <div key={index }>
+                                            <textarea
+                                                value={commentInput[selectedTeam] || ''}
+                                                onChange={(event) => handleCommentChange(selectedTeam)}
+                                                style={{ width: '35vw', height: '100px' }} // Adjust the width and height as needed
+                                            />
+                                            <button onClick={() => handleCommentSubmit(post)}>Submit Comment</button>
+                                        </div>
+                                        <div key={index}>
+                                            {post.comments.map((data, ind) => (
+                                                <div key={ind}>
+                                                    <h3>{data.userName}</h3>
+                                                    <p>{data.comment}</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        
+                                    </div>
+                                ))}
                         </div>
                     </div>
                 )}

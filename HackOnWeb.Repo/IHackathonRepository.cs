@@ -24,6 +24,8 @@ namespace HackOnWebRepo
         public Task AddFile(FileModel file);
 
         public Task<CommunityModel> GetCommunityDetails(string Id);
+        public Task<List<CommunityModel>> GetAllCommunityDetails();
+
 
         public Task<string> UpdateCommunityDetails(CommunityModel community);
 

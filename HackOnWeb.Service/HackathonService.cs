@@ -100,6 +100,11 @@ namespace HackOnWebService
         {
             return await _hackathonRepository.GetCommunityDetails(Id);
         }
+        public async Task<List<CommunityModel>> GetAllCommunityDetails()
+        {
+            return await _hackathonRepository.GetAllCommunityDetails();
+        }
+
 
         public async Task<string> UpdateCommunityDetails(CommunityModel community)
         {
