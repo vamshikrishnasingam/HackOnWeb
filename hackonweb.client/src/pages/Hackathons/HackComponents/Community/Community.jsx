@@ -9,7 +9,7 @@ import './Community.css';
 
 function Community() {
     const teamName = "PHOENIX";
-    const [communityDetails, setCommunityDetails] = useState(null);
+    const [communityDetails, setCommunityDetails] = useState([]);
     const [image, setImage] = useState(null);
     const [githubLink, setGithubLink] = useState('');
     const [appLink, setAppLink] = useState('');
@@ -34,7 +34,7 @@ function Community() {
 
     const GetCommunityDetails = async () => {
         try {
-            const Id = "asjlidfnvjd90erfsdasxz235kdjf";
+            const Id = "asjlidfnvjd90sjdsdasxz235kdjf";
             const response = await axios.get(`https://localhost:7151/api/Hackathons/GetCommunityDetails?Id=${Id}`);
             if (response.data!==null) {
                 setCommunityDetails(response.data);
@@ -72,12 +72,12 @@ function Community() {
         }
     };
 
-    const handleImageUpload = async () => {
+    const handleImageUpload = async (event) => {
         event.preventDefault();
         if (!image) {
             console.error('No image selected');
             return;
-        };
+        }
         // Create FormData object
         const fd = new FormData();
         fd.append('file', image); // 'file' should match the parameter name in your backend controller
@@ -108,7 +108,7 @@ function Community() {
         setReaderImage(null);
     };
 
-    const handleImageUploadCancel = () => {
+    const handleImageUploadCancel = (event) => {
         event.preventDefault();
         setImage(null);
         setReaderImage(null); 
@@ -142,7 +142,7 @@ function Community() {
         }
     };
 
-    const handleFileUpload1 = async() => {
+    const handleFileUpload1 = async(event) => {
         event.preventDefault();
         if (!file1) {
             console.error('No file1 selected');
@@ -179,7 +179,7 @@ function Community() {
         setFile1(null);
         setReaderFile1(null);
     };
-    const handleFileUpload2 = async() => {
+    const handleFileUpload2 = async(event) => {
         event.preventDefault();
         if (!file2) {
             console.error('No file2 selected');
@@ -214,13 +214,13 @@ function Community() {
         setFile2(null);
         setReaderFile2(null);
     };
-    const handleFileUploadCancel1 = () => {
+    const handleFileUploadCancel1 = (event) => {
         event.preventDefault()
         setFile1(null);
         setReaderFile1(null);
         fileInputRef1.current = null;
     };
-    const handleFileUploadCancel2 = () => {
+    const handleFileUploadCancel2 = (event) => {
         event.preventDefault()
         setFile2(null);
         setReaderFile2(null);
@@ -248,9 +248,10 @@ function Community() {
     };
     const handleChangeVisibility = async () => {
         try {
-            const updatedDetails = { ...communityDetails, visibility: !visibility }; // Update the community details with the new visibility value
+            setVisibility(!visibility);
+            console.log(visibility)
+            const updatedDetails = { ...communityDetails, visibility: visibility }; // Update the community details with the new visibility value
             await UpdateCommDetails(updatedDetails); // Call the function to update community details
-            await GetCommunityDetails(); // Refresh community details
         } catch (error) {
             console.error('Error updating visibility:', error);
         }
@@ -262,7 +263,7 @@ function Community() {
         setGithubLink(e.target.value);
     };
 
-    const handleGithubLinkSubmit = async() => {
+    const handleGithubLinkSubmit = async(event) => {
         event.preventDefault();
         try {
             // Once the image is uploaded, update the community details
@@ -279,7 +280,7 @@ function Community() {
         e.preventDefault();
         setAppLink(e.target.value);
     };
-    const handleAppLinkSubmit = async() => {
+    const handleAppLinkSubmit = async(event) => {
         event.preventDefault();
         try {
             // Once the image is uploaded, update the community details
@@ -296,7 +297,7 @@ function Community() {
         setDescription(e.target.value);
     };
 
-    const handleDescriptionSubmit = async () => {
+    const handleDescriptionSubmit = async (event) => {
         event.preventDefault();
         try {
             // Once the image is uploaded, update the community details
@@ -308,7 +309,7 @@ function Community() {
         }
     };
 
-    const handleDescriptionCancel = async () => {
+    const handleDescriptionCancel = async (event) => {
         event.preventDefault();
         setDescription(communityDetails.description);
     }

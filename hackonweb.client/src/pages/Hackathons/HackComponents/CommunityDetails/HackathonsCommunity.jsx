@@ -56,22 +56,25 @@ function HackathonsCommunity() {
         if (action === 'like') {
             if (liked === false) {
                 updatedDetails = { ...post, likes: post.likes + 1 };
+                post.likes += 1;
                 setLiked(true);
                 if (disliked === true)
                     updatedDetails = { ...updatedDetails, disLikes: post.disLikes - 1 };
+                post.disLikes -= 1;
                 setDisliked(false);
             }
             else {
                 console.log('already liked');
             }
-            
         }
         else {
             if (disliked === false) {
-                updatedDetails = { ...post, disLikes: post.disLikes + 1};
+                updatedDetails = { ...post, disLikes: post.disLikes + 1 };
+                post.disLikes += 1;
                 setDisliked(true);
                 if (liked === true) {
                     updatedDetails = { ...updatedDetails, likes: post.likes - 1 };
+                    post.likes -= 1;
                     setLiked(false);
                 }
             }
@@ -87,14 +90,11 @@ function HackathonsCommunity() {
             },
             body: JSON.stringify(updatedDetails)
         });
-        fetchDetails();
+        console.log(response2);
 
     };
-    const handleCommentChange = (team, event) => {
-        setCommentInput({
-            ...commentInput,
-            [team]: event.target.value
-        });
+    const handleCommentChange = () => {
+        setCommentInput(event.target.value);
     };
     const handleCommentSubmit = async(post) => {
         // Check if the user has already commented
@@ -102,7 +102,7 @@ function HackathonsCommunity() {
         const obj = {
             userId: 'userdummy',
             userName: 'big dummy',
-            comment : 'this is dummy of dummies'
+            comment: commentInput
         }
         comments_.push(obj);
         const updatedDetails = { ...post, comments: comments_ };
@@ -143,8 +143,6 @@ function HackathonsCommunity() {
                                                 <div key={ind}>
                                                     <img className="" src={data.uri} alt="" />
                                                     <br/>   
-                            {/*                     <button onClick={() => handleLikeDislike(selectedTeam, 'like')}>Like</button>
-                                                    <button onClick={() => handleLikeDislike(selectedTeam, 'dislike')}>Dislike</button>*/}
                                                 </div>
                                             ))}
                                         </div>
@@ -156,7 +154,7 @@ function HackathonsCommunity() {
                             {posts
                                 .filter(post => post.communityName === selectedTeam)
                                 .map((post, index) => (
-                                    <div>
+                                    <>
                                         <div key={index}>
                                             <button onClick={() => handleLikeDislike( post,'like' )} >Like  :  <span>{post.likes}</span></button>
                                             <button onClick={() => handleLikeDislike(post,'dislike')} >Dislike :  <span>{post.disLikes}</span></button>
@@ -164,8 +162,8 @@ function HackathonsCommunity() {
                                         <h1>Comments</h1>
                                         <div key={index }>
                                             <textarea
-                                                value={commentInput[selectedTeam] || ''}
-                                                onChange={(event) => handleCommentChange(selectedTeam)}
+                                                value={commentInput}
+                                                onChange={() => handleCommentChange()}
                                                 style={{ width: '35vw', height: '100px' }} // Adjust the width and height as needed
                                             />
                                             <button onClick={() => handleCommentSubmit(post)}>Submit Comment</button>
@@ -179,7 +177,7 @@ function HackathonsCommunity() {
                                             ))}
                                         </div>
                                         
-                                    </div>
+                                    </>
                                 ))}
                         </div>
                     </div>
