@@ -248,7 +248,6 @@ function HostHack() {
                 hasErrors = true;
             }
         }
-        hasErrors = false;
 
         // If there are validation errors, update the errors state and return
         if (hasErrors) {
