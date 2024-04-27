@@ -1,61 +1,25 @@
-import React, { useState } from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+import React, { useState,useEffect } from 'react';
 import './Community2.css';
-export default function Community2() {
+import axios from 'axios';
+export default function Community2({ mainCommunityDetails, sendDataToParent }) {
     const [likeCount, setLikeCount] = useState(0);
-    const [dislikeCount, setDislikeCount] = useState(0);
-    const [liked, setLiked] = useState(false);
-    const [disliked, setDisliked] = useState(false);
+    const [dislikeCount, setDisLikeCount] = useState(0);
+    const [comments, setComments] = useState([]);
 
-    const handleLike = () => {
-        if (!liked && !disliked) {
-            setLikeCount(prevCount => prevCount + 1);
-            setLiked(true);
-        } else if (liked) {
-            setLikeCount(prevCount => prevCount - 1);
-            setLiked(false);
-        } else if (disliked) {
-            setLikeCount(prevCount => prevCount + 1);
-            setDislikeCount(prevCount => prevCount - 1);
-            setLiked(true);
-            setDisliked(false);
+    useEffect(() => {
+        const response = mainCommunityDetails;
+        if (response !== null) {
+            console.log(response);
+            setLikeCount(response.likes);
+            setDisLikeCount(response.disLikes);
+            setComments(response.comments);
         }
-    };
-
-    const handleDislike = () => {
-        if (!liked && !disliked) {
-            setDislikeCount(prevCount => prevCount + 1);
-            setDisliked(true);
-        } else if (disliked) {
-            setDislikeCount(prevCount => prevCount - 1);
-            setDisliked(false);
-        } else if (liked) {
-            setLikeCount(prevCount => prevCount - 1);
-            setDislikeCount(prevCount => prevCount + 1);
-            setLiked(false);
-            setDisliked(true);
-        }
-    };
+    }, [mainCommunityDetails]);
 
     const getComments = () => {
         //retreive comments from db
     }
-    const comments = [
-        {
-            author: 'Shashi',
-            content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-        },
-        {
-            author: 'Pasha',
-            content: "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.",
-        },
-    ]
+
 
     const mentors = [
         {
@@ -148,25 +112,6 @@ export default function Community2() {
                     DISLIKES: <p className="text-black pl-2">{dislikeCount}</p>
                 </div>
             </div>
-            {/*<TableContainer component={Paper} className="mentors">
-                <Table sx={{ maxWidth: 400 }} aria-label="simple table">
-                    <TableBody className="table_body">
-                        {mentors.map((row) => (
-                            <TableRow 
-                                key={row.name}
-
-                            >
-                                <TableCell component="th" scope="row">
-                                    <img className="h-12 w-12 flex-none rounded-full" src={row.imageUrl} alt="" />
-                                </TableCell>
-                                <TableCell className="cell text-violet" align="center">{row.name}</TableCell>
-                                <TableCell align="center">{row.role}</TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>*/}
-           
 
             {/* comments component  */}
             <div>
@@ -175,8 +120,8 @@ export default function Community2() {
                     <div className="comments">
                         {comments.map((comment, index) => (
                             <div key={index}>
-                                <p className="comments_header">{comment.author}</p>
-                                <p className="comments_content">{comment.content}</p>
+                                <p className="comments_header">{comment.userName}</p>
+                                <p className="comments_content">{comment.comment}</p>
                                 {index !== comments.length - 1 && <hr className="my-2 border-gray-200" />}
                             </div>
                         ))}

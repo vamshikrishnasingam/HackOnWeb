@@ -7,52 +7,37 @@ import { IoCloudUploadOutline } from "react-icons/io5";
 import axios from 'axios';
 import './Community.css';
 
-function Community() {
+function Community({ mainCommunityDetails, sendDataToParent }) {
     const teamName = "PHOENIX";
-    const [communityDetails, setCommunityDetails] = useState([]);
+    const [communityDetails, setCommunityDetails] = useState(null);
     const [image, setImage] = useState(null);
     const [githubLink, setGithubLink] = useState('');
     const [appLink, setAppLink] = useState('');
     const [description, setDescription] = useState('');
     const [readerImage, setReaderImage] = useState(null);
     const [readerFile1, setReaderFile1] = useState(null);
-    const [readerFile2, setReaderFile2] = useState(null);
     const [file1, setFile1] = useState(null);
-    const [file2, setFile2] = useState(null);
     const imageInputRef = useRef(null);
     const fileInputRef1 = useRef(null);
-    const fileInputRef2 = useRef(null);
     const [showImages, setShowImages] = useState(false);
     const [uploadedFiles, setUploadedFiles] = useState([]);
     const [uploadedImages, setUploadedImages] = useState([]);
     const [visibility, setVisibility] = useState(false);
 
     useEffect(() => {
-        GetCommunityDetails();
-        console.log(communityDetails);
-    }, []);
-
-    const GetCommunityDetails = async () => {
-        try {
-            const Id = "asjlidfnvjd90sjdsdasxz235kdjf";
-            const response = await axios.get(`https://localhost:7151/api/Hackathons/GetCommunityDetails?Id=${Id}`);
-            if (response.data!==null) {
-                setCommunityDetails(response.data);
-                setUploadedImages(response.data.posts);
-                setUploadedFiles(response.data.files);
-                setAppLink(response.data.appLink);
-                setGithubLink(response.data.githubLink);
-                setDescription(response.data.description);
-                setVisibility(response.data.visibility);
+        const response = mainCommunityDetails;
+            console.log(response)
+            if (response!== null) {
+                console.log(response);
+                setCommunityDetails(response);
+                setUploadedImages(response.posts);
+                setUploadedFiles(response.files);
+                setAppLink(response.ppLink);
+                setGithubLink(response.githubLink);
+                setDescription(response.description);
             }
-            console.log(uploadedImages);
-            console.log('Data fetched successfully:', communityDetails);
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    }
+    },[mainCommunityDetails]);
 
-    //IMAGE RELATED FUNCTIONS
 
     const callShowImages = (event) => {
         event.preventDefault();
@@ -88,7 +73,7 @@ function Community() {
                 body: fd
             });
             let data = await response.json();
-
+            console.log(data)
             console.log('Image uploaded successfully:', data.blob.fileName);
             // Once the image is uploaded, update the community details
             const updatedPosts = [...uploadedImages, data.blob];
@@ -100,7 +85,7 @@ function Community() {
                 },
                 body: JSON.stringify(updatedDetails)
             });
-            await GetCommunityDetails();
+            sendDataToParent(true);
         } catch (error) {
             console.error('Error uploading post image:', error);
         }
@@ -113,6 +98,13 @@ function Community() {
         setImage(null);
         setReaderImage(null); 
         imageInputRef.current = null;
+    };
+
+    const handleImageRemove = (indexToRemove) => {
+        // Filter out the image at the specified index
+        const updatedImages = uploadedImages.filter((_, index) => index !== indexToRemove);
+        // Update the state with the filtered images
+        setUploadedImages(updatedImages);
     };
 
     //FILE RELATED FUNCTIONS
@@ -129,18 +121,7 @@ function Community() {
             reader.readAsDataURL(files);
         }
     };
-    const handleFileChange2 = (e) => {
-        e.preventDefault()
-        const files = e.target.files[0];
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setReaderFile2(reader.result);
-            setFile2(files)
-        };
-        if (files) {
-            reader.readAsDataURL(files);
-        }
-    };
+
 
     const handleFileUpload1 = async(event) => {
         event.preventDefault();
@@ -172,59 +153,19 @@ function Community() {
                 },
                 body: JSON.stringify(updatedDetails)
             });
-            await GetCommunityDetails();
+            sendDataToParent(true);
         } catch (error) {
             console.error('Error uploading file1:', error);
         }
         setFile1(null);
         setReaderFile1(null);
     };
-    const handleFileUpload2 = async(event) => {
-        event.preventDefault();
-        if (!file2) {
-            console.error('No file2 selected');
-            return;
-        }
-        // Create FormData object
-        const fd = new FormData();
-        fd.append('file', file2); // 'file' should match the parameter name in your backend controller
-        try {
-            // Send POST request to upload file
-            const response = await fetch('https://localhost:7151/api/Hackathons/UploadFile', {
-                method: 'POST',
-                body: fd
-            });
-            let data = await response.json();
 
-            console.log('File2 uploaded successfully:', data.blob.fileName);
-            // Once the image is uploaded, update the community details
-            const updatedFiles = [...uploadedFiles, data.blob];
-            const updatedDetails = { ...communityDetails, files: updatedFiles };
-            const response2 = await fetch('https://localhost:7151/api/Hackathons/UpdateCommunityDetails', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json' // Set the content type
-                },
-                body: JSON.stringify(updatedDetails)
-            });
-            await GetCommunityDetails();
-        } catch (error) {
-            console.error('Error uploading file2:', error);
-        }
-        setFile2(null);
-        setReaderFile2(null);
-    };
     const handleFileUploadCancel1 = (event) => {
         event.preventDefault()
         setFile1(null);
         setReaderFile1(null);
         fileInputRef1.current = null;
-    };
-    const handleFileUploadCancel2 = (event) => {
-        event.preventDefault()
-        setFile2(null);
-        setReaderFile2(null);
-        fileInputRef2.current = null;
     };
 
     ///OTHER FUNCTIONS
@@ -238,6 +179,7 @@ function Community() {
         }
     };
     const UpdateCommDetails = async (updatedDetails) => {
+        console.log(updatedDetails);
         await fetch('https://localhost:7151/api/Hackathons/UpdateCommunityDetails', {
             method: 'PUT',
             headers: {
@@ -249,8 +191,10 @@ function Community() {
     const handleChangeVisibility = async () => {
         try {
             setVisibility(!visibility);
-            console.log(visibility)
-            const updatedDetails = { ...communityDetails, visibility: visibility }; // Update the community details with the new visibility value
+            console.log(communityDetails);
+            const updatedDetails = { ...communityDetails, visibility: visibility };
+            sendDataToParent(true);
+// Update the community details with the new visibility value
             await UpdateCommDetails(updatedDetails); // Call the function to update community details
         } catch (error) {
             console.error('Error updating visibility:', error);
@@ -269,7 +213,7 @@ function Community() {
             // Once the image is uploaded, update the community details
             const updatedDetails = { ...communityDetails, githubLink: githubLink };
             await UpdateCommDetails(updatedDetails);
-            await GetCommunityDetails();
+            sendDataToParent(true);
         } catch (error) {
             console.error('Error changing github link:', error);
         }
@@ -286,7 +230,7 @@ function Community() {
             // Once the image is uploaded, update the community details
             const updatedDetails = { ...communityDetails, appLink: appLink };
             await UpdateCommDetails(updatedDetails);
-            await GetCommunityDetails();
+            sendDataToParent(true);
         } catch (error) {
             console.error('Error changing app link:', error);
         }
@@ -303,7 +247,7 @@ function Community() {
             // Once the image is uploaded, update the community details
             const updatedDetails = { ...communityDetails, description: description };
             await UpdateCommDetails(updatedDetails);
-            await GetCommunityDetails();
+            sendDataToParent(true);
         } catch (error) {
             console.error('Error changing app link:', error);
         }
@@ -378,14 +322,22 @@ function Community() {
                                 {showImages === true && (
                                     <div className="mt-3 sm:flex sm:overflow-x-auto">
                                         {uploadedImages.map((image, index) => (
-                                            <img
-                                                key={index}
-                                                src={image.uri}
-                                                style={{ maxWidth: '20%', height: '20%', marginRight: '0.5rem' }}
-                                                className="sm:max-w-xs sm:h-auto"
-                                                alt={`Image ${index + 1}`}
-                                            />
+                                            <div key={index} style={{ position: 'relative', display: 'inline-block', maxWidth: '20%', height: '20%', marginRight: '0.5rem' }}>
+                                                <img
+                                                    src={image.uri}
+                                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                                    alt={`Image ${index + 1}`}
+                                                />
+                                                <button
+                                                    style={{ position: 'absolute', top: '5%', right: '5%', backgroundColor: 'rgba(255, 255, 255, 0.5)', border: 'none', borderRadius: '50%', padding: '0.5rem' }}
+                                                    onClick={() => handleImageRemove(index)}
+                                                >
+                                                    X
+                                                </button>
+                                            </div>
+
                                         ))}
+
                                     </div>
                                 )}
                                 <h4 className="heading" id="files">UPLOAD FILES & LINKS</h4>
@@ -418,30 +370,7 @@ function Community() {
                                             </label>
                                         </div>
                                         {/* Second File Upload */}
-                                        <div>
-                                            <label
-                                                htmlFor="file-upload-2"
-                                                className="block cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
-                                            >
-                                                <div className="files flex justify-center" style={{ width: '100px', height: '100px' }}>
-                                                    <div className="text-center" style={{ width: '100%', height: '100%' }}>
-                                                        <div className="flex items-center justify-center h-full">
-                                                            {file2 ?
-                                                                <div className="mt-4 text-center">
-                                                                    <button onClick={handleFileUpload2}>&#x2713;</button>
-                                                                    <button onClick={handleFileUploadCancel2}>O</button>
-                                                                </div>
-                                                                :
-                                                                <div>
-                                                                    <IoCloudUploadOutline className="text-2xl text-gray-900" />
-                                                                    < input id="file-upload-2" name="file-upload" type="file" className="sr-only" onChange={handleFileChange2} ref={fileInputRef2} />
-                                                                </div>
-                                                            }
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </label>
-                                        </div>
+    
                                     </div>
                                     {/*end of first 2 pdfs */}
                                     <div className="grid grid-rows-2 gap-1">
@@ -485,21 +414,22 @@ function Community() {
                             </div>
                             <div className="col-span-full">
                                 <h4 className="heading" id="desc">DESCRIPTION</h4>
-                                <div className="">
+                                <div className="relative">
                                     <textarea
                                         id="about"
                                         name="about"
                                         rows={5}
                                         placeholder="Describe your project"
-                                        className="desc  block w-full p-1 py-2 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-black focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                        value={description} // Bind value to state variable
-                                        onChange={handleDescriptionChange} // Call function on change
+                                        className="desc block w-full p-1 py-2 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-black focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                        value={description}
+                                        onChange={handleDescriptionChange}
                                     />
-                                    {communityDetails!==null && description !== communityDetails.description && (<div className="mt-4 text-center">
+                                    <div className="absolute bottom-0 right-0 mb-1 mr-1 text-center">
                                         <button onClick={handleDescriptionSubmit}>&#x2713;</button>
-                                        <button onClick={handleDescriptionCancel}>O</button>
-                                    </div>)}
+                                        <button onClick={handleDescriptionCancel}>X</button>
+                                    </div>
                                 </div>
+
                                 
                             </div>
                         </div>

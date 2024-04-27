@@ -182,7 +182,10 @@ namespace HackOnWebRepo
                             githubLink = currentComm.githubLink,
                             posts = currentComm.posts,
                             files = currentComm.files,
-                            visibility = currentComm.visibility
+                            visibility = currentComm.visibility,
+                            comments= currentComm.comments,
+                            likes= currentComm.likes,
+                            disLikes= currentComm.disLikes
                         };
                     }
                 }

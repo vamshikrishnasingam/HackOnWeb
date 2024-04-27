@@ -1,12 +1,14 @@
 import Community from "./Community";
 import Community2 from "./Community2";
+import { React, useEffect, useState } from 'react';
+import axios from 'axios';
 import './Community.css';
 
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 function ComunityComp() {
 
-
+    const [mainCommunityDetails, setCommunityDetails] = useState(null);
     const [sectionRef, sectionInView] = useInView();
     const [visionRef, visionInView] = useInView();
     const popInVariant = {
@@ -24,6 +26,30 @@ function ComunityComp() {
             transition: { duration: 1, delay: 0.5 },
         },
     };
+
+    useEffect(() => {
+        GetCommunityDetails();
+    }, [])
+
+    const GetCommunityDetails = async () => {
+        try {
+            const Id = "asjlidfnvjd90sjdsdasxz235kdjf";
+            const response = await axios.get(`https://localhost:7151/api/Hackathons/GetCommunityDetails?Id=${Id}`);
+            if (response.data !== null) {
+                setCommunityDetails(response.data);
+                console.log(response.data)
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+
+    const handleDataFromCommunity = (data) => {
+        if(data)
+        GetCommunityDetails();
+    };
+
+   
     return (
         <motion.div className="total flex flex-wrap"
             initial="hidden"
@@ -36,12 +62,12 @@ function ComunityComp() {
                 animate={visionInView ? "visible" : "hidden"}
                 ref={sectionRef}>
                 <div className="">
-                    <Community />
+                    <Community mainCommunityDetails={mainCommunityDetails} sendDataToParent={handleDataFromCommunity} />
                 </div>
             </div>
             <div className="md:w-2/5 overflow-y-auto relative c2">
                 <div className="">
-                    <Community2 />
+                    <Community2 mainCommunityDetails={mainCommunityDetails} sendDataToParent={handleDataFromCommunity} />
                 </div>
             </div>
         </motion.div>
