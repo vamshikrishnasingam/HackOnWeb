@@ -120,65 +120,70 @@ function HackathonsCommunity() {
 
     return (
         <div className="flex justify-center">
-            <div className="w-1/4">
+            <div className="w-1/5 overflow-y-auto c1 overflow-hidden">
                 <h1 className="text-3xl text-center m-10">Teams</h1>
-                <ul>
-                    {teams.map((team, index) => (
-                        <li key={index} className="cursor-pointer" onClick={() => handleShowPosts(team)}>{team}</li>
-                    ))}
-                </ul>
+                <div className="w-100 text-center">
+                    <ul className='m-2'>
+                        {teams.map((team, index) => (
+                            <li key={index} className="cursor-pointer text-xl capitalize m-12 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" role="button" onClick={() => handleShowPosts(team)}>{team}</li>
+                        ))}
+                    </ul>
+                </div>
             </div>
-            <div className="w-3/4">
+            <div className="w-3/4 overflow-y-auto c1 overflow-hidden">
                 <h1 className="text-3xl text-center m-10">Community Details</h1>
                 {selectedTeam && (
-                    <div className="flex">
-                        <div className="w-1/2 pr-4">
-                            <h2>{selectedTeam}</h2>
-                            <div>
+                    <div>
+                        <h2 className="text-3xl text-center mb-4 capitalize">{selectedTeam}</h2>
+
+                        <div className="flex">
+                            <div className="w-1/2 pr-4  overflow-y-auto c1 overflow-hidden">
+                                <div>
+                                    {posts
+                                        .filter(post => post.communityName === selectedTeam)
+                                        .map((post, index) => (
+                                            <div key={index}>
+                                                {post.posts.map((data, ind) => (
+                                                    <div key={ind}>
+                                                        <img className="" src={data.uri} alt="" />
+                                                        <br />
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        ))}
+
+                                </div>
+                            </div>
+                            <div className="w-1/2 pl-4 overflow-y-auto relative c2">
                                 {posts
                                     .filter(post => post.communityName === selectedTeam)
                                     .map((post, index) => (
-                                        <div key={index}>
-                                            {post.posts.map((data, ind) => (
-                                                <div key={ind}>
-                                                    <img className="" src={data.uri} alt="" />
-                                                    <br/>   
-                                                </div>
-                                            ))}
-                                        </div>
-                                    ))}
+                                        <>
+                                            <div key={index}>
+                                                <button onClick={() => handleLikeDislike(post, 'like')} >Like  :  <span>{post.likes}</span></button>
+                                                <button onClick={() => handleLikeDislike(post, 'dislike')} >Dislike :  <span>{post.disLikes}</span></button>
+                                            </div>
+                                            <h1>Comments</h1>
+                                            <div key={index}>
+                                                <textarea
+                                                    value={commentInput}
+                                                    onChange={() => handleCommentChange()}
+                                                    style={{ width: '35vw', height: '100px' }} // Adjust the width and height as needed
+                                                />
+                                                <button onClick={() => handleCommentSubmit(post)}>Submit Comment</button>
+                                            </div>
+                                            <div key={index}>
+                                                {post.comments.map((data, ind) => (
+                                                    <div key={ind}>
+                                                        <h3>{data.userName}</h3>
+                                                        <p>{data.comment}</p>
+                                                    </div>
+                                                ))}
+                                            </div>
 
+                                        </>
+                                    ))}
                             </div>
-                        </div>
-                        <div className="w-1/2 pl-4">
-                            {posts
-                                .filter(post => post.communityName === selectedTeam)
-                                .map((post, index) => (
-                                    <>
-                                        <div key={index}>
-                                            <button onClick={() => handleLikeDislike( post,'like' )} >Like  :  <span>{post.likes}</span></button>
-                                            <button onClick={() => handleLikeDislike(post,'dislike')} >Dislike :  <span>{post.disLikes}</span></button>
-                                        </div>
-                                        <h1>Comments</h1>
-                                        <div key={index }>
-                                            <textarea
-                                                value={commentInput}
-                                                onChange={() => handleCommentChange()}
-                                                style={{ width: '35vw', height: '100px' }} // Adjust the width and height as needed
-                                            />
-                                            <button onClick={() => handleCommentSubmit(post)}>Submit Comment</button>
-                                        </div>
-                                        <div key={index}>
-                                            {post.comments.map((data, ind) => (
-                                                <div key={ind}>
-                                                    <h3>{data.userName}</h3>
-                                                    <p>{data.comment}</p>
-                                                </div>
-                                            ))}
-                                        </div>
-                                        
-                                    </>
-                                ))}
                         </div>
                     </div>
                 )}
