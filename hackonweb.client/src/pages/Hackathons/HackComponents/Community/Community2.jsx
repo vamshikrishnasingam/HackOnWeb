@@ -65,45 +65,51 @@ export default function Community2({ mainCommunityDetails, sendDataToParent }) {
     return (
         <div className="sm:py-8 px-3 flex flex-col">
             {/* teams component  */}
-            <h4 className="heading" id="members">TEAM MEMBERS :</h4>
-            <section className="members">
-                <div className="mx-auto">
-                    <div className="max-w-full">
-                        <table className="w-full table-auto">
-                            <tbody>
-                                {people.map((row, index) => (
-                                    <tr key={index}>
-                                        <td><img className="h-12 w-12  flex-none rounded-full" src={row.imageUrl} alt="" /></td>
-                                        <td>{row.name}</td>
-                                        <td>{row.role}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
+            <div className="disc1" >
+                <h4 className="heading" id="members">TEAM MEMBERS : </h4>
+                <section className="members">
+                    <div className="mx-auto">
+                        <div className="max-w-full">
+                            <table className="w-full table-auto">
+                                <tbody>
+                                    {people.map((row, index) => (
+                                        <tr key={index}>
+                                            <td><img className="h-12 w-12  flex-none rounded-full" src={row.imageUrl} alt="" /></td>
+                                            <td>{row.name}</td>
+                                            <td>{row.role}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            </div>
+
             {/* mentors component  */}
-            <h4 className="heading" id="mentors">MENTORS :</h4>
-            <section className="mentors">
-                <div className="mx-auto">
-                    <div className="max-w-full">
-                        <table className="w-full table-auto">
-                            <tbody>
-                                {mentors.map((row, index) => (
-                                    <tr key={index}>
-                                        <td><img className="h-12 w-12  flex-none rounded-full" src={row.imageUrl} alt="" /></td>
-                                        <td>{row.name}</td>
-                                        <td>{row.role}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
+            <div className="disc2" >
+                <h4 className="heading" id="members">MENTORS : </h4>
+                <section className="members">
+                    <div className="mx-auto">
+                        <div className="max-w-full">
+                            <table className="w-full table-auto">
+                                <tbody>
+                                    {mentors.map((row, index) => (
+                                        <tr key={index}>
+                                            <td><img className="h-12 w-12  flex-none rounded-full" src={row.imageUrl} alt="" /></td>
+                                            <td>{row.name}</td>
+                                            <td>{row.role}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            </div>
             {/*  likes component  */}
-            <div className="flex gap-4 items-center mt-4">
+           
+            <div className="flex gap-4 items-center mt-3 mb-3">
                 <h4 className="votes">VOTES :</h4>
                 <div className="flex justify-center rounded-md bg-white px-3 py-2 border border-success font-bold text-success">
                     LIKES: <p className="text-black pl-2">{likeCount}</p>
@@ -114,9 +120,10 @@ export default function Community2({ mainCommunityDetails, sendDataToParent }) {
             </div>
 
             {/* comments component  */}
-            <div>
-                <h2 className="heading" id="comments">COMMENTS</h2>
-                {comments.length > 0 ? (
+            <div className="disc5" >
+                <h4 className="heading" id="comments"> COMMENTS : </h4>
+                <section className="comments">
+                    {(typeof comments !== 'undefined' && comments.length) ? (
                     <div className="comments">
                         {comments.map((comment, index) => (
                             <div key={index}>
@@ -129,7 +136,9 @@ export default function Community2({ mainCommunityDetails, sendDataToParent }) {
                 ) : (
                     <p>No comments yet</p>
                 )}
+                </section>
             </div>
+
 
         </div>
     )

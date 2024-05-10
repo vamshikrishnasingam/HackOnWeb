@@ -1,37 +1,48 @@
 /* Community.css */
 :root {
-/*    --posts-image: linear-gradient(to top, #f43b47 0%, #453a94 100%);
+    /*    --posts-image: linear-gradient(to top, #f43b47 0%, #453a94 100%);
     --files-image: linear-gradient(to top, #e14fad 0%, #f9d423 100%);
     --desc-image: linear-gradient(to bottom, #30cfd0 0%, #330867 100%);*/
-    --posts-image: linear-gradient(225deg, #A8BFFF 0%, #884D80 100%);
-    --files-image: linear-gradient(225deg, #A8BFFF 0%, #884D80 100%);
-    --desc-image: linear-gradient(225deg, #A8BFFF 0%, #884D80 100%);
+
+    --posts-image: linear-gradient(270deg, #eec0c6 0%, #7ee8fa 74%);
+    --desc-image: linear-gradient(to bottom, #3a1c71, #d76d77, #ffaf7b);
+    --post-color: linear-gradient(to bottom, #23074d, #cc5333);
+    --desc-color: #B8D8E3;
 }
 .total {
     background-color:white;
 }
+.disc3, .disc4 {
+    padding: 5px;
+    border-radius: 10px;
+    margin-bottom: 5px;
+}
+
+.disc3 {
+    background-image:var(--post-color);
+}
+
+.disc4 {
+    background-image :var(--desc-image);
+}
 .heading {
-    margin-top: 3vh;
+    margin-top: 0vh;
     color: white;
     border: 2px;
     text-align: center;
     font-size: medium;
     font-weight: 700;
-    border-radius: 20px 20px 0px 0px;
     padding: 10px;
 }
 .heading#posts {
-    background-image: var(--posts-image);
-}
-.heading#files {
-    background-image: var(--files-image);
+    margin-top:0vh;
 }
 .heading#desc {
-    background-image: var(--desc-image);
+    margin-top: 0vh;
 }
-
 .profile {
     padding: 15px;
+    margin-bottom:5px;
     border-radius: 10px;
     border: 1px solid;
     border-color: #e6c79c;
@@ -39,48 +50,36 @@
     background-color: #e6c79c;
     background-image: linear-gradient(315deg, #e6c79c 0%, #d6a3a3 74%);
 }
-
 .show {
-    margin-top: 10px;
-    color: white;
-    background-image: var(--posts-image);
+    margin-top: 1vh;
+    background-image: var(--post-color);
     border: 0px;
     
 }
-.show:hover {
-    border-color:white;
-}
-
 .linkbox, .buttonlink {
     border: 1px solid;
     border-radius: 10px;
     background-color: #F5F5F5;
 }
-
 .buttonlink {
     border-bottom-left-radius: 0px;
     border-top-left-radius: 0px;
     border: 0px;
 }
-
-.desc {
-    background-color: #F5F5F5;
-}
-
 .comm1 {
     background-color: #d3d3d3;
     background-image: linear-gradient(315deg, #d3d3d3 0%, #57606f 74%);
 }
-
 .posts {
-    background-color: #F5F5F5;
+    background-color: white;
 }
 .files{
-    background-color:#F5F5F5;
+    background-color:white;;
     border:1px solid;
     border-color:black;
     border-radius:5px;
 }
+
 
 .c1 {
     height: 81.5vh;

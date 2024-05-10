@@ -9,7 +9,6 @@ namespace Common.Models
     public class HackathonModel
     {
         public string id { get; set; }
-        
         public string HackathonId { get; set; }
         public string HackathonName { get; set; }
         public string HackathonDescription { get; set; }

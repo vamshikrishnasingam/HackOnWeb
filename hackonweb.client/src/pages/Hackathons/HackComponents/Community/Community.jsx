@@ -283,41 +283,44 @@ function Community({ mainCommunityDetails, sendDataToParent }) {
 
                         <div className="grid grid-cols-1">
                             <div className="col-span-full">
-                                <h4 className="heading" id="posts">POST YOUR THOUGHTS</h4>
-                                <div className="posts flex justify-center border border-gray-900 px-5 py-5">
-                                    <label
-                                        htmlFor="image-upload"
-                                        className="block cursor-pointer  font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
-                                        style={{ display: 'block', padding: '10px' }}
-                                    >
-                                        <div className="text-center">
-                                            {image ? (
-                                                <div className="mt-4 text-center">
-                                                    <img src={readerImage} style={{ maxWidth: '100%', maxHeight: '300px' }} alt="Preview" />
-                                                    <button onClick={handleImageUpload}>Upload</button>
-                                                    <button onClick={handleImageUploadCancel}>Cancel</button>
-                                                </div>
-                                            ) : (
-                                                <div>
-                                                    <PhotoIcon className="mx-auto h-20 w-12 text-gray-300" aria-hidden="true" />
-                                                    <div className="mt-4 flex text-sm leading-6 text-gray-600">
-                                                        <span>Upload a file</span>
-                                                        <input
-                                                            id="image-upload"
-                                                            name="image-upload"
-                                                            type="file"
-                                                            className="sr-only"
-                                                            onChange={handleImageChange}
-                                                            ref={imageInputRef}
-                                                        />
+                                <div className="disc3">
+                                    <h4 className="heading" id="posts">POST YOUR THOUGHTS</h4>
+                                    <div className="posts flex justify-center border border-gray-900 px-5 py-5">
+                                        <label
+                                            htmlFor="image-upload"
+                                            className="block cursor-pointer font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+                                            style={{ display: 'block', padding: '10px' }}
+                                        >
+                                            <div className="text-center">
+                                                {image ? (
+                                                    <div className="mt-4 text-center">
+                                                        <img src={readerImage} style={{ maxWidth: '100%', maxHeight: '300px' }} alt="Preview" />
+                                                        <button onClick={handleImageUpload}>Upload</button>
+                                                        <button onClick={handleImageUploadCancel}>Cancel</button>
                                                     </div>
-                                                    <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
-                                                    <p className="pl-1">or drag and drop</p>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </label>
+                                                ) : (
+                                                    <div>
+                                                        <PhotoIcon className="mx-auto h-20 w-12 text-gray-300" aria-hidden="true" />
+                                                        <div className="mt-4 flex text-sm leading-6 text-gray-600">
+                                                            <span>Upload a file</span>
+                                                            <input
+                                                                id="image-upload"
+                                                                name="image-upload"
+                                                                type="file"
+                                                                className="sr-only"
+                                                                onChange={handleImageChange}
+                                                                ref={imageInputRef}
+                                                            />
+                                                        </div>
+                                                        <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
+                                                        <p className="pl-1">or drag and drop</p>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </label>
+                                    </div>
                                 </div>
+
                                 <button className="show" onClick={callShowImages}>Show Posts</button>
                                 {showImages === true && (
                                     <div className="mt-3 sm:flex sm:overflow-x-auto">
@@ -412,9 +415,9 @@ function Community({ mainCommunityDetails, sendDataToParent }) {
                                 <div>
                                 </div>
                             </div>
-                            <div className="col-span-full">
+                            <div className="disc4">
                                 <h4 className="heading" id="desc">DESCRIPTION</h4>
-                                <div className="relative">
+                                <div className="desc relative">
                                     <textarea
                                         id="about"
                                         name="about"
@@ -429,9 +432,9 @@ function Community({ mainCommunityDetails, sendDataToParent }) {
                                         <button onClick={handleDescriptionCancel}>X</button>
                                     </div>
                                 </div>
-
-                                
                             </div>
+
+
                         </div>
                     </div>
                 </div>

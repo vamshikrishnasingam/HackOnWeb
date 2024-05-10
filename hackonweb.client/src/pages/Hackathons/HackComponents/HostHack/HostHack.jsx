@@ -10,7 +10,7 @@ function HostHack() {
         Organization: '',
         rounds: 3, // Default number of rounds
     });
-    const hackModel = {
+    var hackModel = {
         "id": "HACK001",
         "hackathonId": "HACK2024",
         "hackathonName": "CodeFest 2024",
@@ -49,13 +49,51 @@ function HostHack() {
         }
     };
 
-
     const [roundsData, setRoundsData] = useState([]);
     useEffect(() => {
         setRoundsData(Array.from({ length: hackathonDetails.rounds }, () => ({})));
     }, [hackathonDetails.rounds]);
 
     const handleSubmitDetails = async() => {
+        console.log(hackModel);
+        hackModel = {
+            "id":"random_id_will_be_generated",
+            "HackathonId": "random_id",
+            "HackathonName": hackathonDetails.HackathonName,
+            "HackathonDescription": hackathonDetails.HackathonDescription,
+            "StartDate": hackathonDetails.StartDate,
+            "EndDate": hackathonDetails.EndDate,
+            "coding": hackathonDetails.coding,
+            "organization": hackathonDetails.organization,
+            "Round1": {
+                "Round1Name": roundsData[0].Round1Name,
+                "platform": roundsData[0].platform,
+                "Link": roundsData[0].Link,
+                "CodingDate": roundsData[0].CodingDate,
+                "StartTime": roundsData[0].StartTime,
+                "EndTime": roundsData[0].EndTime
+            },
+            "Round2": {
+                "Round2Name": roundsData[1].Round2Name,
+                "ProblemStatementsURL": roundsData[1].ProblemStatements,
+                "ModeOfProblemStatements": roundsData[1].ModeOfProblemStatements,
+                "PPTStartDate": roundsData[1].PPTStartDate,
+                "PPTEndDate": roundsData[1].PPTEndDate,
+                "PPTStartTime": roundsData[1].PPTStartTime,
+                "PPTEndTime": roundsData[1].PPTEndTime,
+                "ModeOfSubmission": roundsData[1].ModeOfSubmission
+            },
+            "Round3": {
+                "Round3Name": roundsData[2].Round3Name,
+                "DiscordURL": roundsData[2].DiscordURL,
+                "ModeOfHack": roundsData[2].ModeOfHack,
+                "HackStartDate": roundsData[2].HackStartDate,
+                "HackEndDate": roundsData[2].HackEndDate,
+                "HackStartTime": roundsData[2].HackStartTime,
+                "HackEndTime": roundsData[2].HackEndTime,
+                "Venue": roundsData[2].Venue
+            }
+        };
         console.log(hackModel);
         try {
             // Send POST request to upload file
@@ -99,7 +137,7 @@ function HostHack() {
         fd.append('file', file);
         try {
             // Send POST request to upload file
-            const response = await fetch('http://localhost:7151/api/Hackathons/UploadFile', {
+            const response = await fetch('https://localhost:7151/api/Hackathons/UploadFile', {
                 method: 'POST',
                 body: fd
             });
@@ -773,7 +811,7 @@ function HostHack() {
                     {step === hackathonDetails.rounds + 2 && (
                         <div className="container mt-4">
                             <h2 className="text-6xl font-bold mb-4 text-center text-blue-900">Preview</h2>
-                            {Object.entries(hackModel).map(([key, value], index) => (
+                            {Object.entries(hackathonDetails).map(([key, value], index) => (
                                 <div key={index} className="card mb-4">
                                     <div className="card-body">
                                         <h5 className="card-title font-semibold">{key}</h5>
@@ -822,13 +860,13 @@ function HostHack() {
                             >
                                 Next
                             </button>
-                             {/* <button
+                              <button
                                 className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                     type="button"
                                     onClick={handleSubmitDetails}
                             >
                                 Submit
-                                </button>*/}
+                                </button>
                                 </div>
                         )}
                         {step === hackathonDetails.rounds + 2 && (
