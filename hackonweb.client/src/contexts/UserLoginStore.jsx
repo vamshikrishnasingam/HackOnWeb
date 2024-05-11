@@ -71,9 +71,9 @@ function UserLoginStore({ children }) {
         const response = await axios.get(`https://localhost:7151/api/Hackathons/GetUserById?id=${currentUser.id}`)
         const data = response.data[0];
         console.log(data);
-        if (data){
-            setCurrentUser(data)
-            setTeams(data.teams)
+        if (data!=currentUser){
+            setCurrentUser({})
+            setTeams([])
         }
     }
     //to add in userlogincontextstore.js
@@ -118,7 +118,10 @@ function UserLoginStore({ children }) {
         }
     };*/
     useEffect(() => {
-        FetchUser();
+        const FetchData = async () => {
+            await FetchUser();
+        }
+        FetchData();
     }, []);
     return (
         <loginContext.Provider value={[currentUser, loginUser, userLoginStatus, loginErr, logoutUser, verified, teams, fetchTeams]}>

@@ -5,9 +5,37 @@ import axios from 'axios';
 import './Community.css';
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import { communityContext } from "../../../../contexts/communityContext";
+import { loginContext } from "../../../../contexts/loginContext";
 function ComunityComp() {
-    let [mainCommunityDetails, changeCommunityDetails, GetCommunityDetails, handleDataFromCommunity] = useContext(communityContext);
+    const [team, setTeam] = useState({});
+    const [mainCommunityDetails, setCommunityDetails] = useState({});
+    let [currentUser, loginUser, userLoginStatus, loginErr, logoutUser, verified, teams, fetchTeams] = useContext(loginContext)
+    const GetCommunityDetails = async () => {
+        try {
+            console.log(teams)
+            for (let i = 0; i < teams.length; i++) {
+                if (teams[i].status === 1) {
+                    console.log("response of search", teams[i]);
+                    setTeam(teams[i]);
+                    break;
+                }
+            }
+            if (team != undefined) {
+                const response = await axios.get(`https://localhost:7151/api/Hackathons/GetCommunityDetails?Id=${team.teamId}`);
+                if (response.data !== null) {
+                    setCommunityDetails(response.data);
+                    console.log("response of comm", response.data);
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+
+    const handleDataFromCommunity = (data) => {
+        if (data)
+            GetCommunityDetails();
+    };
     const [sectionRef, sectionInView] = useInView();
     const [visionRef, visionInView] = useInView();
     const popInVariant = {

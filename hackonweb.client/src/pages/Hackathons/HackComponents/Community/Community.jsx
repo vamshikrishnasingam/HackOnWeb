@@ -324,7 +324,7 @@ function Community({ mainCommunityDetails, sendDataToParent }) {
                                 <button className="show" onClick={callShowImages}>Show Posts</button>
                                 {showImages === true && (
                                     <div className="mt-3 sm:flex sm:overflow-x-auto">
-                                        {uploadedImages.map((image, index) => (
+                                        {uploadedImages?.map((image, index) => (
                                             <div key={index} style={{ position: 'relative', display: 'inline-block', maxWidth: '20%', height: '20%', marginRight: '0.5rem' }}>
                                                 <img
                                                     src={image.uri}

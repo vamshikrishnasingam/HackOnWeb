@@ -63,9 +63,9 @@ function HackNavigationBar() {
                         >
                             Upcoming Hacks
                         </Link>
-                         <Link ref={dropdownRef} 
-                            className={`relative inline-block text-left flex justify-center items-center block rounded hover:bg-green-800 hover:text-white md:hover:bg-green dark:border-gray-700 ${(location.pathname === '/hackathons/hack-host' || location.pathname === '/hackathons/jury-mentors' || location.pathname === '/hackathons/host-verify') ? 'text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 px-2 py-1 rounded-lg text-sm  dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800' : 'text-gray-900'}`}
-                      >
+                        <div ref={dropdownRef} 
+                        className={`relative inline-block text-left flex justify-center items-center block rounded hover:bg-green-800 hover:text-white md:hover:bg-green dark:border-gray-700 ${(location.pathname === '/hackathons/hack-host' || location.pathname === '/hackathons/jury-mentors' || location.pathname === '/hackathons/host-verify') ? 'text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 px-2 py-1 rounded-lg text-sm  dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800' : 'text-gray-900'}`}
+                        >
                             <button
                                 id="dropdownHoverButton"
                                 onMouseEnter={toggleDropdown}
@@ -109,7 +109,7 @@ function HackNavigationBar() {
                                     </ul>
                                 </div>
                             )}
-                        </Link>
+                        </div>
                         <Link
                             to="community"
                             className={`flex justify-center items-center block py-2 px-3 rounded hover:bg-green-800 hover:text-white md:hover:bg-green dark:border-gray-700 ${location.pathname === '/hackathons/community' ? 'text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800' : 'text-gray-900'}`}
