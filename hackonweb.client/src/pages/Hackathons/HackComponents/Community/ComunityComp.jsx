@@ -1,14 +1,13 @@
 import Community from "./Community";
 import Community2 from "./Community2";
-import { React, useEffect, useState } from 'react';
+import { React, useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import './Community.css';
-
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+import { communityContext } from "../../../../contexts/communityContext";
 function ComunityComp() {
     let [mainCommunityDetails, changeCommunityDetails, GetCommunityDetails, handleDataFromCommunity] = useContext(communityContext);
-    const [mainCommunityDetails, setCommunityDetails] = useState(null);
     const [sectionRef, sectionInView] = useInView();
     const [visionRef, visionInView] = useInView();
     const popInVariant = {
