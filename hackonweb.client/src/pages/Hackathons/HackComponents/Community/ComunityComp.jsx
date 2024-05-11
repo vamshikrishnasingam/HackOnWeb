@@ -7,7 +7,7 @@ import './Community.css';
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 function ComunityComp() {
-
+    let [mainCommunityDetails, changeCommunityDetails, GetCommunityDetails, handleDataFromCommunity] = useContext(communityContext);
     const [mainCommunityDetails, setCommunityDetails] = useState(null);
     const [sectionRef, sectionInView] = useInView();
     const [visionRef, visionInView] = useInView();
@@ -30,24 +30,6 @@ function ComunityComp() {
     useEffect(() => {
         GetCommunityDetails();
     }, [])
-
-    const GetCommunityDetails = async () => {
-        try {
-            const Id = "asjlidfnvjd90sjdsdasxz235kdjf";
-            const response = await axios.get(`https://localhost:7151/api/Hackathons/GetCommunityDetails?Id=${Id}`);
-            if (response.data !== null) {
-                setCommunityDetails(response.data);
-                console.log(response.data)
-            }
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    }
-
-    const handleDataFromCommunity = (data) => {
-        if(data)
-        GetCommunityDetails();
-    };
 
    
     return (
