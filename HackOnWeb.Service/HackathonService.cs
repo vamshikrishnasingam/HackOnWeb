@@ -126,5 +126,11 @@ namespace HackOnWebService
             return await _hackathonRepository.VerifyHost(vm);
         }
 
+        //get hackathon details by id
+        public async Task<List<HackathonModel>> GetHackathonDetailsbyId(string id)
+        {
+            return await _hackathonRepository.GetHackathonDetailsbyId(id);
+        }
+
     }
 }
