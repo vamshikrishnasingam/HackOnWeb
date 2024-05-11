@@ -32,7 +32,7 @@ function Community({ mainCommunityDetails, sendDataToParent }) {
                 setCommunityDetails(response);
                 setUploadedImages(response.posts);
                 setUploadedFiles(response.files);
-                setAppLink(response.ppLink);
+                setAppLink(response.appLink);
                 setGithubLink(response.githubLink);
                 setDescription(response.description);
             }

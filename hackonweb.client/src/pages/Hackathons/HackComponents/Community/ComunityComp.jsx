@@ -1,14 +1,13 @@
 import Community from "./Community";
 import Community2 from "./Community2";
-import { React, useEffect, useState } from 'react';
+import { React, useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import './Community.css';
-
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+import { communityContext } from "../../../../contexts/communityContext";
 function ComunityComp() {
-
-    const [mainCommunityDetails, setCommunityDetails] = useState(null);
+    let [mainCommunityDetails, changeCommunityDetails, GetCommunityDetails, handleDataFromCommunity] = useContext(communityContext);
     const [sectionRef, sectionInView] = useInView();
     const [visionRef, visionInView] = useInView();
     const popInVariant = {
@@ -30,24 +29,6 @@ function ComunityComp() {
     useEffect(() => {
         GetCommunityDetails();
     }, [])
-
-    const GetCommunityDetails = async () => {
-        try {
-            const Id = "asjlidfnvjd90sjdsdasxz235kdjf";
-            const response = await axios.get(`https://localhost:7151/api/Hackathons/GetCommunityDetails?Id=${Id}`);
-            if (response.data !== null) {
-                setCommunityDetails(response.data);
-                console.log(response.data)
-            }
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    }
-
-    const handleDataFromCommunity = (data) => {
-        if(data)
-        GetCommunityDetails();
-    };
 
    
     return (
