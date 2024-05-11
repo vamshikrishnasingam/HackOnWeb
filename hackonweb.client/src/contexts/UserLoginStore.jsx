@@ -4,11 +4,15 @@ import { loginContext } from "./loginContext";
 
 // eslint-disable-next-line react/prop-types
 function UserLoginStore({ children }) {
+    const [teams, setTeams] = useState([]);
     const [currentUser, setCurrentUser] = useState({});
     const [verified,setVerified]=useState(false);
     const [loginErr, setLoginErr] = useState("")
     const [userLoginStatus, setUserLoginStatus] = useState(false)
     //function to make user login reuqest
+    const fetchTeams = () => {
+        setTeams(currentUser.teams);
+    }
     const loginUser = async (userCredObj) => {
         console.log(userCredObj)
         try {
@@ -32,6 +36,7 @@ function UserLoginStore({ children }) {
                 setLoginErr("");
                 setUserLoginStatus(true);
                 setVerified(currentUser.verified);
+                setTeams(currentUser.teams)
                 // store jwt token in local storage (you need to adjust this based on your actual token handling)
                 localStorage.setItem("user", JSON.stringify(data));
             })
@@ -56,15 +61,20 @@ function UserLoginStore({ children }) {
     const FetchUser = async () => {
         const storedUser = localStorage.getItem("user");
         if (storedUser) {
-            setCurrentUser(JSON.parse(storedUser));
+            await setCurrentUser(JSON.parse(storedUser));
             setUserLoginStatus(true);
             setVerified(storedUser.verified);
+            setTeams(storedUser.teams)
         } else {
             return null;
         }
-        const response = await axios.post(`https://localhost:7151/api/Hackathons/GetUserById?id=${currentUser.id}`)
-        const data = response.data;
-        console.log(data)
+        const response = await axios.get(`https://localhost:7151/api/Hackathons/GetUserById?id=${currentUser.id}`)
+        const data = response.data[0];
+        console.log(data);
+        if (data){
+            setCurrentUser(data)
+            setTeams(data.teams)
+        }
     }
     //to add in userlogincontextstore.js
    /* const checkTokenAndFetchUser = async () => {
@@ -108,11 +118,10 @@ function UserLoginStore({ children }) {
         }
     };*/
     useEffect(() => {
-        /*checkTokenAndFetchUser();*/
         FetchUser();
     }, []);
     return (
-        <loginContext.Provider value={[currentUser, loginUser, userLoginStatus, loginErr, logoutUser, verified]}>
+        <loginContext.Provider value={[currentUser, loginUser, userLoginStatus, loginErr, logoutUser, verified, teams, fetchTeams]}>
             {children}
         </loginContext.Provider>
     )
