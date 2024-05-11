@@ -33,5 +33,9 @@ namespace HackOnWebService
         public Task<int> VerifyHost(VerifyModel vm);
 
 
+        //get hackathon details by id
+        public Task<List<HackathonModel>> GetHackathonDetailsbyId(string id);
+
+
     }
 }

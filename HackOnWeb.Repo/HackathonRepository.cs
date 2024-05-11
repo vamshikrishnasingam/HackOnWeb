@@ -56,6 +56,23 @@ namespace HackOnWebRepo
             }
             return hackathons;
         }
+
+
+        //getHackathonDetails
+        public async Task<List<HackathonModel>> GetHackathonDetailsbyId(string id)
+        {
+            var container = _cosmosclient.GetContainer(DatabaseId, HackathonContainerId);
+            var query = "SELECT * FROM c where c.id = @id";
+            var queryDefinition = new QueryDefinition(query).WithParameter("@id", id);
+            var hackathons = new List<HackathonModel>();
+            var resultSetIterator = container.GetItemQueryIterator<HackathonModel>(queryDefinition);
+            while (resultSetIterator.HasMoreResults)
+            {
+                var CurrentHackathon = await resultSetIterator.ReadNextAsync();
+                hackathons.AddRange(CurrentHackathon);
+            }
+            return hackathons;
+        }
         //uploadHackathonDetails
         public async Task<HackathonModel> uploadHackathon(HackathonModel hackathon)
         {
