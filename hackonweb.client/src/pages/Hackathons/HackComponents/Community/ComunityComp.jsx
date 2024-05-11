@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import Community from "./Community";
 import Community2 from "./Community2";
 import { React, useEffect, useState, useContext } from 'react';
@@ -7,25 +8,23 @@ import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { loginContext } from "../../../../contexts/loginContext";
 function ComunityComp() {
-    const [team, setTeam] = useState({});
     const [mainCommunityDetails, setCommunityDetails] = useState({});
     let [currentUser, loginUser, userLoginStatus, loginErr, logoutUser, verified, teams, fetchTeams] = useContext(loginContext)
     const GetCommunityDetails = async () => {
         try {
-            console.log(teams)
-            for (let i = 0; i < teams.length; i++) {
-                if (teams[i].status === 1) {
-                    console.log("response of search", teams[i]);
-                    setTeam(teams[i]);
-                    break;
-                }
-            }
-            if (team != undefined) {
-                const response = await axios.get(`https://localhost:7151/api/Hackathons/GetCommunityDetails?Id=${team.teamId}`);
+            console.log(currentUser.teams)
+            const teams = currentUser.teams;
+            const teamWithStatusOne = teams.find(team => team.status === 1);
+            const teamIdWithStatusOne = teamWithStatusOne ? teamWithStatusOne.teamId : undefined;
+            if (teamIdWithStatusOne !== undefined) {
+                const response = await axios.get(`https://localhost:7151/api/Hackathons/GetCommunityDetails?Id=${teamIdWithStatusOne}`);
                 if (response.data !== null) {
                     setCommunityDetails(response.data);
                     console.log("response of comm", response.data);
                 }
+            }
+            else {
+                console.log("not in a team yet");
             }
         } catch (error) {
             console.error('Error fetching data:', error);
