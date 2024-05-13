@@ -1,26 +1,54 @@
-/* eslint-disable react/prop-types */
+﻿/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { selectHackathon } from '../Redux/actions';
 import { useNavigate } from 'react-router-dom';
+import { TbUsersPlus } from "react-icons/tb";
+import { IoTimerOutline } from "react-icons/io5";
 
 const HackathonCard = ({ hackathon, onClick, isClicked }) => {
     const { startDate, endDate } = hackathon;
     const isOngoing = new Date(startDate) <= new Date() && new Date() <= new Date(endDate);
     const formattedStartDate = new Date(startDate).toLocaleDateString();
     const formattedEndDate = new Date(endDate).toLocaleDateString();
+    const registrationDeadline = Math.ceil((new Date(endDate) - new Date()) / (1000 * 60 * 60 * 24))
+    const registeredCount = 20;
 
     return (
-        <div className={`border rounded-lg p-4 mb-4 cursor-pointer ${isOngoing ? 'bg-blue-100' : 'bg-green-100'} ${isClicked ? 'bg-green-200' : ''}`} onClick={onClick}>
-            <h2 className="text-lg font-bold mb-2">{hackathon.hackathonName}</h2>
-            <p className="text-sm">ID: {hackathon.id}</p>
-            <p className="text-sm">Description: {hackathon.hackathonDescription}</p>
-            <p className="text-sm">Start Date: {formattedStartDate}</p>
-            <p className="text-sm">End Date: {formattedEndDate}</p>
-            <p className="text-sm">Organization: {hackathon.organization}</p>
+        <div className={`border rounded-lg p-2 mb-4 cursor-pointer ${isOngoing ? 'bg-blue-100' : 'bg-green-100'} ${isClicked ? 'bg-green-100 hover:border border-success' : ''}`} onClick={onClick}>
+            <div className='flex'>
+                {/* Image */}
+                <img src={"https://media.istockphoto.com/id/1189767041/vector/hackathon-signs-round-design-template-thin-line-icon-concept-vector.jpg?s=612x612&w=0&k=20&c=DW-btIjpNjItFfk35N4KvrMkoGoqd1rEPwb_uV9IZEU="} alt="Hackathon" className="w-1/3 border border-4  rounded-lg" />
+
+                {/* Hackathon details */}
+                <div className="ml-4 w-2/3 m-2">
+                    <div className='m-2'>
+                        <h2 className="text-2xl">{hackathon.hackathonName}</h2>
+                        <p className="text-md mt-1 font-light ">{hackathon.organization}</p>
+                    </div>
+              
+                        <div className="flex items-center">
+                            <div className='m-1 fontbold'>
+                            < TbUsersPlus />
+                            </div>
+                            <p className="text-sm">{registeredCount} Registered</p>
+                        </div>
+                        <div className='flex items-center'>
+                            <div className='m-1 fontbold'>
+                                <IoTimerOutline />
+                            </div>
+                            {/* Calculate time left for registration */}
+                            {registrationDeadline && (
+                                <p className="text-sm">{registrationDeadline} Days Left</p>
+                            )}
+                        </div>
+                </div>
+            </div>
+            <p className="text-sm m-2 text-center">{hackathon.hackathonDescription}</p>
         </div>
+
     );
 };
 
@@ -38,44 +66,83 @@ const HackathonDetailsComp = ({ hackathon }) => {
     return (
         <>
             <div className="border rounded-lg p-4 mb-4 bg-gray-100">
-                <div className="flex justify-between items-center">
-                    <h2 className="text-lg font-bold mb-2">{hackathonName}</h2>
-                    <div>
-                        <button className="bg-green-800 hover:bg-green-600 border border-green-600 text-white font-bold py-2 px-4 rounded mt-2"
-                            onClick={() => {
-                                handleDetailsClick();
-                                navigate('/hackathons/hackathon-details')
-                            }}
-                        >
-                            Register
-                        </button>
+                <div className="border rounded-lg p-4 bg-white mb-6 shadow-md">
+                    <div className="flex">
+                        <div>
+                            <img src={"https://media.istockphoto.com/id/1189767041/vector/hackathon-signs-round-design-template-thin-line-icon-concept-vector.jpg?s=612x612&w=0&k=20&c=DW-btIjpNjItFfk35N4KvrMkoGoqd1rEPwb_uV9IZEU="} alt="Hackathon" className="border border-gray-300 p-2 rounded-lg" width='150' />
+                        </div>
+                        <div className="ml-4 flex-grow">
+                            <h2 className="text-3xl font-bold text-gray-800 mb-2">{hackathonName}</h2>
+                            <p className="text-lg text-gray-600"><span className="font-semibold">Organization:</span> {organization}</p>
+                            <p className="text-lg text-gray-600"><span className="font-semibold">Venue:</span> {round3.venue}</p>
+                            <p className="text-lg text-gray-600"><span className="font-semibold">Mode:</span> {round3.modeOfHack}</p>
+                            <p className="text-lg text-gray-600"><span className="font-semibold">Description:</span> {hackathonDescription}</p>
+                        </div>
+                        <div className="ml-4">
+                            <div className="text-lg text-gray-800 m-3">
+                                <p className="mb-1"><span className="font-semibold">Start Date:</span></p>
+                                <p className="text-sm">{formattedStartDate}</p>
+                                <p className="mt-4 mb-1"><span className="font-semibold">End Date:</span></p>
+                                <p className="text-sm">{formattedEndDate}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <hr className='mt-4 border-gray-500'></hr>
+                    <div className="flex justify-between items-center">
+                        {/*<div>
+                            <button className="text-gray-700 font-bold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out">
+                                Add to Wishlist
+                            </button>
+                        </div>*/}
+                        <div className="flex items-center">
+                            <p className="text-lg text-gray-700">Registration Deadline :</p>
+                            <div>
+                                <p className="text-sm font-bold text-gray-600">{formattedStartDate}</p>
+                            </div>
+                        </div>
+
+                        <div className='m-2'>
+                            <button className="bg-green-800 hover:bg-green-600 border border-green-600 text-white font-bold py-2 px-4 rounded mt-2"
+                                onClick={() => {
+                                    handleDetailsClick();
+                                    navigate('/hackathons/hackathon-details')
+                                }}
+                            >
+                                Register
+                            </button>
+                        </div>
                     </div>
                 </div>
-                <p className="text-sm">Description: {hackathonDescription}</p>
-                <p className="text-sm">Start Date: {formattedStartDate}</p>
-                <p className="text-sm">End Date: {formattedEndDate}</p>
-                <p className="text-sm">Organization: {organization}</p>
+
                 <div className="mt-4">
-                    <h3 className="text-lg font-bold mb-2">Rounds Information:</h3>
-                    {round1 && (<div className="border rounded-lg p-4 bg-white mb-4">
+                    <h3 className="text-lg font-bold m-2">Rounds Information:</h3>
+                    {round1 && (<div className="border rounded-lg p-4 bg-white mb-4 shadow-md">
                         <h4 className="text-md font-bold mb-2">{round1.round1Name}</h4>
                         <p className="text-sm">Platform: {round1.platform}</p>
                         <p className="text-sm">Date: {new Date(round1.codingDate).toLocaleDateString()}</p>
                         <p className="text-sm">Time: {round1.startTime} - {round1.endTime}</p>
                     </div>)}
-                    <div className="border rounded-lg p-4 bg-white mb-4">
-                        <h4 className="text-md font-bold mb-2">{round2.round2Name}</h4>
-                        <p className="text-sm">Problem Statements URL: {round2.problemStatementsURL}</p>
-                        <p className="text-sm">Date: {new Date(round2.pptStartDate).toLocaleDateString()} - {new Date(round2.pptEndDate).toLocaleDateString()}</p>
-                        <p className="text-sm">Time: {round2.pptStartTime} - {round2.pptEndTime}</p>
-                    </div>
-                    <div className="border rounded-lg p-4 bg-white">
-                        <h4 className="text-md font-bold mb-2">{round3.round3Name}</h4>
-                        <p className="text-sm">Discord URL: {round3.discordURL}</p>
-                        <p className="text-sm">Date: {new Date(round3.hackStartDate).toLocaleDateString()} - {new Date(round3.hackEndDate).toLocaleDateString()}</p>
-                        <p className="text-sm">Time: {round3.hackStartTime} - {round3.hackEndTime}</p>
-                        <p className="text-sm">Venue: {round3.venue}</p>
-                    </div>
+                    {
+                        round2 && (
+                            <div className="border rounded-lg p-4 bg-white mb-4 shadow-md">
+                                <h4 className="text-md font-bold mb-2">{round2.round2Name}</h4>
+                                <p className="text-sm">Problem Statements URL: {round2.problemStatementsURL}</p>
+                                <p className="text-sm">Date: {new Date(round2.pptStartDate).toLocaleDateString()} - {new Date(round2.pptEndDate).toLocaleDateString()}</p>
+                                <p className="text-sm">Time: {round2.pptStartTime} - {round2.pptEndTime}</p>
+                            </div>
+                        )
+                    }
+                    {
+                        round3 && (
+                            <div className="border rounded-lg p-4 bg-white shadow-md">
+                                <h4 className="text-md font-bold mb-2">{round3.round3Name}</h4>
+                                <p className="text-sm">Discord URL: {round3.discordURL}</p>
+                                <p className="text-sm">Date: {new Date(round3.hackStartDate).toLocaleDateString()} - {new Date(round3.hackEndDate).toLocaleDateString()}</p>
+                                <p className="text-sm">Time: {round3.hackStartTime} - {round3.hackEndTime}</p>
+                                <p className="text-sm">Venue: {round3.venue}</p>
+                            </div>
+                        )
+                    }
                 </div>
             </div>
         </>
@@ -148,13 +215,13 @@ const OnGoingHacks = () => {
 
     return (
         <div className="flex">
-            <div className="max-w-3xl mx-auto p-4">
+            <div className="w-1/3 mx-auto p-4">
                 <h1 className="text-2xl font-bold mb-4">On Going Hackathons</h1>
                 <div className='overflow-y-auto c1' >
                     <HackathonList hackathons={hackathons} onHackathonClick={handleDetailsClick} />
                 </div>
             </div>
-            <div className="flex-1 p-4">
+            <div className="w-2/3 flex-1 p-4">
                 <h1 className="text-2xl font-bold mb-4">Hackathon Details</h1>
                 <div className="overflow-y-auto c2">
                     {selectedHackathon && <HackathonDetailsComp hackathon={selectedHackathon} />}
