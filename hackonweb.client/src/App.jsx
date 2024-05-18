@@ -14,7 +14,7 @@ import Calendar from './pages/Calendar/Calendar'
 import HostHackVerification from './pages/Hackathons/HackComponents/HostHack/HostHackVerification';
 import AddJuryMentor from './pages/Hackathons/HackComponents/MentorJury/AddJuryMentor';
 import HackathonsCommunity from './pages/Hackathons/HackComponents/CommunityDetails/HackathonsCommunity';
-import HackathonDetails from './pages/Hackathons/HackComponents/Hacks/HackathonDetails/HackathonDetails';
+import HackathonRegistration from './pages/Hackathons/HackComponents/Hacks/HackathonRegistration/HackathonRegistration';
 function App() {
     return (
         <div className='App'>
@@ -28,7 +28,7 @@ function App() {
                         <Route path="/sign-up" element={<SignUp/>} />
                         <Route path="/hackathons" element={<HackRoute />}>
                             <Route path="" element={<OnGoingHacks />} />
-                            <Route path="hackathon-details" element={<HackathonDetails/>} />
+                            <Route path="hackathon-registration" element={<HackathonRegistration/>} />
                             <Route path="upcoming" element={<UpcomingHacks />} />
                             <Route path="hack-host" element={<HostHack/>} />
                             <Route path="host-verify" element={<HostHackVerification />} />

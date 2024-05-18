@@ -105,7 +105,7 @@ const HackathonDetailsComp = ({ hackathon }) => {
                             <button className="bg-green-800 hover:bg-green-600 border border-green-600 text-white font-bold py-2 px-4 rounded mt-2"
                                 onClick={() => {
                                     handleDetailsClick();
-                                    navigate('/hackathons/hackathon-details')
+                                    navigate('/hackathons/hackathon-registration')
                                 }}
                             >
                                 Register
@@ -153,6 +153,7 @@ const HackathonList = ({ hackathons, onHackathonClick }) => {
     return (
         <div>
             <div className="border rounded-lg p-4 mb-4 bg-gray-100">
+                {hackathons.length === 0 && <div> No Hackathons at this moment</div>}
                 {hackathons.map((hackathon, index) => (
                     <HackathonCard key={index} hackathon={hackathon} onClick={() => onHackathonClick(index)} isClicked={hackathon.clicked} />
                 ))}

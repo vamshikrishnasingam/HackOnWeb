@@ -10,7 +10,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="src\contexts\" />
-    <Folder Include="src\pages\Hackathons\HackComponents\Hacks\HackathonDetails\" />
     <Folder Include="src\pages\Hackathons\HackComponents\MentorJury\" />
     <Folder Include="src\pages\Hackathons\HackComponents\CommunityDetails\" />
     <Folder Include="src\pages\Metors\" />

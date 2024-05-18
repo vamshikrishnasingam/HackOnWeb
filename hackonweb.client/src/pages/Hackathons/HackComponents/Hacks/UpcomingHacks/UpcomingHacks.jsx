@@ -17,7 +17,7 @@ const HackathonCard = ({ hackathon, onClick, isClicked }) => {
     const registeredCount = 20;
 
     return (
-        <div className={`border rounded-lg p-2 mb-4 cursor-pointer ${isOngoing ? 'bg-blue-100' : 'bg-green-100'} ${isClicked ? 'bg-green-100 hover:border border-success' : ''}`} onClick={onClick}>
+        <div className={`border rounded-lg p-2 mb-4 cursor-pointer ${isOngoing ? 'bg-green-100' : 'bg-blue-100'} ${isClicked ? 'bg-green-100 hover:border border-success' : ''}`} onClick={onClick}>
              <div className='flex'>
                 {/* Image */}
                 <img src={"https://media.istockphoto.com/id/1189767041/vector/hackathon-signs-round-design-template-thin-line-icon-concept-vector.jpg?s=612x612&w=0&k=20&c=DW-btIjpNjItFfk35N4KvrMkoGoqd1rEPwb_uV9IZEU="} alt="Hackathon" className="w-1/3 border border-4  rounded-lg" />
@@ -88,15 +88,15 @@ const HackathonDetailsComp = ({ hackathon }) => {
                     </div>
                     <hr className='mt-4 border-gray-500'></hr>
                     <div className="flex justify-between items-center">
-                        {/*<div>
-                            <button className="text-gray-700 font-bold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out">
-                                Add to Wishlist
+                        <div>
+                            <button className="text-gray-700 font-bold py-2 px-4 hover:border border-gray-100 bg-gray-100 ease-in-out">
+                                Wishlist
                             </button>
-                        </div>*/}
-                        <div className="flex items-center">
-                            <p className="text-lg text-gray-700">Registration Deadline :</p>
+                        </div>
+                        <div className="flex items-center border border-1 p-2 rounded-2 bg-gray-100 text-sm">
+                            <p className="text-gray-700">Registration Deadline :</p>
                             <div>
-                                <p className="text-sm font-bold text-gray-600">{formattedStartDate}</p>
+                                <p className="text-sm text-gray-600">{formattedStartDate}</p>
                             </div>
                         </div>
 
@@ -104,7 +104,7 @@ const HackathonDetailsComp = ({ hackathon }) => {
                             <button className="bg-green-800 hover:bg-green-600 border border-green-600 text-white font-bold py-2 px-4 rounded mt-2"
                                 onClick={() => {
                                     handleDetailsClick();
-                                    navigate('/hackathons/hackathon-details')
+                                    navigate('/hackathons/hackathon-registration')
                                 }}
                             >
                                 Register
@@ -152,6 +152,7 @@ const HackathonList = ({ hackathons, onHackathonClick }) => {
     return (
         <div>
             <div className="border rounded-lg p-4 mb-4 bg-gray-100">
+                {hackathons.length === 0 && <div> No Hackathons at this moment</div>}
                 {hackathons.map((hackathon, index) => (
                     <HackathonCard key={index} hackathon={hackathon} onClick={() => onHackathonClick(index)} isClicked={hackathon.clicked} />
                 ))}
