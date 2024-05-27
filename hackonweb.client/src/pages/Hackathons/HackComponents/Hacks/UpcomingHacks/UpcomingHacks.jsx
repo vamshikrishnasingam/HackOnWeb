@@ -10,14 +10,14 @@ import { IoTimerOutline } from "react-icons/io5";
 
 const HackathonCard = ({ hackathon, onClick, isClicked }) => {
     const { startDate, endDate } = hackathon;
-    const isOngoing = new Date(startDate) <= new Date() && new Date() <= new Date(endDate);
+    const isUpcoming = new Date(startDate) <= new Date() && new Date() <= new Date(endDate);
     const formattedStartDate = new Date(startDate).toLocaleDateString();
     const formattedEndDate = new Date(endDate).toLocaleDateString();
     const registrationDeadline = Math.ceil((new Date(endDate) - new Date()) / (1000 * 60 * 60 * 24))
     const registeredCount = 20;
 
     return (
-        <div className={`border rounded-lg p-2 mb-4 cursor-pointer ${isOngoing ? 'bg-green-100' : 'bg-blue-100'} ${isClicked ? 'bg-green-100 hover:border border-success' : ''}`} onClick={onClick}>
+        <div className={`border rounded-lg p-2 mb-4 cursor-pointer ${isUpcoming ? 'bg-blue-100' : 'bg-green-100'} ${isClicked ? 'bg-blue-200 hover:border border-success' : ''}`} onClick={onClick}>
              <div className='flex'>
                 {/* Image */}
                 <img src={"https://media.istockphoto.com/id/1189767041/vector/hackathon-signs-round-design-template-thin-line-icon-concept-vector.jpg?s=612x612&w=0&k=20&c=DW-btIjpNjItFfk35N4KvrMkoGoqd1rEPwb_uV9IZEU="} alt="Hackathon" className="w-1/3 border border-4  rounded-lg" />
@@ -174,14 +174,19 @@ const UpcomingHacks = () => {
                 const Hackathons = response.data.filter(hackathon => {
                     const startDate = new Date(hackathon.startDate);
                     const endDate = new Date(hackathon.endDate);
-                    return !(startDate <= currentDate && currentDate <= endDate);
+                    return (startDate > currentDate);
                 });
+
+                // Sort hackathons according to dates in descending order
+                const sortedHackathons = Hackathons.sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
+
                 // Add the clicked and isOngoing properties to the filtered hackathons
-                const Ongoinghackathons = Hackathons.map(hackathon => ({
+                const Ongoinghackathons = sortedHackathons.map(hackathon => ({
                     ...hackathon,
                     clicked: false,
                     isOngoing: true
                 }));
+
                 setHackathons(Ongoinghackathons);
                 if (Ongoinghackathons.length > 0) {
                     setSelectedHackathon(Ongoinghackathons[0]); // Select the first hackathon by default

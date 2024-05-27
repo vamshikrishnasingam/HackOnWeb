@@ -1,0 +1,42 @@
+
+.sidebar {
+    height: 90vh;
+    width: 100vw;
+    position: relative;
+    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.scrollable-container {
+    max-height: 70vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(155, 155, 155, 0.5) rgba(255, 255, 255, 0.1);
+}
+
+.scrollable-list {
+    overflow-x: auto;
+}
+
+/* Custom scrollbar */
+.scrollable-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.scrollable-container::-webkit-scrollbar-thumb {
+    background-color: rgba(155, 155, 155, 0.5);
+    border-radius: 4px;
+}
+
+.scrollable-container::-webkit-scrollbar-track {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+
+.sidec {
+    height: 90vh;
+    position: relative;
+    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+}

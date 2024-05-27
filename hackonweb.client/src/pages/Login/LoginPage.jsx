@@ -17,7 +17,7 @@ function LoginPage() {
             await loginUser(userCredObj);
             setTimeout(() => {
                 if (userLoginStatus) {
-                    navigate('/hackathons');
+                    navigate('/user-dashboard');
                 }
             }, 2000);
         } finally {

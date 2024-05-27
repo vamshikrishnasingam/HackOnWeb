@@ -1,7 +1,8 @@
-import { Fragment, useState, useEffect } from 'react'
+import { Fragment, useState, useEffect,useContext } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Link, useLocation } from 'react-router-dom'
+import { loginContext } from '../../contexts/loginContext';
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -14,6 +15,9 @@ function NavigationBar() {
         { name: 'Mentors', to: '/mentors', current: true },
         { name: 'Calendar', to: '/calendar', current: true },
     ]);
+
+
+    let [currentUser, loginUser, userLoginStatus, loginErr, logoutUser, verified,,] = useContext(loginContext);
     const location = useLocation(); // Get the current location
 
     useEffect(() => {
@@ -133,26 +137,54 @@ function NavigationBar() {
                                                      </a>
                                                  )}
                                              </Menu.Item>*/}
-                                            <Menu.Item>
-                                                {({ active }) => (
-                                                    <Link
-                                                        to="/sign-up"
-                                                        className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                                                    >
-                                                        SignUp
-                                                    </Link>
-                                                )}
-                                            </Menu.Item>
-                                            <Menu.Item>
-                                                {({ active }) => (
-                                                    <Link
-                                                        to="/login"
-                                                        className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                                                    >
-                                                        Login
-                                                    </Link>
-                                                )}
-                                            </Menu.Item>
+                                            {userLoginStatus ? (
+                                                <Menu.Item>
+                                                    {({ active }) => (
+                                                        <Link
+                                                            to="/user-dashboard"
+                                                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                                                        >
+                                                            Profile
+                                                        </Link>
+                                                    )}
+                                                </Menu.Item>
+                                            ) : (
+                                                    <Menu.Item>
+                                                        {({ active }) => (
+                                                            <Link
+                                                                to="/sign-up"
+                                                                className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                                                            >
+                                                                SignUp
+                                                            </Link>
+                                                        )}
+                                                    </Menu.Item>
+                                            )}
+                                            {userLoginStatus ? (
+                                                <Menu.Item>
+                                                    {({ active }) => (
+                                                        <Link
+                                                            to="/login"
+                                                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                                                            onClick={logoutUser}
+                                                        >
+                                                            Logout
+                                                        </Link>
+                                             
+                                                    )}
+                                                </Menu.Item>
+                                            ) : (
+                                                    <Menu.Item>
+                                                        {({ active }) => (
+                                                            <Link
+                                                                to="/login"
+                                                                className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                                                            >
+                                                                Login
+                                                            </Link>
+                                                        )}
+                                                    </Menu.Item>
+                                            )}
                                         </Menu.Items>
                                     </Transition>
                                 </Menu>

@@ -10,14 +10,17 @@ import { IoTimerOutline } from "react-icons/io5";
 
 const HackathonCard = ({ hackathon, onClick, isClicked }) => {
     const { startDate, endDate } = hackathon;
-    const isOngoing = new Date(startDate) <= new Date() && new Date() <= new Date(endDate);
+    const currentDate = new Date();
+    const isOngoing = new Date(startDate) <= currentDate && currentDate <= new Date(endDate);
+    const iscompleted = currentDate >= new Date(endDate)
     const formattedStartDate = new Date(startDate).toLocaleDateString();
     const formattedEndDate = new Date(endDate).toLocaleDateString();
     const registrationDeadline = Math.ceil((new Date(endDate) - new Date()) / (1000 * 60 * 60 * 24))
     const registeredCount = 20;
 
     return (
-        <div className={`border rounded-lg p-2 mb-4 cursor-pointer ${isOngoing ? 'bg-blue-100' : 'bg-green-100'} ${isClicked ? 'bg-green-100 hover:border border-success' : ''}`} onClick={onClick}>
+        <div className={`border rounded-lg p-2 mb-4 cursor-pointer ${iscompleted ? 'bg-red-100' : (isOngoing ? 'bg-green-100' : 'bg-blue-100')} ${isClicked ? (iscompleted ? 'bg-red-200 border border-danger' :'bg-blue-200 hover:border border-success') : ''
+}`} onClick={onClick}>
             <div className='flex'>
                 {/* Image */}
                 <img src={"https://media.istockphoto.com/id/1189767041/vector/hackathon-signs-round-design-template-thin-line-icon-concept-vector.jpg?s=612x612&w=0&k=20&c=DW-btIjpNjItFfk35N4KvrMkoGoqd1rEPwb_uV9IZEU="} alt="Hackathon" className="w-1/3 border border-4  rounded-lg" />
@@ -59,6 +62,8 @@ const HackathonDetailsComp = ({ hackathon }) => {
     const formattedStartDate = new Date(startDate).toLocaleString();
     const formattedEndDate = new Date(endDate).toLocaleString();
     const dispatch = useDispatch();
+    const currentDate = new Date();
+    const iscompleted = currentDate >= new Date(endDate)
 
     const handleDetailsClick = () => {
         dispatch(selectHackathon(hackathon));
@@ -101,16 +106,29 @@ const HackathonDetailsComp = ({ hackathon }) => {
                             </div>
                         </div>
 
-                        <div className='m-2'>
-                            <button className="bg-green-800 hover:bg-green-600 border border-green-600 text-white font-bold py-2 px-4 rounded mt-2"
-                                onClick={() => {
-                                    handleDetailsClick();
-                                    navigate('/hackathons/hackathon-registration')
-                                }}
-                            >
+                        {iscompleted ?(
+                            <div className='m-2'>
+                                <button className="bg-red-800 hover:bg-red-600 border border-red-600 text-white font-bold py-2 px-4 rounded mt-2"
+                                    
+                                >
+                                    Registrations Closed
+                                </button>
+                            </div>
+                        ): (
+                        <div className = 'm-2'>
+                            <button className = "bg-green-800 hover:bg-green-600 border border-green-600 text-white font-bold py-2 px-4 rounded mt-2"
+                                onClick = {
+                                    () => {
+                                        handleDetailsClick();
+                                        navigate('/hackathons/hackathon-registration')
+                                    }
+                                }
+                                >
                                 Register
                             </button>
-                        </div>
+                         </div>
+                            )
+                        }
                     </div>
                 </div>
 
@@ -168,36 +186,39 @@ const OnGoingHacks = () => {
     const [selectedHackathon, setSelectedHackathon] = useState(null);
     const dispatch = useDispatch();
     useEffect(() => {
-    // Fetch hackathon data from the API
-    axios.get('https://localhost:7151/api/Hackathons/GetHackathonDetails')
-        .then(response => {
-            const currentDate = new Date();
-            const Hackathons = response.data.filter(hackathon => {
-                const startDate = new Date(hackathon.startDate);
-                const endDate = new Date(hackathon.endDate);
-                return startDate <= currentDate && currentDate <= endDate;
-            });
-            // Add the clicked and isOngoing properties to the filtered hackathons
-            const Ongoinghackathons = Hackathons.map(hackathon => ({
-                ...hackathon,
-                clicked: false,
-                isOngoing: true
-            }));
-            setHackathons(Ongoinghackathons);
-            if (Ongoinghackathons.length > 0) {
-                setSelectedHackathon(Ongoinghackathons[0]); // Select the first hackathon by default
-                dispatch(selectHackathon(Ongoinghackathons[0])); // Dispatch the selected hackathon to Redux
-                // Set clicked to true for the first hackathon
-                Ongoinghackathons[0].clicked = true;
+        // Fetch hackathon data from the API
+        axios.get('https://localhost:7151/api/Hackathons/GetHackathonDetails')
+            .then(response => {
+                const currentDate = new Date();
+                const Hackathons = response.data.filter(hackathon => {
+                    const startDate = new Date(hackathon.startDate);
+                    const endDate = new Date(hackathon.endDate);
+                    return (startDate <= currentDate && currentDate <= endDate) || (currentDate >= endDate);
+                });
+
+                // Sort hackathons according to dates in descending order
+                const sortedHackathons = Hackathons.sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
+
+                // Add the clicked and isOngoing properties to the filtered hackathons
+                const Ongoinghackathons = sortedHackathons.map(hackathon => ({
+                    ...hackathon,
+                    clicked: false,
+                    isOngoing: true
+                }));
+
                 setHackathons(Ongoinghackathons);
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching hackathons:', error);
-        });
-}, []);
-
-
+                if (Ongoinghackathons.length > 0) {
+                    setSelectedHackathon(Ongoinghackathons[0]); // Select the first hackathon by default
+                    dispatch(selectHackathon(Ongoinghackathons[0])); // Dispatch the selected hackathon to Redux
+                    // Set clicked to true for the first hackathon
+                    Ongoinghackathons[0].clicked = true;
+                    setHackathons(Ongoinghackathons);
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching hackathons:', error);
+            });
+    }, []);
     const handleDetailsClick = (index) => {
         setSelectedHackathon(hackathons[index]);
         dispatch(selectHackathon(hackathons[index]));
