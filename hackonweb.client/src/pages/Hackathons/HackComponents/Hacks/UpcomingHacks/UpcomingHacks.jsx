@@ -10,14 +10,14 @@ import { IoTimerOutline } from "react-icons/io5";
 
 const HackathonCard = ({ hackathon, onClick, isClicked }) => {
     const { startDate, endDate } = hackathon;
-    const isUpcoming = new Date(startDate) <= new Date() && new Date() <= new Date(endDate);
+    const isUpcoming = new Date(startDate) > new Date();
     const formattedStartDate = new Date(startDate).toLocaleDateString();
     const formattedEndDate = new Date(endDate).toLocaleDateString();
     const registrationDeadline = Math.ceil((new Date(endDate) - new Date()) / (1000 * 60 * 60 * 24))
     const registeredCount = 20;
 
     return (
-        <div className={`border rounded-lg p-2 mb-4 cursor-pointer ${isUpcoming ? 'bg-blue-100' : 'bg-green-100'} ${isClicked ? 'bg-blue-200 hover:border border-success' : ''}`} onClick={onClick}>
+        <div className={`border rounded-lg p-2 mb-4 cursor-pointer ${isUpcoming ? 'bg-green-100' : 'bg-blue-100'} ${isClicked ? 'bg-green-300 hover:border border-success' : ''}`} onClick={onClick}>
              <div className='flex'>
                 {/* Image */}
                 <img src={"https://media.istockphoto.com/id/1189767041/vector/hackathon-signs-round-design-template-thin-line-icon-concept-vector.jpg?s=612x612&w=0&k=20&c=DW-btIjpNjItFfk35N4KvrMkoGoqd1rEPwb_uV9IZEU="} alt="Hackathon" className="w-1/3 border border-4  rounded-lg" />
@@ -221,7 +221,7 @@ const UpcomingHacks = () => {
     return (
         <div className="flex">
             <div className="w-1/3 mx-auto p-4">
-                <h1 className="text-2xl font-bold mb-4">On Going Hackathons</h1>
+                <h1 className="text-2xl font-bold mb-4">UpComing Hackathons</h1>
                 <div className='overflow-y-auto c1' >
                     <HackathonList hackathons={hackathons} onHackathonClick={handleDetailsClick} />
                 </div>

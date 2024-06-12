@@ -9,12 +9,14 @@
     <PublishAssetsDirectory>$(MSBuildProjectDirectory)\dist</PublishAssetsDirectory>
   </PropertyGroup>
   <ItemGroup>
+    <Folder Include="backend-mlmodel\__pycache__\" />
     <Folder Include="src\contexts\" />
     <Folder Include="src\pages\Hackathons\HackComponents\MentorJury\" />
     <Folder Include="src\pages\Hackathons\HackComponents\CommunityDetails\" />
+    <Folder Include="src\pages\Hackathons\Evaluation\" />
     <Folder Include="src\pages\Metors\" />
     <Folder Include="src\pages\Calendar\" />
-    <Folder Include="src\pages\HackParticipation\" />
+    <Folder Include="src\pages\Hackathons\HackParticipation\" />
     <Folder Include="src\pages\User-Dashboard\" />
     <Folder Include="src\RootLayout\" />
   </ItemGroup>

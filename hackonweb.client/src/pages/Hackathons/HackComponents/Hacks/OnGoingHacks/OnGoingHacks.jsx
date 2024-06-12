@@ -19,7 +19,7 @@ const HackathonCard = ({ hackathon, onClick, isClicked }) => {
     const registeredCount = 20;
 
     return (
-        <div className={`border rounded-lg p-2 mb-4 cursor-pointer ${iscompleted ? 'bg-red-100' : (isOngoing ? 'bg-green-100' : 'bg-blue-100')} ${isClicked ? (iscompleted ? 'bg-red-200 border border-danger' :'bg-blue-200 hover:border border-success') : ''
+        <div className={`border rounded-lg p-2 mb-4 cursor-pointer ${iscompleted ? 'bg-red-100' : (isOngoing ? 'bg-green-200' : 'bg-blue-200')} ${isClicked ? (iscompleted ? 'bg-red-200 border border-danger' :'bg-blue-100 hover:border border-success') : ''
 }`} onClick={onClick}>
             <div className='flex'>
                 {/* Image */}

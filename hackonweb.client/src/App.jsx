@@ -16,7 +16,8 @@ import AddJuryMentor from './pages/Hackathons/HackComponents/MentorJury/AddJuryM
 import HackathonsCommunity from './pages/Hackathons/HackComponents/CommunityDetails/HackathonsCommunity';
 import HackathonRegistration from './pages/Hackathons/HackComponents/Hacks/HackathonRegistration/HackathonRegistration';
 import UserDashboard from './pages/User-Dashboard/UserDashboard';
-import HackSubmissions from './pages/HackParticipation/HackSubmissions';
+import HackSubmissions from './pages/Hackathons/HackParticipation/HackSubmissions';
+import JuryEvaluation from './pages/Hackathons/Evaluation/JuryEvaluation';
 function App() {
     return (
         <div className='App'>
@@ -37,9 +38,10 @@ function App() {
                             <Route path="community" element={<CommunityComp />} />
                             <Route path="jury-mentors" element={<AddJuryMentor />} />
                             <Route path="hack-community" element={<HackathonsCommunity />} />
-                            <Route path="hack-submission" element={<HackSubmissions/>} />
+                            <Route path="hack-submission" element={<HackSubmissions />} />
+                            <Route path="jury-evaluation" element={<JuryEvaluation />} />
                         </Route>
-                        <Route path="/user-dashboard" element={<UserDashboard/>} />
+                        <Route path="/user-dashboard" element={<UserDashboard />} />
                     </Route>
                 </Routes>
             </Router>

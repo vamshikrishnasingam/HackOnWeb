@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useContext } from 'react';
 import { useSelector } from 'react-redux';
-import { loginContext } from '../../contexts/loginContext';
+import { loginContext } from '../../../contexts/loginContext';
 
 const HackSubmissions = () => {
     const [
@@ -60,7 +60,7 @@ const HackSubmissions = () => {
         <div className="bg-gray-100">
             {selectedHackathon ? (
                 <div className="w-full flex">
-                    <div className="w-1/3 overflow-y-auto">
+                    <div className="w-1/3 overflow-y-auto c1">
                         {selectedHackathon && (
                             <div>
                                 <div className="p-5 bg-white">
@@ -109,8 +109,8 @@ const HackSubmissions = () => {
                             </div>
                         )}
                     </div>
-                    <div className='p-4 w-2/3 bg-gray-100 overflow-y-auto c2'>
-                        <h1 className="text-3xl font-bold mb-6 text-gray-800">Competition Rounds</h1>
+                    <div className='p-4 w-2/3 bg-gray-100 overflow-y-auto c1'>
+                        <h1 className="text-3xl font-bold mb-6 text-gray-800">Hackathon Rounds</h1>
                         <nav className="mb-4">
                             <div className="flex space-x-4">
                                 {selectedHackathon.round1 && (
@@ -130,110 +130,116 @@ const HackSubmissions = () => {
                                 )}
                             </div>
                         </nav>
-                        {activeRound === 'round1' && (
-                            <section className="mb-8 bg-white p-6 rounded-lg shadow-md" id="round1">
-                                <h2 className="text-2xl font-semibold mb-4 text-gray-700">Round 1: Coding Round</h2>
-                                <p>
-                                    <a
-                                        href="https://example.com/coding-platform"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="text-blue-500 underline"
-                                    >
-                                        Click here to access the coding platform
-                                    </a>
-                                </p>
-                            </section>
-                        )}
-                        {activeRound === 'round2' && (
-                            <section className="mb-8 bg-white p-6 rounded-lg shadow-md" id="round2">
-                                <h2 className="text-2xl font-semibold mb-4 text-gray-700">Round 2: Idea Submission Round</h2>
-                                <div className="mb-4">
-                                    <label className="block mb-2 font-medium text-gray-700">Upload your PPT: </label>
-                                    <input
-                                        type="file"
-                                        accept=".ppt,.pptx"
-                                        onChange={(event) => handleFileUpload(event, setUploadedIdeaFile)}
-                                        className="block w-full border border-gray-300 rounded-lg p-2"
-                                    />
-                                </div>
-                                {uploadedIdeaFile && (
+                        <div className='scrollable-container'>
+                            {activeRound === 'round1' && (
+                                <section className="mb-8 bg-white p-6 rounded-lg shadow-md" id="round1">
+                                    <h2 className="text-2xl font-semibold mb-4 text-gray-700">Round 1: Coding Round</h2>
+                                    <p>
+                                        <a
+                                            href="https://example.com/coding-platform"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-blue-500 underline"
+                                        >
+                                            Click here to access the coding platform
+                                        </a>
+                                    </p>
+                                </section>
+
+                            )}
+                            {activeRound === 'round2' && (
+                                <section className="mb-8 bg-white p-6 rounded-lg shadow-md" id="round2">
+                                    {selectedHackathon.round1 ? (<h2 className="text-2xl font-semibold mb-4 text-gray-700">Round 2: Idea Submission Round</h2>) : (
+                                        <h2 className="text-2xl font-semibold mb-4 text-gray-700">Round 1: Idea Submission Round</h2>)}
+                                    
                                     <div className="mb-4">
-                                        <p>Uploaded File: {uploadedIdeaFile.name}</p>
+                                        <label className="block mb-2 font-medium text-gray-700">Upload your PPT: </label>
+                                        <input
+                                            type="file"
+                                            accept=".ppt,.pptx"
+                                            onChange={(event) => handleFileUpload(event, setUploadedIdeaFile)}
+                                            className="block w-full border border-gray-300 rounded-lg p-2"
+                                        />
                                     </div>
-                                )}
-                                <div>
-                                    {selectedHackathon && selectedHackathon.round2 && (
-                                        <p>
-                                            <a
-                                                href={selectedHackathon.round2.ProblemStatementsURL}
-                                                download
-                                                className="text-blue-500 underline"
-                                            >
-                                                Download previous problem statement details file
-                                            </a>
-                                        </p>
+                                    {uploadedIdeaFile && (
+                                        <div className="mb-4">
+                                            <p>Uploaded File: {uploadedIdeaFile.name}</p>
+                                        </div>
                                     )}
-                                </div>
-                            </section>
-                        )}
-
-                        {activeRound === 'round3' && (
-                            <section className="mb-8 bg-white p-6 rounded-lg shadow-md" id="round3">
-                                <h2 className="text-2xl font-semibold mb-4 text-gray-700">Round 3: Hackathon Round</h2>
-                                {hackathonOnline ? (
                                     <div>
-                                        <div className="mb-4">
-                                            <label className="block mb-2 font-medium text-gray-700">Upload your PPT: </label>
-                                            <input
-                                                type="file"
-                                                accept=".ppt,.pptx"
-                                                onChange={(event) => handleFileUpload(event, setUploadedHackathonPpt)}
-                                                className="block w-full border border-gray-300 rounded-lg p-2"
-                                            />
-                                        </div>
-                                        {uploadedHackathonPpt && (
-                                            <div className="mb-4">
-                                                <p>Uploaded File: {uploadedHackathonPpt.name}</p>
-                                            </div>
-                                        )}
-                                        <div className="mb-4">
-                                            <label className="block mb-2 font-medium text-gray-700">Upload your Prototype Video: </label>
-                                            <input
-                                                type="file"
-                                                accept="video/*"
-                                                onChange={(event) => handleFileUpload(event, setUploadedVideo)}
-                                                className="block w-full border border-gray-300 rounded-lg p-2"
-                                            />
-                                        </div>
-                                        {uploadedVideo && (
-                                            <div className="mb-4">
-                                                <p>Uploaded Video: {uploadedVideo.name}</p>
-                                            </div>
+                                        {selectedHackathon && selectedHackathon.round2 && (
+                                            <p>
+                                                <a
+                                                    href={selectedHackathon.round2.ProblemStatementsURL}
+                                                    download
+                                                    className="text-blue-500 underline"
+                                                >
+                                                    Download previous problem statement details file
+                                                </a>
+                                            </p>
                                         )}
                                     </div>
-                                ) : (
-                                    <div>
-                                        <p className="text-gray-700">The hackathon will be held offline.</p>
-                                        <p className="text-gray-700">Venue: XYZ Convention Center</p>
-                                        <p className="text-gray-700">Date: 1st June 2024</p>
-                                    </div>
-                                )}
-                            </section>
-                        )}
+                                </section>
+                            )}
 
-                        {userTeam && (
-                            <section className="mb-8 bg-white p-6 rounded-lg shadow-md">
-                                <h2 className="text-2xl font-semibold mb-4 text-gray-700">Your Team</h2>
-                                <p className="mb-2 text-gray-700">Team Name: {userTeam.name}</p>
-                                <p className="text-gray-700">Members:</p>
-                                <ul className="list-disc list-inside text-gray-700">
-                                    {userTeam.members.map(member => (
-                                        <li key={member}>{member}</li>
-                                    ))}
-                                </ul>
-                            </section>
-                        )}
+                            {activeRound === 'round3' && (
+                                <section className="mb-8 bg-white p-6 rounded-lg shadow-md" id="round3">
+                                    {selectedHackathon.round1 ? (<h2 className="text-2xl font-semibold mb-4 text-gray-700">Round 3: Hackathon Round</h2>)
+                                        : (<h2 className="text-2xl font-semibold mb-4 text-gray-700">Round 2: Hackathon Round</h2>)}
+                                    {hackathonOnline ? (
+                                        <div>
+                                            <div className="mb-4">
+                                                <label className="block mb-2 font-medium text-gray-700">Upload your PPT: </label>
+                                                <input
+                                                    type="file"
+                                                    accept=".ppt,.pptx"
+                                                    onChange={(event) => handleFileUpload(event, setUploadedHackathonPpt)}
+                                                    className="block w-full border border-gray-300 rounded-lg p-2"
+                                                />
+                                            </div>
+                                            {uploadedHackathonPpt && (
+                                                <div className="mb-4">
+                                                    <p>Uploaded File: {uploadedHackathonPpt.name}</p>
+                                                </div>
+                                            )}
+                                            <div className="mb-4">
+                                                <label className="block mb-2 font-medium text-gray-700">Upload your Prototype Video: </label>
+                                                <input
+                                                    type="file"
+                                                    accept="video/*"
+                                                    onChange={(event) => handleFileUpload(event, setUploadedVideo)}
+                                                    className="block w-full border border-gray-300 rounded-lg p-2"
+                                                />
+                                            </div>
+                                            {uploadedVideo && (
+                                                <div className="mb-4">
+                                                    <p>Uploaded Video: {uploadedVideo.name}</p>
+                                                </div>
+                                            )}
+                                        </div>
+                                    ) : (
+                                        <div>
+                                            <p className="text-gray-700">The hackathon will be held offline.</p>
+                                            <p className="text-gray-700">Venue: XYZ Convention Center</p>
+                                            <p className="text-gray-700">Date: 1st June 2024</p>
+                                        </div>
+                                    )}
+                                </section>
+                            )}
+
+                            {userTeam && (
+                                <section className="mb-8 bg-white p-6 rounded-lg shadow-md">
+                                    <h2 className="text-2xl font-semibold mb-4 text-gray-700">Your Team</h2>
+                                    <p className="mb-2 text-gray-700">Team Name: {userTeam.name}</p>
+                                    <p className="text-gray-700">Members:</p>
+                                    <ul className="list-disc list-inside text-gray-700">
+                                        {userTeam.members.map(member => (
+                                            <li key={member}>{member}</li>
+                                        ))}
+                                    </ul>
+                                </section>
+                            )}
+                        </div>
                     </div>
 
                 </div>
