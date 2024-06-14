@@ -12,7 +12,8 @@ namespace HackOnWebRepo
         public Task<List<UserModel>> getAllUsers();
 
         public Task<List<UserModel>> getUserById(string id);
-
+        public Task<List<UserModel>> getUserByEmail(string email);
+        public Task<bool> UpdateUser(UserModel user);
         public Task<UserModel> LoginWithPassword(string email, string password);
 
         public Task<UserModel> CreateNewUser(UserModel user);
@@ -33,6 +34,8 @@ namespace HackOnWebRepo
 
         //get hackathon details by id
         public Task<List<HackathonModel>> GetHackathonDetailsbyId(string id);
+        public Task<bool> ValidateUserEmail(string email);
+        public Task<bool> CreateTeam(CommunityModel team);
 
     }
 }

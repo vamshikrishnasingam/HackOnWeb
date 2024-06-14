@@ -68,13 +68,14 @@ function UserLoginStore({ children }) {
         } else {
             return null;
         }
-        /*const response = await axios.get(`https://localhost:7151/api/Hackathons/GetUserById?id=${currentUser.id}`)
-        const data = response.data[0];
-        console.log(data);
-        if (data!=currentUser){
+        const response = await axios.get(`https://localhost:7151/api/Hackathons/GetUserById?id=${currentUser.id}`)
+        const data = response.data[0]
+        console.log(response)
+        /*if (data!=currentUser){
             setCurrentUser({})
             setTeams([])
         }*/
+        console.log(currentUser)
     }
     //to add in userlogincontextstore.js
    /* const checkTokenAndFetchUser = async () => {

@@ -131,6 +131,44 @@ namespace HackOnWebService
         {
             return await _hackathonRepository.GetHackathonDetailsbyId(id);
         }
+        //validate user emails
 
+        public async Task<List<string>> ValidateUserEmails(List<string> emails)
+        {
+            var invalidEmails = new List<string>();
+
+            foreach (var email in emails)
+            {
+                bool isValid = await _hackathonRepository.ValidateUserEmail(email);
+                if (!isValid)
+                {
+                    invalidEmails.Add(email);
+                }
+            }
+
+            return invalidEmails;
+        }
+        //create team or community
+        public async Task<int> CreateTeam(CommunityModel team)
+        {
+            bool teamres=await _hackathonRepository.CreateTeam(team);
+            if(teamres==false)
+            {
+                return 3;
+            }
+            bool usersTeamsUpdated = true;
+            foreach (string email in team.Members)
+            {
+                List<UserModel> users = await _hackathonRepository.getUserByEmail(email);
+                users[0].Teams.Add(team);
+                bool currentUsersTeamsUpdated = await _hackathonRepository.UpdateUser(users[0]);
+                usersTeamsUpdated=(usersTeamsUpdated && currentUsersTeamsUpdated);
+            }
+            if (teamres && usersTeamsUpdated)
+            {
+                return 1;
+            }
+            return 2;
+        }
     }
 }

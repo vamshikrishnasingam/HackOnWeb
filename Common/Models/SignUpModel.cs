@@ -16,19 +16,24 @@ namespace Common.Models
         public string email { get; set; }
         public bool verified { get; set; }
         public FileModel verificationDocs { get; set; }
-        public List<Team> Teams { get; set; }
+        public List<CommunityModel> Teams { get; set; }
+        public string uid { get; set; }
         public SignUpModel()
         {
+            uid = "1";
             verified = false;
             verificationDocs = new FileModel();
-            Teams = new List<Team>();
+            Teams = new List<CommunityModel>();
         }
     }
-    public class Team
+    /*public class Team
     {
-        public string TeamId { get; set; }
+        public string id { get; set; }
+        public string communityName { get; set; }
+        public string HackathonId { get; set; }
+        public List<string> Members { get; set; }
         public string StartDate { get; set; }
         public string EndDate { get; set; }
         public int Status { get; set; }
-    }
+    }*/
 }

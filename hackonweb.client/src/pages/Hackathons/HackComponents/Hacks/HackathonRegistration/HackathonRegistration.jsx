@@ -1,27 +1,125 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-
-const RegistrationAction = ({ action, hackathonId, hackathonName }) => {
+import { useContext } from 'react';
+import { loginContext } from '../../../../../contexts/loginContext';
+import { v4 as uuidv4 } from 'uuid';
+import { useNavigate } from 'react-router-dom';
+const RegistrationAction = ({ action, selectedHackathon }) => {
+    const [currentUser, loginUser, userLoginStatus, loginErr, logoutUser, verified, teams, fetchTeams] = useContext(loginContext);
     const [teamName, setTeamName] = useState('');
     const [numberOfMembers, setNumberOfMembers] = useState(1);
     const [team, setTeam] = useState(null);
-
+    const [teamMem, setTeamMem] = useState([currentUser.email]);
     const handleTeamNameChange = (e) => {
         setTeamName(e.target.value);
     };
+    let navigate = useNavigate();
+    const handleTeamSubmit = async () => {
+        try {
+            const response = await fetch('https://localhost:7151/api/Hackathons/create-team', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(team),
+            });
+            //console.log(response)
+            const result = await response.json();
+            //console.log(result)
+            if (response.ok) {
+                alert("Team Created"); // Display the response message in an alert dialog
+                navigate('/user-dashboard')
+            } else {
+                if (result == 3) {
 
-    const handleNumberOfMembersChange = (e) => {
-        setNumberOfMembers(e.target.value);
+                    alert('Failed to create team: Team Already Exists Please choose another team name');
+                } else {
+                    alert('Failed to create team: Users Not Added to Team');
+                }
+            }
+        } catch (error) {
+            console.error('Error creating team:', error);
+        }
+    }
+    const validateEmails = async (emails) => {
+        try {
+            const response = await fetch('https://localhost:7151/api/Hackathons/validate-emails', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify( emails ),
+            });
+            const data = await response.json();
+            /*console.log(data)
+            console.log(response)*/
+            return data.invalidEmails; // assuming the response contains an 'invalidEmails' field which is an array of invalid emails
+        } catch (error) {
+            console.error('Error validating emails:', error);
+            return [];
+        }
     };
+    /*const generateRandomId = () => {
+        return Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
+    };*/
+    const handleNumberOfMembersChange = async() => {
+        const invalidEmails = await validateEmails(teamMem);
+        if (invalidEmails.length === 0) {
+            setNumberOfMembers(numberOfMembers + 1);
+            setTeamMem([...teamMem, '']);
+        } else {
+            alert(`The following emails are invalid: ${invalidEmails.join(', ')}`);
+        }
+    }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Simulate team creation
-        const newTeam = {
-            name: teamName,
-            members: Array.from({ length: numberOfMembers }, (_, i) => `Member ${i + 1}`),
-        };
-        setTeam(newTeam);
+        const invalidEmails = await validateEmails(teamMem);
+        if (invalidEmails.length === 0) {
+            // Simulate team creation
+            const newTeam = {
+                id: uuidv4(),
+                communityName: teamName,
+                Members: teamMem,
+                HackathonId: selectedHackathon.id,
+                StartDate: selectedHackathon.startDate,
+                EndDate: selectedHackathon.endDate,
+                posts: [],
+                files: [],
+                comments: [],
+                likes: 0,
+                dislikes: 0,
+                githubLink: '',
+                appLink: '',
+                description: '',
+                visibility: true,
+            };
+            setTeam(newTeam);
+        } else {
+            alert(`The following emails are invalid: ${invalidEmails.join(', ')}`);
+        }
+    };
+    const renderTeamMembers = () => {
+        return teamMem.map((member, index) => (
+            <div key={index} className="mb-4">
+                <label htmlFor={`teamMember-${index}`} className="block text-gray-700 font-semibold mb-2">
+                    Team Member {index + 1}
+                </label>
+                <input
+                    type="email"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-green-500"
+                    id={`teamMember-${index}`}
+                    value={member}
+                    disabled={index === 0}
+                    readOnly={index === 0}
+                    onChange={(e) => {
+                        const updatedMembers = [...teamMem];
+                        updatedMembers[index] = e.target.value;
+                        setTeamMem(updatedMembers);
+                    }}
+                />
+            </div>
+        ));
     };
 
     return (
@@ -29,18 +127,25 @@ const RegistrationAction = ({ action, hackathonId, hackathonName }) => {
             <h2 className="text-xl font-semibold mb-4">{action === 'create' ? 'Create Team' : 'Join Team'}</h2>
             {team && action === 'create' ? (
                 <div>
-                    <h3 className="text-lg font-semibold mb-2">Team: {team.name}</h3>
+                    <h3 className="text-lg font-semibold mb-2">Team: {team.communityName}</h3>
                     <ul className="list-disc pl-4">
-                        {team.members.map((member, index) => (
+                        {team.Members.map((member, index) => (
                             <li key={index}>{member}</li>
                         ))}
                     </ul>
                     <div className='flex mt-4'>
-                        <button className="w-1/2 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md mr-2">
+                        <button className="w-1/2 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md mr-2"
+                            onClick={() => setTeam(null)}
+                        >
                             Edit Team
                         </button>
-                        <button className="w-1/2 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md ml-2">
+                        {/*<button className="w-1/2 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md ml-2">
                             Invite
+                        </button>*/}
+                        <button className="w-1/2 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md ml-2"
+                            onClick={handleTeamSubmit}
+                        >
+                            Submit
                         </button>
                     </div>
                 </div>
@@ -52,10 +157,16 @@ const RegistrationAction = ({ action, hackathonId, hackathonName }) => {
                                 <label htmlFor="teamName" className="block text-gray-700 font-semibold mb-2">Team Name</label>
                                 <input type="text" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-green-500" id="teamName" value={teamName} onChange={handleTeamNameChange} />
                             </div>
-                            <div className="mb-4">
+                            {/*<div className="mb-4">
                                 <label htmlFor="numberOfMembers" className="block text-gray-700 font-semibold mb-2">Number of Members</label>
                                 <input type="number" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-green-500" id="numberOfMembers" value={numberOfMembers} onChange={handleNumberOfMembersChange} />
-                            </div>
+                            </div>*/}                                
+                            {renderTeamMembers()}
+                            <button
+                                type="button"
+                                onClick={handleNumberOfMembersChange} className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md mb-4">
+                                Add Team Member
+                            </button>
                             <button type="submit" className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md">
                                 {action === 'create' ? 'Create Team' : 'Join Team'}
                             </button>
@@ -170,17 +281,17 @@ const HackathonRegistration = () => {
                                         Create Team
                                     </button>
                                 </div>
-                                <div className='m-2 w-50'>
+                                {/*<div className='m-2 w-50'>
                                     <button
                                         onClick={handleJoinTeamClick}
                                         className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md"
                                     >
                                         Join Team
                                     </button>
-                                </div>
+                                </div>*/}
                             </div>
                             <div className="w-full">
-                                {selectedAction && <RegistrationAction action={selectedAction} hackathonId={selectedHackathon?.id} hackathonName={selectedHackathon?.hackathonName} />}
+                                {selectedAction && <RegistrationAction action={selectedAction} selectedHackathon={selectedHackathon} />}
                             </div>
                         </div>
                     </div>

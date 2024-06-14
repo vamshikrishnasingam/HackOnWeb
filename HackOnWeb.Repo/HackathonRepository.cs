@@ -103,7 +103,48 @@ namespace HackOnWebRepo
 
             return users;
         }
+        public async Task<List<UserModel>> getUserByEmail(string email)
+        {
+            var container = _cosmosclient.GetContainer(DatabaseId, UserContainerId);
 
+            var query = "SELECT * FROM c WHERE c.email = @email";
+            var queryDefinition = new QueryDefinition(query).WithParameter("@email", email);
+            var users = new List<UserModel>();
+
+            var resultSetIterator = container.GetItemQueryIterator<UserModel>(queryDefinition);
+
+            while (resultSetIterator.HasMoreResults)
+            {
+                var currentUser = await resultSetIterator.ReadNextAsync();
+                users.AddRange(currentUser);
+            }
+
+            return users;
+        }
+        public async Task<bool> UpdateUser(UserModel user)
+        {
+            try
+            {
+                var container = _cosmosclient.GetContainer(DatabaseId, UserContainerId);
+                var id = user.id;
+                var email = user.email;
+                var response = await container.ReplaceItemAsync(user, id, new PartitionKey(email));
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    return true;
+                }
+                else { 
+                    return false;
+                }
+            }catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return false;
+            }
+            catch (Exception ex)
+            { 
+                return false;
+            }
+        }
         public async Task<UserModel> LoginWithPassword(string email, string password)
         {
             var container = _cosmosclient.GetContainer(DatabaseId, UserContainerId);
@@ -286,7 +327,43 @@ namespace HackOnWebRepo
                 return 500;
             }
         }
+        //validate user email exists or not
+        public async Task<bool> ValidateUserEmail(string email)
+        {
+            var container = _cosmosclient.GetContainer(DatabaseId, UserContainerId);
 
+            var query = "SELECT * FROM c WHERE c.email = @email";
+            var queryDefinition = new QueryDefinition(query).WithParameter("@email", email);
+            var resultSetIterator = container.GetItemQueryIterator<UserModel>(queryDefinition);
+            if (resultSetIterator.HasMoreResults)
+            {
+                var response = await resultSetIterator.ReadNextAsync();
+                var currentUser = response.FirstOrDefault();
+                if (currentUser != null)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        //create team or community
+        public async Task<bool> CreateTeam(CommunityModel team)
+        {
+            var container = _cosmosclient.GetContainer(DatabaseId, CommunityContainerId);
+
+            try
+            {
+                var response = await container.CreateItemAsync(team, new PartitionKey(team.communityName));
+
+                //return $"Team created with status code: {response.StatusCode}";
+                return true;
+            }
+            catch (Exception ex)
+            {
+                //return $"Error creating team: {ex.Message}";
+                return false;
+            }
+        }
 
     }
 

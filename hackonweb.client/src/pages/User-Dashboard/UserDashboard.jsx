@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { loginContext } from '../../contexts/loginContext';
-import { Button } from 'react-bootstrap'; 
+import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import './UserDashboard.css';
@@ -110,7 +110,6 @@ const Hackathons = ({ hackathons }) => {
                             </li>
                         ))}
                     </ul>
-
                 ) : (
                     <p className="text-gray-700">No {filter} hackathons.</p>
                 )}
@@ -170,40 +169,51 @@ const Sidebar = ({ activeSection, setActiveSection, logoutUser, sidebarOpen, tog
 };
 function UserDashboard() {
     const [currentUser, loginUser, userLoginStatus, loginErr, logoutUser, verified] = useContext(loginContext);
-    const [userDetails, setUserDetails] = useState(null);
+    //const [userDetails, setUserDetails] = useState(null);
     const [hackathons, setHackathons] = useState([]);
     const [activeSection, setActiveSection] = useState('profile');
-
+    const [refresh, setRefresh] = useState(false);
     useEffect(() => {
-        if (currentUser && currentUser.id) {
-            setUserDetails(currentUser);
-            /*const fetchUserDetails = async () => {
-                try {
-                    const response = await axios.get(`https://localhost:7151/api/Hackathons/GetUserById?id=${currentUser.id}`);
-                    setUserDetails(response.data[0]);
-                } catch (error) {
-                    console.error('Error fetching user details:', error);
+        const fetchHackathons = async () => {
+            try {
+                //console.log(currentUser)
+                const response = await axios.get(`https://localhost:7151/api/Hackathons/GetHackathonDetails`);
+                const allHackathons = response.data;
+                // If you need all hackathons elsewhere, set them separately
+                setHackathons(allHackathons);
+                if (hackathons == null) {
+                    setRefresh(!refresh)
                 }
-            };*/
-
-            const fetchHackathons = async () => {
-                try {
-                    const response = await axios.get(`https://localhost:7151/api/Hackathons/GetHackathonDetails`);
-                    setHackathons(response.data);
-                } catch (error) {
-                    console.error('Error fetching hackathons:', error);
+                if (currentUser && currentUser.id) {
+                    // Initialize hackathonsRegistered as an empty array, not an object.
+                    const hackathonsRegistered = [];
+                    for (let i = 0; i < currentUser.teams.length; i++) {
+                        for (let j = 0; j < allHackathons.length; j++) {
+                            if (allHackathons[j].id === currentUser.teams[i].hackathonId) {
+                                // Use .push to add the item to the array
+                                hackathonsRegistered.push(allHackathons[j]);
+                            }
+                        }
+                    }
+                    // Now hackathonsRegistered contains the matched hackathons
+                    setHackathons(hackathonsRegistered);
+                    console.log(hackathons)
                 }
-            };
+            } catch (error) {
+                console.error('Error fetching hackathons:', error);
+            }
+        };
 
-            //fetchUserDetails();
+        if (currentUser) {
             fetchHackathons();
         }
-    }, [currentUser]);
+    }, [refresh,currentUser]); // Only run this effect when currentUser changes
+
 
     const renderSection = () => {
         switch (activeSection) {
             case 'profile':
-                return userDetails ? <Profile userDetails={userDetails} /> : <p className="text-gray-700">Loading user details...</p>;
+                return currentUser ? <Profile userDetails={currentUser} /> : <p className="text-gray-700">Loading user details...</p>;
             case 'hackathons':
                 return <Hackathons hackathons={hackathons} />;
             case 'certificates':
@@ -233,19 +243,19 @@ function UserDashboard() {
                     </div>
                 </div>
             ) : (
-                    <div className="mx-auto col-lg-6 p-5 mt-5 border border-5 bg-secondary bg-opacity-10">
-                        <h1 className="display-1 text-danger">You are Logged Out</h1>
-                        <p className="display-6">Please Login to continue</p>
-                        {/* <p className='display-6'>Please Login to continue</p> */}
-                        <Button variant="success" className="mt-4 fw-bold fs-4 bg-success text-decoration-none text-white hover:bg-gray-700">
-                            <Link
-                                to="/login"
-                                className='text-decoration-none text-white'
-                            >
-                                Login
-                            </Link>
-                        </Button>
-                    </div>
+                <div className="mx-auto col-lg-6 p-5 mt-5 border border-5 bg-secondary bg-opacity-10">
+                    <h1 className="display-1 text-danger">You are Logged Out</h1>
+                    <p className="display-6">Please Login to continue</p>
+                    {/* <p className='display-6'>Please Login to continue</p> */}
+                    <Button variant="success" className="mt-4 fw-bold fs-4 bg-success text-decoration-none text-white hover:bg-gray-700">
+                        <Link
+                            to="/login"
+                            className='text-decoration-none text-white'
+                        >
+                            Login
+                        </Link>
+                    </Button>
+                </div>
             )}
         </>
     );

@@ -35,7 +35,8 @@ namespace HackOnWebService
 
         //get hackathon details by id
         public Task<List<HackathonModel>> GetHackathonDetailsbyId(string id);
-
+        public Task<List<string>> ValidateUserEmails(List<string> emails);
+        public Task<int> CreateTeam(CommunityModel team);
 
     }
 }

@@ -18,12 +18,12 @@ namespace Common.Models
         public bool verified { get; set; }
         public FileModel verificationDocs { get; set; }
 
-        public List<Team> Teams { get; set; }
+        public List<CommunityModel> Teams { get; set; }
         public UserModel()
         {
             verified = false;
             verificationDocs = new FileModel();
-            Teams = new List<Team>();
+            Teams = new List<CommunityModel>();
         }
     }
 }

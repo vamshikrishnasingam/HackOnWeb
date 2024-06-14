@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useSelector } from 'react-redux';
 import { loginContext } from '../../../contexts/loginContext';
-
+import axios from 'axios';
 const HackSubmissions = () => {
     const [
         currentUser,
@@ -19,12 +19,60 @@ const HackSubmissions = () => {
     const [uploadedHackathonPpt, setUploadedHackathonPpt] = useState(null);
     const [uploadedVideo, setUploadedVideo] = useState(null);
     const [hackathonOnline, setHackathonOnline] = useState(true); // Change this to false for offline
-
     const hackathon = useSelector(state => state.selectedHackathon);
     const [selectedHackathon, setSelectedHackathon] = useState(null);
     const [userTeam, setUserTeam] = useState(null);
     const [activeRound, setActiveRound] = useState('round1');
+    const [file, setFile] = useState(null);
+    const [summary, setSummary] = useState("");
 
+    const handlePPTChange = (e) => {
+        setFile(e.target.files[0]);
+    };
+
+    const handlePPTSubmit = async (e) => {
+        e.preventDefault();
+        if (!file) {
+            alert("Please upload a file first!");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        try {
+            const response = await axios.post(
+                "http://localhost:5000/upload",
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                }
+            );
+            console.log(response.data.summary);
+            setSummary(response.data.summary);
+            const uploadResponse = await fetch('https://localhost:7151/api/Hackathons/UploadFile', {
+                method: 'POST',
+                body: formData
+            });
+            let data = await uploadResponse.json();
+            console.log(data);
+            data.Summary=response.data.summary
+            console.log('PPT uploaded successfully:', data.blob.fileName);
+            const updatedTeam = { ...userTeam, IdeaSubmission: data.blob };
+            const response2 = await fetch('https://localhost:7151/api/Hackathons/UpdateCommunityDetails', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json' // Set the content type
+                },
+                body: JSON.stringify(updatedTeam)
+            });
+            console.log(response2)
+        } catch (error) {
+            console.error("There was an error uploading the file!", error);
+        }
+    };
     useEffect(() => {
         if (hackathon) {
             localStorage.setItem('selectedHackathon', JSON.stringify(hackathon));
@@ -41,10 +89,16 @@ const HackSubmissions = () => {
     }, []);
 
     useEffect(() => {
-        if (currentUser && teams) {
-            const team = teams.find(team => team.members.includes(currentUser.id));
-            setUserTeam(team);
+        if (currentUser && currentUser.teams) {
+            fetchTeams();
+            console.log(teams)
+            const team = currentUser.teams.find(team => team.hackathonId === selectedHackathon?.id);
+            if (team) {
+                setUserTeam(team); // Store the team ID in the state
+            }
+            
         }
+        console.log(teams)
     }, [currentUser, teams]);
 
     const handleFileUpload = (event, setFileFunction) => {
@@ -153,13 +207,19 @@ const HackSubmissions = () => {
                                         <h2 className="text-2xl font-semibold mb-4 text-gray-700">Round 1: Idea Submission Round</h2>)}
                                     
                                     <div className="mb-4">
-                                        <label className="block mb-2 font-medium text-gray-700">Upload your PPT: </label>
-                                        <input
-                                            type="file"
-                                            accept=".ppt,.pptx"
-                                            onChange={(event) => handleFileUpload(event, setUploadedIdeaFile)}
-                                            className="block w-full border border-gray-300 rounded-lg p-2"
-                                        />
+                                        <form onSubmit={handlePPTSubmit} className="space-y-6">
+                                            <input
+                                                type="file"
+                                                onChange={handlePPTChange}
+                                                className="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                                            />
+                                            <button
+                                                type="submit"
+                                                className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                            >
+                                                Upload
+                                            </button>
+                                        </form>
                                     </div>
                                     {uploadedIdeaFile && (
                                         <div className="mb-4">
@@ -230,7 +290,7 @@ const HackSubmissions = () => {
                             {userTeam && (
                                 <section className="mb-8 bg-white p-6 rounded-lg shadow-md">
                                     <h2 className="text-2xl font-semibold mb-4 text-gray-700">Your Team</h2>
-                                    <p className="mb-2 text-gray-700">Team Name: {userTeam.name}</p>
+                                    <p className="mb-2 text-gray-700">Team Name: {userTeam.communityName}</p>
                                     <p className="text-gray-700">Members:</p>
                                     <ul className="list-disc list-inside text-gray-700">
                                         {userTeam.members.map(member => (

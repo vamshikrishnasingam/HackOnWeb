@@ -243,6 +243,33 @@ namespace HackOnWeb.Server.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+
+        [HttpPost("validate-emails")]
+        public async Task<ActionResult<List<string>>> ValidateEmails(List<string> emails)
+        {
+            if (emails == null || emails.Count == 0)
+            {
+                return BadRequest("Email list is empty.");
+            }
+
+            var invalidEmails = await _hackathonService.ValidateUserEmails(emails);
+
+            return Ok(new { invalidEmails });
+        }
+        [HttpPost("create-team")]
+        public async Task<ActionResult<int>> CreateTeam(CommunityModel team)
+        {
+            if (team == null)
+            {
+                return BadRequest("Team object is required.");
+            }
+            int res = await _hackathonService.CreateTeam(team);
+            if(res == 1)
+            {
+                return Ok(res);
+            }
+            return BadRequest(res);
+        }   
     }
 
 }
