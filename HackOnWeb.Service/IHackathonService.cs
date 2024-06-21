@@ -12,13 +12,14 @@ namespace HackOnWebService
     {
 
         public Task<List<UserModel>> getAllUsers();
-
+        public Task<List<UserModel>> getUserByEmail(string email);
         public Task<List<UserModel>> getUserById(string id);
         
         public Task<UserModel> LoginWithPassword(string email,string password);
 
         public Task<UserModel> CreateNewUser(UserModel user);
 
+        public Task<bool> UpdateUser(UserModel user);
         public Task<List<HackathonModel> >GetHackathonDetails();
         public Task<HackathonModel> uploadHackathon(HackathonModel hackathon);
         public Task<List<FileModel>> ListAsync();

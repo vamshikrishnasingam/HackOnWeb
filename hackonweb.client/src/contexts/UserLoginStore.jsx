@@ -8,7 +8,8 @@ function UserLoginStore({ children }) {
     const [currentUser, setCurrentUser] = useState({});
     const [verified,setVerified]=useState(false);
     const [loginErr, setLoginErr] = useState("")
-    const [userLoginStatus, setUserLoginStatus] = useState(false)
+    const [userLoginStatus, setUserLoginStatus] = useState(false);
+    const [loading, setLoading] = useState(false);
     //function to make user login reuqest
     const fetchTeams = () => {
         setTeams(currentUser.teams);
@@ -68,13 +69,19 @@ function UserLoginStore({ children }) {
         } else {
             return null;
         }
-        const response = await axios.get(`https://localhost:7151/api/Hackathons/GetUserById?id=${currentUser.id}`)
-        const data = response.data[0]
-        console.log(response)
-        /*if (data!=currentUser){
-            setCurrentUser({})
-            setTeams([])
-        }*/
+        const response = await axios.get(`https://localhost:7151/api/Hackathons/GetUserByEmail?email=${currentUser.email}`)
+        const data = await response.data[0]
+        console.log(data)
+        setTimeout(() => { },1000)
+        if (data) {
+            if (data.password == currentUser.password) {
+                console.log(data)
+                setCurrentUser(data)
+                setTeams(data.teams)
+                setVerified(data.verified)
+                localStorage.setItem("user", JSON.stringify(data));
+            }
+        }
         console.log(currentUser)
     }
     //to add in userlogincontextstore.js
@@ -115,12 +122,14 @@ function UserLoginStore({ children }) {
         } catch (error) {
             // Handle network errors or any other issues
             console.error(error);
-            return null;
+            return null; 
         }
     };*/
+   
     useEffect(() => {
         const FetchData = async () => {
             await FetchUser();
+            console.log(currentUser)
         }
         FetchData();
     }, []);
@@ -130,4 +139,4 @@ function UserLoginStore({ children }) {
         </loginContext.Provider>
     )
 }
-export default UserLoginStore;
+export default UserLoginStore; 

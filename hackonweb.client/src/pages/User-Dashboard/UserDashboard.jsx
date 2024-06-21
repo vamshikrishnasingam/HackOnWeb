@@ -37,6 +37,7 @@ const Hackathons = ({ hackathons }) => {
 
     const handleDetailsClick = (hackathon) => {
         dispatch(selectHackathon(hackathon));
+        localStorage.setItem('selectedHackathon', JSON.stringify(hackathon));
     };
 
     const now = new Date();
@@ -184,12 +185,14 @@ function UserDashboard() {
                 if (hackathons == null) {
                     setRefresh(!refresh)
                 }
-                if (currentUser && currentUser.id) {
+                const res = await axios.get(`https://localhost:7151/api/Hackathons/GetUserByEmail?email=${currentUser.email}`);
+                const currentUser1 = res.data[0];
+                if (currentUser1 && currentUser1.id) {
                     // Initialize hackathonsRegistered as an empty array, not an object.
                     const hackathonsRegistered = [];
-                    for (let i = 0; i < currentUser.teams.length; i++) {
+                    for (let i = 0; i < currentUser1.teams.length; i++) {
                         for (let j = 0; j < allHackathons.length; j++) {
-                            if (allHackathons[j].id === currentUser.teams[i].hackathonId) {
+                            if (allHackathons[j].id === currentUser1.teams[i].hackathonId) {
                                 // Use .push to add the item to the array
                                 hackathonsRegistered.push(allHackathons[j]);
                             }

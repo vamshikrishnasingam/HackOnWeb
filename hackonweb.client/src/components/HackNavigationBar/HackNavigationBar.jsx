@@ -63,18 +63,17 @@ function HackNavigationBar() {
                         >
                             Upcoming Hacks
                         </Link>
-                        <div ref={dropdownRef} 
-                        className={`relative inline-block text-left flex justify-center items-center block rounded hover:bg-green-800 hover:text-white md:hover:bg-green dark:border-gray-700 ${(location.pathname === '/hackathons/hack-host' || location.pathname === '/hackathons/jury-mentors' || location.pathname === '/hackathons/host-verify') ? 'text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 px-2 py-1 rounded-lg text-sm  dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800' : 'text-gray-900'}`}
+                        <div ref={dropdownRef}
+
+                            className={`relative inline-block focus:ring-4 focus:outline-none focus:ring-blue-300 text-left flex justify-center items-center block rounded hover:bg-green-800 hover:text-white md:hover:bg-green dark:border-gray-700 ${(location.pathname === '/hackathons/hack-host' || location.pathname === '/hackathons/jury-mentors' || location.pathname === '/hackathons/host-verify') ? 'text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 px-2 py-1 rounded-lg text-sm  dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800' : 'text-gray-900'}`}
                         >
-                            <button
+
+                            <Link
                                 id="dropdownHoverButton"
                                 onMouseEnter={toggleDropdown}
-                                className='border-0'
-                                  type="button"
-                            >
+                                className={`px-3 flex justify-center items-center block rounded hover:bg-green-800 hover:text-white md:hover:bg-green dark:border-gray-700 ${(location.pathname === '/hackathons/hack-host' || location.pathname === '/hackathons/jury-mentors' || location.pathname === '/hackathons/host-verify') ? 'text-white rounded-lg text-sm px-2 py-1 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800' : 'text-gray-900'}`}>
                                 Host A Hack
-                            </button>
-
+                            </Link>
                             {/* Dropdown menu */}
                             {isDropOpen && (
                                 <div

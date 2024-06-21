@@ -8,46 +8,39 @@ function GoogleDocsViewer({ fileUrl }) {
         <iframe
             src={`https://docs.google.com/gview?url=${encodeURIComponent(fileUrl)}&embedded=true`}
             width="100%"
-            height="350px"
+            height="100%"
             title="Google Docs Viewer"
         />
+              
     );
 }
 
 function JuryEvaluation() {
-    const [files, setFiles] = useState([]); // Initialize as an empty array
-    const [selectedFile, setSelectedFile] = useState(null);
+    const [teamsData, setTeamsData] = useState([]); // Initialize as an empty array
+    const [selectedTeam, setSelectedTeam] = useState(null);
     const [summary, setSummary] = useState("");
+
 
     // Fetch files
     useEffect(() => {
         const fetchFiles = async () => {
             try {
-                const response = await axios.get("https://localhost:7151/api/Hackathons/ListFiles");
+                const response = await axios.get("https://localhost:7151/api/Hackathons/GetAllCommunityDetails");
                 // Check if response contains files array
-                if (response.data && Array.isArray(response.data.files)) {
-                    setFiles(response.data.files);
-                    console.log(response.data)
-                } else {
-                    console.error("Invalid response structure:", response.data);
-                    setFiles(response.data); // Fallback to empty array
-                }
+                setTeamsData(response.data);
+                console.log(teamsData)
+                setSelectedTeam(teamsData[0]);
+                console.log(response.data)
             } catch (error) {
                 console.error("Error fetching files:", error);
-                // Fallback to dummy data in case of an error
-                setFiles([
-                    { id: 1, url: "https://fileblob1421.blob.core.windows.net/files/5c728ef5-2bc3-455b-987a-67a0a6569892.pptx", name: "TeamAlpha.pptx" },
-                    { id: 2, url: "http://example.com/TeamBeta.pptx", name: "TeamBeta.pptx" },
-                    { id: 3, url: "http://example.com/TeamGamma.pptx", name: "TeamGamma.pptx" },
-                ]);
             }
         };
         fetchFiles();
     }, []);
 
     // Handle file selection
-    const handleFileClick = (file) => {
-        setSelectedFile(file);
+    const handleFileClick = (team) => {
+        setSelectedTeam(team);
         setSummary(""); // Clear previous summary
     };
 
@@ -68,14 +61,14 @@ function JuryEvaluation() {
 
     // Handle summarization of the selected file
     const handleSummarize = async () => {
-        if (!selectedFile) {
+        if (!selectedTeam) {
             alert("No file available for summarization!");
             return;
         }
 
         try {
             // Convert URL to File
-            const file = await urlToFile(selectedFile.uri, selectedFile.name);
+            const file = await urlToFile(selectedTeam.uri, selectedTeam.name);
 
             // Create form data
             const formData = new FormData();
@@ -98,45 +91,54 @@ function JuryEvaluation() {
         }
     };
 
+    const [sidebarOpen, setSidebarOpen] = useState(true);
+    const toggleSidebar = () => {
+        setSidebarOpen(!sidebarOpen);
+    };
+
     return (
-        <div className="min-h-screen flex bg-gray-100">
-            <aside className="bg-white shadow-lg rounded-lg p-4 w-1/4">
-                <h1 className="text-2xl font-bold text-gray-800 mb-4">Files</h1>
-                <ul className="text-dark">
-                    {files ? (
-                        files.map((file) => (
-                            <li
-                                key={file.id}
-                                className={`cursor-pointer text-dark py-2 px-4 mb-2 rounded-lg ${selectedFile?.id === file.id ? 'bg-blue-100' : 'hover:bg-gray-200'}`}
-                                onClick={() => handleFileClick(file)}
-                            >
-                                {file.uri}
-                            </li>
-                        ))
-                    ) : (
-                        <li className="text-gray-600">No files available.</li>
-                    )}
-                </ul>
-            </aside>
-            <main className="flex-grow p-8 flex flex-col items-center">
-                {selectedFile ? (
-                    <div className="bg-white shadow-lg rounded-lg p-8 w-full">
-                        <h2 className="text-2xl font-bold text-gray-800 mb-4">{selectedFile.name}</h2>
-                        {selectedFile.uri ? (
-                            <div>
-                                <GoogleDocsViewer fileUrl={selectedFile.uri} />
+        <div className="flex bg-gray-100">
+            <div className={`bg-gradient-to-r from-gray-800 to-gray-600 text-white flex flex-col justify-between overflow-y-auto c1 ${sidebarOpen ? 'w-64' : 'w-22'} transition-all duration-300`}>
+                <div className="p-6">
+                    <button
+                        onClick={toggleSidebar}
+                        className="block w-full text-left text-dark p-2 my-2 rounded hover:bg-gray-700 border border-gray-600"
+                    >
+                        <i className="fas fa-bars m-2"></i>
+                    </button>
+                    <div className="text-center mt-6">
+                        {teamsData ? (
+                            teamsData.map((team) => (
                                 <button
-                                    onClick={handleSummarize}
-                                    className="w-full py-2 px-4 mt-4 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                    key={team.id}
+                                    className={`block w-full text-left text-dark p-2 my-2 rounded hover:bg-gray-700 border border-gray-600 ${selectedTeam?.id === team.id ? 'bg-blue-100' : 'hover:bg-gray-200'} ${sidebarOpen ? 'text-dark' : 'text-dark'}`}
+                                    onClick={() => handleFileClick(team)}
                                 >
-                                    Summarize
+                                    <i className="fas fa-user m-2"></i>{sidebarOpen && team.communityName}
                                 </button>
-                                {summary && (
-                                    <div className="mt-8 p-4 bg-gray-50 rounded-lg shadow-inner">
+                            ))
+                        ) : (
+                            <li className="text-gray-600">No Data available.</li>
+                        )}
+                    </div>
+                </div>
+            </div>
+            <div className="flex-1 c1 border rounded-lg p-3 bg-gray-200">
+                {selectedTeam ? (
+                    <div className="p-8 border rounded-lg bg-white mb-6 shadow-md">
+                        <h2 className="text-2xl font-bold text-gray-800 m-4">{selectedTeam.communityName}</h2>
+
+                        {selectedTeam.ideaSubmission.uri ? (
+                            <div className='flex'>
+                                <div className='w-1/2'>{selectedTeam.ideaSubmission.summary && (
+                                    <div className="p-4">
                                         <h3 className="text-xl font-semibold text-gray-700 mb-2">Summary</h3>
-                                        <p className="text-gray-600">{summary}</p>
+                                        <p className="text-gray-600">{selectedTeam.ideaSubmission.summary}</p>
                                     </div>
-                                )}
+                                )}</div>
+                                <div className='w-1/2 p-4'>
+                                    <GoogleDocsViewer fileUrl={selectedTeam.ideaSubmission.uri} />
+                                </div>
                             </div>
                         ) : (
                             <p className="text-gray-600">No file available.</p>
@@ -145,7 +147,7 @@ function JuryEvaluation() {
                 ) : (
                     <p className="text-gray-600">Select a file to view and summarize.</p>
                 )}
-            </main>
+            </div>
         </div>
     );
 }

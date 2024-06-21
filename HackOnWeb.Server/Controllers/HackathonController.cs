@@ -44,6 +44,42 @@ namespace HackOnWeb.Server.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+
+        [HttpGet]
+        [Route("GetUserByEmail")]
+        public async Task<ActionResult<List<UserModel>>> GetUserByEmail(string email)
+        {
+            try
+            {
+                // Call the corresponding method in the service layer
+                return Ok(await _hackathonService.getUserByEmail(email));
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or handle it as needed
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+        [HttpPut]
+        [Route("UpdateUser")]
+        public async Task<ActionResult<string>> UpdateUser(UserModel user)
+        {
+            try
+            {
+                // Call the corresponding method in the service layer
+                var result = await _hackathonService.UpdateUser(user);
+                if(!result)
+                {
+                    return BadRequest("Failed");
+                }
+                return Ok("updated");
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or handle it as needed
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
         [HttpPost]
         [Route("LoginWithPassword")]
         public async Task<ActionResult<UserModel>> LoginWithPassword(LoginModel userCredObj)

@@ -20,6 +20,7 @@ def summarize_text(text):
     max_chunk_length = 512
     chunks = [text[i:i+max_chunk_length] for i in range(0, len(text), max_chunk_length)]
 
+
     summarized_text = ""
     for chunk in chunks:
         inputs = t5_tokenizer.encode("summarize: " + chunk, return_tensors="pt", max_length=512, truncation=True).to(device)

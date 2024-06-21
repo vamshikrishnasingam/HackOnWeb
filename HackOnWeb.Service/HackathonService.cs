@@ -35,6 +35,15 @@ namespace HackOnWebService
         {
             return await _hackathonRepository.getUserById(id);
         }
+        public async Task<List<UserModel>> getUserByEmail(string email)
+        {
+            return await _hackathonRepository.getUserByEmail(email);
+        }
+
+        public async Task<bool> UpdateUser(UserModel user)
+        {
+            return await _hackathonRepository.UpdateUser(user);
+        }
         public async Task<UserModel> LoginWithPassword(string email,string password)
         {
             return await _hackathonRepository.LoginWithPassword(email, password);

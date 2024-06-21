@@ -23,9 +23,9 @@ const RegistrationAction = ({ action, selectedHackathon }) => {
                 },
                 body: JSON.stringify(team),
             });
-            //console.log(response)
+            console.log(response)
             const result = await response.json();
-            //console.log(result)
+            console.log(result)
             if (response.ok) {
                 alert("Team Created"); // Display the response message in an alert dialog
                 navigate('/user-dashboard')

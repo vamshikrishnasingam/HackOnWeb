@@ -279,7 +279,20 @@ namespace HackOnWebRepo
                 var id = community.id;
                 var name = community.communityName;
                 var response = await container.ReplaceItemAsync(community, id, new PartitionKey(name));
-
+                foreach(var email in community.Members)
+                {
+                    List<UserModel> user = await getUserByEmail(email);
+                    foreach(var team in user[0].Teams)
+                    {
+                        if(team.id==community.id)
+                        {
+                            user[0].Teams.Remove(team);
+                            break;
+                        }
+                    }
+                    user[0].Teams.Add(community);
+                    await UpdateUser(user[0]);
+                }
                 return $"Community details updated with status code: {response.StatusCode}";
             }
             catch (Exception ex)

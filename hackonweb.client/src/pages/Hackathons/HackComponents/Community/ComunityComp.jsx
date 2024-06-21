@@ -65,9 +65,7 @@ function ComunityComp() {
             animate={sectionInView ? "visible" : "hidden"}
             ref={sectionRef}>
             <div className="md:w-3/5 overflow-y-auto c1 overflow-hidden lg:pb-[90px] bg-white dark:bg-dark animate__animated animate__fadeIn"
-                variants={itemVariants}
-                initial="hidden"
-                animate={visionInView ? "visible" : "hidden"}
+                
                 ref={sectionRef}>
                 <div className="">
                     <Community mainCommunityDetails={mainCommunityDetails} sendDataToParent={handleDataFromCommunity} />

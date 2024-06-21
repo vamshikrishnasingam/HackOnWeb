@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 
 namespace Common.Models
 {
@@ -33,5 +34,10 @@ namespace Common.Models
             public Stream? Content { get; set; } // Byte array representing the file content
                                                     // Add additional properties as needed, such as URL or path
         }
+        public CommunityModel()
+        {
+            IdeaSubmission=new PPTModel();
+        }
+
     }
 }

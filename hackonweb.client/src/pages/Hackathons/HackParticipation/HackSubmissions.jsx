@@ -3,6 +3,25 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useSelector } from 'react-redux';
 import { loginContext } from '../../../contexts/loginContext';
 import axios from 'axios';
+
+
+function GoogleDocsViewer({ fileUrl }) {
+    return (
+        <>{
+            fileUrl && (
+                <iframe
+                    src={`https://docs.google.com/gview?url=${encodeURIComponent(fileUrl)}&embedded=true`}
+                    width="100%"
+                    height="500px"
+                    title="Google Docs Viewer"
+                    className='p-3'
+                />
+            )
+        }
+        </>
+    );
+}
+
 const HackSubmissions = () => {
     const [
         currentUser,
@@ -25,10 +44,34 @@ const HackSubmissions = () => {
     const [activeRound, setActiveRound] = useState('round1');
     const [file, setFile] = useState(null);
     const [summary, setSummary] = useState("");
+    const [fileUri, setFileUri] = useState(null);
+    const [refresh1, setRefresh1] = useState(false);
 
     const handlePPTChange = (e) => {
         setFile(e.target.files[0]);
     };
+    const fetchData = async () => {
+        const res = await axios.get(`https://localhost:7151/api/Hackathons/GetUserByEmail?email=${currentUser.email}`);
+        const currentUser1 = res.data[0];
+        if (currentUser1 && currentUser1.teams) {
+            fetchTeams();
+            console.log(teams)
+            const team = currentUser1.teams.find(team => team.hackathonId === selectedHackathon?.id);
+            if (team) {
+                setUserTeam(team); // Store the team ID in the state
+            }
+
+        }
+        console.log(currentUser1)
+        console.log(teams)
+        for (var i = 0; i < teams?.length; i++) {
+            if (teams[i]?.id == userTeam?.id) {
+                console.log(teams[i])
+                setFileUri(teams[i].ideaSubmission?.uri);
+                break;
+            }
+        }
+    }
 
     const handlePPTSubmit = async (e) => {
         e.preventDefault();
@@ -41,6 +84,7 @@ const HackSubmissions = () => {
         formData.append("file", file);
 
         try {
+            // First API call to http://localhost:5000/upload
             const response = await axios.post(
                 "http://localhost:5000/upload",
                 formData,
@@ -52,32 +96,42 @@ const HackSubmissions = () => {
             );
             console.log(response.data.summary);
             setSummary(response.data.summary);
+            setRefresh1(!refresh1)
+            // Second API call to https://localhost:7151/api/Hackathons/UploadFile
             const uploadResponse = await fetch('https://localhost:7151/api/Hackathons/UploadFile', {
                 method: 'POST',
                 body: formData
             });
             let data = await uploadResponse.json();
             console.log(data);
-            data.Summary=response.data.summary
+            data.blob.Summary = response.data.summary; // Use response.data.summary directly here
             console.log('PPT uploaded successfully:', data.blob.fileName);
+            setFileUri(data.blob.uri);
+            
+            // Assuming userTeam and updatedTeam are properly defined elsewhere in your code
             const updatedTeam = { ...userTeam, IdeaSubmission: data.blob };
+            fetchData()
+            setRefresh1(!refresh1)
+            // Third API call to https://localhost:7151/api/Hackathons/UpdateCommunityDetails
             const response2 = await fetch('https://localhost:7151/api/Hackathons/UpdateCommunityDetails', {
                 method: 'PUT',
                 headers: {
-                    'Content-Type': 'application/json' // Set the content type
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(updatedTeam)
             });
-            console.log(response2)
+            console.log(response2);
+            setTimeout(() => { setRefresh1(!refresh1) }, 3000)
         } catch (error) {
             console.error("There was an error uploading the file!", error);
         }
     };
+
     useEffect(() => {
         if (hackathon) {
             localStorage.setItem('selectedHackathon', JSON.stringify(hackathon));
         }
-    }, [hackathon]);
+    }, [hackathon,refresh1]);
 
     useEffect(() => {
         const storedHackathon = localStorage.getItem('selectedHackathon');
@@ -89,17 +143,10 @@ const HackSubmissions = () => {
     }, []);
 
     useEffect(() => {
-        if (currentUser && currentUser.teams) {
-            fetchTeams();
-            console.log(teams)
-            const team = currentUser.teams.find(team => team.hackathonId === selectedHackathon?.id);
-            if (team) {
-                setUserTeam(team); // Store the team ID in the state
-            }
-            
-        }
-        console.log(teams)
-    }, [currentUser, teams]);
+        
+        fetchData();
+
+    }, [currentUser, teams,refresh1]);
 
     const handleFileUpload = (event, setFileFunction) => {
         const file = event.target.files[0];
@@ -286,6 +333,12 @@ const HackSubmissions = () => {
                                     )}
                                 </section>
                             )}
+                            <div className='mb-8 bg-white p-6 rounded-lg shadow-md'>{userTeam?.ideaSubmission.summary ?(
+                                <div className="p-4">
+                                    <h3 className="text-xl font-semibold text-gray-700 mb-2">Summary</h3>
+                                    <p className="text-gray-600">{userTeam?.ideaSubmission.summary}</p>
+                                </div>
+                            ):<></>}</div>
 
                             {userTeam && (
                                 <section className="mb-8 bg-white p-6 rounded-lg shadow-md">
@@ -299,6 +352,7 @@ const HackSubmissions = () => {
                                     </ul>
                                 </section>
                             )}
+                            <GoogleDocsViewer fileUrl={fileUri} />
                         </div>
                     </div>
 
