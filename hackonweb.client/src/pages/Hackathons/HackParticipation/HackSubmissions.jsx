@@ -6,9 +6,9 @@ import axios from 'axios';
 
 
 function GoogleDocsViewer({ fileUrl }) {
+    useEffect(() => { }, [fileUrl]
+    )
     return (
-        <>{
-            fileUrl && (
                 <iframe
                     src={`https://docs.google.com/gview?url=${encodeURIComponent(fileUrl)}&embedded=true`}
                     width="100%"
@@ -16,9 +16,7 @@ function GoogleDocsViewer({ fileUrl }) {
                     title="Google Docs Viewer"
                     className='p-3'
                 />
-            )
-        }
-        </>
+
     );
 }
 

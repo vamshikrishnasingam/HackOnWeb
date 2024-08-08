@@ -15,11 +15,14 @@ const HackathonCard = ({ hackathon, onClick, isClicked }) => {
     const iscompleted = currentDate >= new Date(endDate)
     const formattedStartDate = new Date(startDate).toLocaleDateString();
     const formattedEndDate = new Date(endDate).toLocaleDateString();
-    const registrationDeadline = Math.ceil((new Date(endDate) - new Date()) / (1000 * 60 * 60 * 24))
+    let registrationDeadline = Math.ceil((new Date(endDate) - new Date()) / (1000 * 60 * 60 * 24))
+    if (registrationDeadline < 0) {
+        registrationDeadline = 0;
+    }
     const registeredCount = 20;
 
     return (
-        <div className={`border rounded-lg p-2 mb-4 cursor-pointer ${iscompleted ? 'bg-red-100' : (isOngoing ? 'bg-green-200' : 'bg-blue-200')} ${isClicked ? (iscompleted ? 'bg-red-200 border border-danger' :'bg-blue-100 hover:border border-success') : ''
+        <div className={`border rounded-lg p-2 mb-4 cursor-pointer ${iscompleted ? 'bg-red-100' : (isOngoing ? 'bg-green-200' : 'bg-blue-200')} ${isClicked ? (iscompleted ? 'bg-red-200 border border-danger' :'bg-green-300 hover:border border-success') : ''
 }`} onClick={onClick}>
             <div className='flex'>
                 {/* Image */}

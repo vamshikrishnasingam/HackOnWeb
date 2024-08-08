@@ -1,5 +1,19 @@
 import { useEffect, useState } from "react";
 import './HackathonsCommunity.css';
+
+
+// Component to view the file using Google Docs Viewer
+function GoogleDocsViewer({ fileUrl }) {
+    return (
+        <iframe
+            src={`https://docs.google.com/gview?url=${encodeURIComponent(fileUrl)}&embedded=true`}
+            width="100%"
+            height="100%"
+            title="Google Docs Viewer"
+        />
+
+    );
+}
 function HackathonsCommunity() {
     const [teams, setTeams] = useState([]);
     const [selectedTeam, setSelectedTeam] = useState(null);
@@ -23,7 +37,6 @@ function HackathonsCommunity() {
             }
             const data = await response.json();
             setPosts(data);
-            console.log(data)
         } catch (error) {
             console.error('Error fetching data:', error);
         }
@@ -159,15 +172,21 @@ function HackathonsCommunity() {
                                 {posts
                                     .filter(post => post.communityName === selectedTeam)
                                     .map((post, index) => (
-                                        <div key={index} className="mb-6 bg-white p-4 rounded-lg shadow-xl">
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                {post.posts.map((data, ind) => (
-                                                    <div key={ind} className="mb-4">
-                                                        <img src={data.uri} alt="" className="w-full h-auto rounded-lg shadow" />
-                                                    </div>
-                                                ))}
+                                        <>
+                                            <div key={index} className="mb-6 bg-white p-4 rounded-lg shadow-xl">
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                    {post.posts.map((data, ind) => (
+                                                        <div key={ind} className="mb-4">
+                                                            <img src={data.uri} alt="" className="w-full h-auto rounded-lg shadow" />
+                                                        </div>
+                                                    ))}
+                                                </div>
                                             </div>
-                                        </div>
+                                            <div className='p-2'>
+                                                <h2 className="mb-3">Documents</h2>
+                                                <GoogleDocsViewer fileUrl={post.ideaSubmission.uri} />
+                                            </div>
+                                        </>
                                     ))}
                             </div>
                             <div className="w-1/2 pl-4 overflow-y-auto sidebar1">
