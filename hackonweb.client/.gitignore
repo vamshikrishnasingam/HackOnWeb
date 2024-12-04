@@ -12,6 +12,7 @@ dist
 dist-ssr
 *.local
 backend-mlmodel/uploads/*
+
 backend-mlmodel/*.h5
 # Editor directories and files
 .vscode/*
