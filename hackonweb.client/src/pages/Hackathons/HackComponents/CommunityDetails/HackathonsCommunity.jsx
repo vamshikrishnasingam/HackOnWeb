@@ -72,10 +72,11 @@ function HackathonsCommunity() {
                 updatedDetails = { ...post, likes: post.likes + 1 };
                 post.likes += 1;
                 setLiked(true);
-                if (disliked === true)
+                if (disliked === true) {  
                     updatedDetails = { ...updatedDetails, disLikes: post.disLikes - 1 };
-                post.disLikes -= 1;
-                setDisliked(false);
+                    post.disLikes -= 1;
+                    setDisliked(false);
+                }
             }
             else {
                 console.log('already liked');
@@ -161,14 +162,14 @@ function HackathonsCommunity() {
                     </div>
                 </div>
             </div>
-            <div className="flex-1">
+            <div className="flex-1 bg-gray-400">
                 {selectedTeam && (
                     <div>
-                        <h2 className="text-4xl text-center mb-6 font-bold text-gray-800">{selectedTeam}</h2>
+                        <h2 className="text-4xl text-center mb-6 font-bold text-gray-800 mt-3">{selectedTeam}</h2>
                         <div className="flex">
 
-                            <div className="w-1/2 pr-4 overflow-y-auto sidebar1">
-                                <h2 className=" text-center mb-6 font-bold text-gray-800">Posts</h2>
+                            <div className="w-1/2 pr-4 overflow-y-auto sidebar1 p-2">
+                                <h2 className=" text-2xl text-center mb-6 font-bold text-gray-800">Posts</h2>
                                 {posts
                                     .filter(post => post.communityName === selectedTeam)
                                     .map((post, index) => (
@@ -182,14 +183,28 @@ function HackathonsCommunity() {
                                                     ))}
                                                 </div>
                                             </div>
-                                            <div className='p-2'>
-                                                <h2 className="mb-3">Documents</h2>
+                                            <div key={index} className="mb-6 bg-white p-4 rounded-lg shadow-xl">
+                                            <div className='p-2 h-2/3'>
+                                                <h2 className="text-2xl text-center mb-6 font-bold text-gray-800 mt-3">Submitted PPT</h2>
                                                 <GoogleDocsViewer fileUrl={post.ideaSubmission.uri} />
+                                                </div>
                                             </div>
+                                            <h2 className="text-2xl text-center m-6 font-bold text-gray-800 mt-3 mb-8">Team Uploads</h2>
+                                            <div key={index} className="mb-6 bg-white p-4 rounded-lg shadow-xl">
+                                                <div className="grid grid-cols-1 gap-4">
+                                                    {post.files.map((data) => (
+                                                        <div key={data.id} className="mb-4">
+                                                            <GoogleDocsViewer fileUrl={data.uri} />
+                                                        
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                            
                                         </>
                                     ))}
                             </div>
-                            <div className="w-1/2 pl-4 overflow-y-auto sidebar1">
+                            <div className="w-1/2 pl-4 overflow-y-auto sidebar1 p-2">
                                 <h2 className="text-center mb-6 font-bold text-gray-800">Likes and Comments</h2>
                                 {posts
                                     .filter(post => post.communityName === selectedTeam)

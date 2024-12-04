@@ -4,8 +4,7 @@ import { useSelector } from 'react-redux';
 import { loginContext } from '../../../contexts/loginContext';
 import axios from 'axios';
 
-
-function GoogleDocsViewer({ fileUrl }) {
+function GoogleDocsViewer({ fileUrl}) {
     useEffect(() => { }, [fileUrl]
     )
     return (
@@ -31,7 +30,6 @@ const HackSubmissions = () => {
         teams,
         fetchTeams
     ] = useContext(loginContext);
-
     const [uploadedIdeaFile, setUploadedIdeaFile] = useState(null);
     const [uploadedHackathonPpt, setUploadedHackathonPpt] = useState(null);
     const [uploadedVideo, setUploadedVideo] = useState(null);
@@ -44,11 +42,13 @@ const HackSubmissions = () => {
     const [summary, setSummary] = useState("");
     const [fileUri, setFileUri] = useState(null);
     const [refresh1, setRefresh1] = useState(false);
-
+    const [loading, setLoading] = useState(false);
+    const [load, setLoad] = useState(false);
     const handlePPTChange = (e) => {
         setFile(e.target.files[0]);
     };
     const fetchData = async () => {
+        setFileUri(null);
         const res = await axios.get(`https://localhost:7151/api/Hackathons/GetUserByEmail?email=${currentUser.email}`);
         const currentUser1 = res.data[0];
         if (currentUser1 && currentUser1.teams) {
@@ -57,21 +57,24 @@ const HackSubmissions = () => {
             const team = currentUser1.teams.find(team => team.hackathonId === selectedHackathon?.id);
             if (team) {
                 setUserTeam(team); // Store the team ID in the state
+                setFileUri(team.ideaSubmission.uri);
             }
 
         }
-        console.log(currentUser1)
+        /*console.log(currentUser1)
         console.log(teams)
         for (var i = 0; i < teams?.length; i++) {
             if (teams[i]?.id == userTeam?.id) {
                 console.log(teams[i])
-                setFileUri(teams[i].ideaSubmission?.uri);
+                setFileUri(teams[i].ideaSubmission.uri);
                 break;
             }
-        }
+        }*/
     }
 
     const handlePPTSubmit = async (e) => {
+        setFileUri(null);
+        setLoading(true);
         e.preventDefault();
         if (!file) {
             alert("Please upload a file first!");
@@ -92,7 +95,7 @@ const HackSubmissions = () => {
                     },
                 }
             );
-            console.log(response.data.summary);
+            setLoading(false);
             setSummary(response.data.summary);
             setRefresh1(!refresh1)
             // Second API call to https://localhost:7151/api/Hackathons/UploadFile
@@ -104,11 +107,9 @@ const HackSubmissions = () => {
             console.log(data);
             data.blob.Summary = response.data.summary; // Use response.data.summary directly here
             console.log('PPT uploaded successfully:', data.blob.fileName);
-            setFileUri(data.blob.uri);
-            
+
             // Assuming userTeam and updatedTeam are properly defined elsewhere in your code
             const updatedTeam = { ...userTeam, IdeaSubmission: data.blob };
-            fetchData()
             setRefresh1(!refresh1)
             // Third API call to https://localhost:7151/api/Hackathons/UpdateCommunityDetails
             const response2 = await fetch('https://localhost:7151/api/Hackathons/UpdateCommunityDetails', {
@@ -118,13 +119,15 @@ const HackSubmissions = () => {
                 },
                 body: JSON.stringify(updatedTeam)
             });
+            setFileUri(data.blob.uri);
             console.log(response2);
             setTimeout(() => { setRefresh1(!refresh1) }, 3000)
         } catch (error) {
             console.error("There was an error uploading the file!", error);
+        } finally {
+            window.location.reload();
         }
     };
-
     useEffect(() => {
         if (hackathon) {
             localStorage.setItem('selectedHackathon', JSON.stringify(hackathon));
@@ -139,20 +142,20 @@ const HackSubmissions = () => {
             setHackathonOnline(parsedHackathon.round3.modeOfHack === 'online');
         }
     }, []);
-
+    const refetch = async () => {
+        await fetchData();
+    }
     useEffect(() => {
-        
-        fetchData();
-
+        refetch();
     }, [currentUser, teams,refresh1]);
 
     const handleFileUpload = (event, setFileFunction) => {
         const file = event.target.files[0];
         setFileFunction(file);
     };
-
     const handleNavClick = (round) => {
         setActiveRound(round);
+        refetch();
     };
 
     return (
@@ -258,11 +261,8 @@ const HackSubmissions = () => {
                                                 onChange={handlePPTChange}
                                                 className="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
                                             />
-                                            <button
-                                                type="submit"
-                                                className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                                            >
-                                                Upload
+                                            <button type="submit" className={`bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 w-full ${loading ? 'opacity-50 cursor-not-allowed' : ''}`} disabled={loading}>
+                                                {loading ? 'Uploading...' : 'Upload and Summarize'}
                                             </button>
                                         </form>
                                     </div>
@@ -332,11 +332,13 @@ const HackSubmissions = () => {
                                 </section>
                             )}
                             <div className='mb-8 bg-white p-6 rounded-lg shadow-md'>{userTeam?.ideaSubmission.summary ?(
-                                <div className="p-4">
-                                    <h3 className="text-xl font-semibold text-gray-700 mb-2">Summary</h3>
-                                    <p className="text-gray-600">{userTeam?.ideaSubmission.summary}</p>
-                                </div>
-                            ):<></>}</div>
+                                    <div className="p-4">
+                                        <h3 className="text-xl font-semibold text-gray-700 mb-2">Summary</h3>
+                                        <p className="text-gray-600">{userTeam?.ideaSubmission.summary}</p>
+                                    </div>
+                            ) :
+                                <label className="block mb-2 font-medium text-gray-700">Upload your PPT to get Summary</label>
+                            }</div>
 
                             {userTeam && (
                                 <section className="mb-8 bg-white p-6 rounded-lg shadow-md">
@@ -350,7 +352,16 @@ const HackSubmissions = () => {
                                     </ul>
                                 </section>
                             )}
-                            <GoogleDocsViewer fileUrl={fileUri} />
+                            <section className="mb-8 bg-white p-6 rounded-lg shadow-md">
+                                <div className='p-4 h-2/3'>
+                                    <h3 className="text-xl font-semibold text-gray-700 mb-2">PPT</h3>
+                                    {fileUri ? (
+                                        <GoogleDocsViewer fileUrl={fileUri} />
+                                    ) :
+                                        <p className="mb-2 text-gray-700">No file Available or Reload here to View PPT
+                                            </p>}
+                                </div>
+                            </section>
                         </div>
                     </div>
 
