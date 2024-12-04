@@ -52,7 +52,7 @@ function NavigationBar() {
                                 <div className="flex flex-shrink-0 items-center">
                                     <img
                                         className="h-8 w-auto"
-                                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                                        src="https://i.pinimg.com/originals/e5/91/75/e59175aaae1d67d34b21dd77a2fc7a93.jpg"
                                         alt="Your Company"
                                     />
                                 </div>

@@ -226,7 +226,7 @@ function SignUp() {
                                 </div>
                             </div>*/}
                             <div>
-                                <label className=""> Phone: <span className="text-sm text-gray-400">(optional)</span> </label>
+                                <label className=""> Phone: <span className="text-sm text-gray-400"></span> </label>
                                 <input type="text" {...register("phone")} placeholder="+543 5445 0543" className="mt-2 h-12 w-full rounded-md bg-gray-100 px-3" />
                             </div>
                         </div>

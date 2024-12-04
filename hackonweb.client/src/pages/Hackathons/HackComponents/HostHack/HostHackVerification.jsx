@@ -14,6 +14,7 @@ const HostHackVerification = () => {
     const [showHostHack, setShowHostHack] = useState(false);
     const [showContinue, setShowContinue] = useState(false);
     const [errors, setErrors] = useState({});
+    const [extractedText, setExtractedText] = useState('');
     let navigate = useNavigate()
     const handleEmailChange = (e) => {
         setEmail(e.target.value);
@@ -74,6 +75,25 @@ const HostHackVerification = () => {
         //form data
         const fd = new FormData();
         fd.append('file', document); // 'file' should match the parameter name in your backend controller
+        const formData = new FormData();
+        formData.append('image', document);
+
+        try {
+            const response = await fetch('http://localhost:5000/extract-text', {
+                method: 'POST',
+                body: formData,
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                setExtractedText(data.extractedText); // Display extracted text
+            } else {
+                setErrors({ apiError: data.error });
+            }
+        } catch (error) {
+            console.error('Error extracting text:', error);
+            setErrors({ apiError: 'An error occurred while extracting text. Please try again later.' });
+        }
         try {
             // Send POST request to upload file
             const response = await fetch('https://localhost:7151/api/Hackathons/UploadFile', {
@@ -189,7 +209,13 @@ const HostHackVerification = () => {
                     </form>
                 </div>
             ) : (
-                <>
+                    <>
+                        {extractedText ? (
+                            <div className="mt-4">
+                                <h3 className="text-lg font-semibold">Extracted Text:</h3>
+                                <p className="text-gray-700">{extractedText}</p>
+                            </div>
+                        ): (<>Not text</>)}
                     <div className="max-w-xl mx-auto p-10 border rounded-lg bg-gray-50">
                         <h2 className="text-xl font-semibold mb-4 text-center">Verification Status</h2>
                             <p className={`mb-4 text-gray-700 text-center ${status=='pending'? 'text-danger':'text-success'}`}>Status: {status}</p>

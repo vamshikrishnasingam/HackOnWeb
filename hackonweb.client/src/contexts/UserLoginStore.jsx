@@ -126,12 +126,16 @@ function UserLoginStore({ children }) {
         }
     };*/
    
+    const refetch = async () => {
+        await FetchUser();
+    }
     useEffect(() => {
-        const FetchData = async () => {
+        /*const FetchData = async () => {
             await FetchUser();
             console.log(currentUser)
         }
-        FetchData();
+        FetchData();*/
+        refetch();
     }, []);
     return (
         <loginContext.Provider value={[currentUser, loginUser, userLoginStatus, loginErr, logoutUser, verified, teams, fetchTeams]}>

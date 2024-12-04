@@ -28,8 +28,8 @@ function JuryEvaluation() {
                 const response = await axios.get("https://localhost:7151/api/Hackathons/GetAllCommunityDetails");
                 // Check if response contains files array
                 setTeamsData(response.data);
-                console.log(teamsData)
-                setSelectedTeam(teamsData[0]);
+                console.log(teamsData[0])
+                setSelectedTeam(response.data[0]);
                 console.log(response.data)
             } catch (error) {
                 console.error("Error fetching files:", error);

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 function HostHack() {
     const [step, setStep] = useState(1); // Current step
     const [hackathonDetails, setHackathonDetails] = useState({
@@ -48,6 +49,7 @@ function HostHack() {
             "venue": "TechFest Auditorium"
         }
     };
+    let navigate = useNavigate();
 
     const [roundsData, setRoundsData] = useState([]);
     useEffect(() => {
@@ -106,6 +108,7 @@ function HostHack() {
             });
             let data = await response.json();
             console.log('details uploaded succesfully :', data);
+            navigate('/hackathons')
             // Once the image is uploaded, update the community details
         } catch (error) {
             console.error('Error uploading:', error);
